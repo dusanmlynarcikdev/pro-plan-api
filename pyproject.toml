@@ -1,8 +1,6 @@
 [project]
 name = "pro-subscription-management-api"
-version = "0.0.0"
-description = "A reference implementation of a Pro subscription management REST API built with Clean Architecture and FastAPI in Python."
-readme = "README.md"
+version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.135.2",

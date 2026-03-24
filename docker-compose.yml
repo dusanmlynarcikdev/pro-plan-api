@@ -12,15 +12,19 @@ services:
       - '80:80'
     restart: always
     volumes:
-      - ./:/code
+      - ./app:/code/app
+      - ./tests:/code/tests
+      - ./Makefile:/code/Makefile
+      - ./pyproject.toml:/code/pyproject.toml
+      - ./uv.lock:/code/uv.lock
 
   database:
     container_name: database
     environment:
       POSTGRES_PASSWORD: postgres
-    image: postgres:18.3-alpine
+    image: postgres:18.3
     ports:
       - '5432:5432'
     restart: always
     volumes:
-      - ./.docker/postgres:/var/lib/postgresql:rw
+      - ./.docker/postgres:/var/lib/postgresql
