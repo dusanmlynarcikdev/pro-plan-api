@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, FastAPI, status
+from fastapi import FastAPI
 
 app = FastAPI(
     title="Pro Subscription Management REST API",
