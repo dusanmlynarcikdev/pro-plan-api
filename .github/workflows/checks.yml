@@ -1,0 +1,35 @@
+name: Checks
+
+on:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build
+        run: docker build -t api .
+
+      - name: Types
+        run: docker run api ty check
+
+      - name: Lint
+        run: docker run api ruff check
+
+      - name: Format
+        run: docker run api ruff format --check
+
+      - name: Tests
+        run: |
+          docker network create network
+          docker run -d \
+            --name database \
+            --network network \
+            -e POSTGRES_PASSWORD=postgres \
+            -e POSTGRES_DB=test \
+            postgres:18.3-alpine
+          docker run --network network api pytest tests -v
