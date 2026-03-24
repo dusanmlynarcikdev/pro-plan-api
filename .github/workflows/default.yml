@@ -27,5 +27,5 @@ jobs:
             --network network \
             -e POSTGRES_PASSWORD=postgres \
             -e POSTGRES_DB=test \
-            postgres:18.3-alpine
+            postgres:18.3
           docker run --network network api make t

@@ -1,4 +1,5 @@
 .docker
+.git
 .github
 .gitignore
 docker-compose.yml

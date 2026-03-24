@@ -1,9 +1,9 @@
 FROM python:3.14
 
 # Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.0 /uv /bin/
 
-# uv uses system environment
+# Force uv to use system environment
 ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
 
 WORKDIR /code
