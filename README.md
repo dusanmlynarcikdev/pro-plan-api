@@ -53,8 +53,8 @@ docker compose up -d
 ```
 
 The API will be available at:
-- **API (base path & health check):** http://localhost
-- **API Doc:** http://localhost:81
+- **API (base path & health check):** http://0.0.0.0
+- **API Doc:** http://0.0.0.0/docs
 
 ## 👤 Maintainer
 

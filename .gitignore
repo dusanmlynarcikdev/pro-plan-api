@@ -1,2 +1,3 @@
 .docker/postgres/*
 !.docker/.gitkeep
+**/__pycache__
