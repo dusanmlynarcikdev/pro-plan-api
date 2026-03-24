@@ -1,0 +1,18 @@
+[project]
+name = "pro-subscription-management-api"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.135.2",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.2",
+    "ruff>=0.15.7",
+    "ty>=0.0.24",
+]
+
+[tool.ruff.lint]
+select = ["I"]
