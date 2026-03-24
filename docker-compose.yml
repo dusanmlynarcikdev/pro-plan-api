@@ -1,0 +1,25 @@
+name: pro-subscription-management-api
+
+services:
+  api:
+    build:
+      context: .
+    container_name: api
+    depends_on:
+      - database
+    ports:
+      - '80:80'
+    restart: always
+    volumes:
+      - ./:/code
+
+  database:
+    container_name: database
+    environment:
+      POSTGRES_PASSWORD: postgres
+    image: postgres:18.3-alpine
+    ports:
+      - '5432:5432'
+    restart: always
+    volumes:
+      - ./.docker/postgres:/var/lib/postgresql:rw
