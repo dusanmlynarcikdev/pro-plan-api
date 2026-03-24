@@ -5,7 +5,7 @@ from app.presentation.api.health_check import router as health_check_router
 app = FastAPI(
     title="Pro Subscription Management REST API",
     servers=[
-        {"url": "http://localhost", "description": "Local"},
+        {"url": "http://0.0.0.0", "description": "Local"},
     ],
     swagger_ui_parameters={"operationsSorter": "alpha"},
 )
