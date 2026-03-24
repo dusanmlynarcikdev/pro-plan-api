@@ -16,4 +16,3 @@ ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
 
 # Install dependencies with dev
 RUN uv sync --frozen --no-cache
-
