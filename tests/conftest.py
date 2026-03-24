@@ -1,7 +1,7 @@
 from typing import Generator
-from pytest import fixture
 
 from fastapi.testclient import TestClient
+from pytest import fixture
 
 from app.main import app
 
