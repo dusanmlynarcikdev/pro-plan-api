@@ -8,7 +8,12 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 load_dotenv(".env.test")
 
-from app.infrastructure.database import DATABASE_URL, get_session
+from app.infrastructure.database import (
+    DATABASE_URL,
+    engine,
+    get_session,
+    get_session_factory,
+)
 from app.main import app
 
 
@@ -20,14 +25,15 @@ def client() -> Generator[TestClient]:
 
 @fixture
 async def session() -> AsyncGenerator[AsyncSession]:
-    async for session_ in get_session():
-        transaction = await session_.begin()
-        app.dependency_overrides[get_session] = lambda: session_
-        try:
-            yield session_
-        finally:
-            app.dependency_overrides.pop(get_session, None)
-            await transaction.rollback()
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        async with get_session_factory(connection)() as session_:
+            app.dependency_overrides[get_session] = lambda: session_
+            try:
+                yield session_
+            finally:
+                app.dependency_overrides.pop(get_session, None)
+        await transaction.rollback()
 
 
 @fixture(scope="session", autouse=True)
