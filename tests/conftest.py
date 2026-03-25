@@ -22,7 +22,7 @@ def client() -> Generator[TestClient]:
 async def session() -> AsyncGenerator[AsyncSession]:
     async with engine.connect() as connection:
         transaction = await connection.begin()
-        async with AsyncSession(bind=connection, expire_on_commit=False) as session_:
+        async with AsyncSession(connection, expire_on_commit=False) as session_:
             app.dependency_overrides[get_session] = lambda: session_
             try:
                 yield session_
