@@ -3,8 +3,8 @@ from typing import AsyncGenerator, Generator
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from pytest import fixture
-from sqlalchemy_utils import create_database as sqlalchemy_create_database
-from sqlalchemy_utils import database_exists as sqlalchemy_database_exists
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import database_exists
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 load_dotenv(".env.test")
@@ -32,6 +32,6 @@ async def session() -> AsyncGenerator[AsyncSession]:
 
 
 @fixture(scope="session", autouse=True)
-def create_database() -> None:
-    if not sqlalchemy_database_exists(DATABASE_URL):
-        sqlalchemy_create_database(DATABASE_URL)
+def prepare_database() -> None:
+    if not database_exists(DATABASE_URL):
+        create_database(DATABASE_URL)

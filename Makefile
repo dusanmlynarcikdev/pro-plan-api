@@ -15,4 +15,4 @@ ty:
 
 # tests
 t:
-	pytest tests -v -s
+	pytest tests -v
