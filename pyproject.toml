@@ -20,7 +20,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-anyio_mode = "auto"
+asyncio_mode = "auto"
 
 [tool.ruff.lint]
 select = ["I"]

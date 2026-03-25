@@ -23,7 +23,11 @@ def client() -> Generator[TestClient]:
 @asyncio_fixture(scope="function")
 async def session() -> AsyncGenerator[AsyncSession]:
     async with get_session_factory(database_engine)() as session_:
-        yield session_
+        transaction = await session_.begin()
+        try:
+            yield session_
+        finally:
+            await transaction.rollback()
 
 
 @fixture(scope="session", autouse=True)
