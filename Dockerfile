@@ -15,6 +15,6 @@ RUN uv sync --frozen
 
 COPY ./app ./app
 COPY ./tests ./tests
-COPY .env /
-COPY .env.test /
+COPY .env ./
+COPY .env.test ./
 COPY Makefile ./
