@@ -3,8 +3,7 @@ from typing import AsyncGenerator, Generator
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from pytest import fixture
-from sqlalchemy_utils import create_database
-from sqlalchemy_utils import database_exists
+from sqlalchemy_utils import create_database, database_exists
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 load_dotenv(".env.test")
