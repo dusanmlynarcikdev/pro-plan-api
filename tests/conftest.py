@@ -1,16 +1,16 @@
 from typing import AsyncGenerator, Generator
 
+from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from pytest import fixture
 from sqlalchemy_utils import create_database as sqlalchemy_create_database
 from sqlalchemy_utils import database_exists as sqlalchemy_database_exists
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.infrastructure.database import create_engine, get_session, get_session_factory
-from app.main import app
+load_dotenv(".env.test")
 
-DATABASE_URL = "postgresql+psycopg://postgres:postgres@database:5432/test"
-database_engine = create_engine(DATABASE_URL)
+from app.infrastructure.database import DATABASE_URL, get_session
+from app.main import app
 
 
 @fixture
@@ -21,7 +21,7 @@ def client() -> Generator[TestClient]:
 
 @fixture
 async def session() -> AsyncGenerator[AsyncSession]:
-    async with get_session_factory(database_engine)() as session_:
+    async for session_ in get_session():
         transaction = await session_.begin()
         app.dependency_overrides[get_session] = lambda: session_
         try:

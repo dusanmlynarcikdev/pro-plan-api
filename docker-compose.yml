@@ -15,6 +15,8 @@ services:
       - ./app:/code/app
       - ./tests:/code/tests
       - ./Makefile:/code/Makefile
+      - ./.env:/code/.env
+      - ./.env.test:/code/.env.test
       - ./pyproject.toml:/code/pyproject.toml
       - ./uv.lock:/code/uv.lock
 

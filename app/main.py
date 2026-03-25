@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
+
+load_dotenv(".env")
 
 from app.presentation.api.health_check import router as health_check_router
 
