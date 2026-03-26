@@ -58,6 +58,16 @@ def test_renewal(period: Period, expected_date: date) -> None:
     assert subscription.state == State.ACTIVE
 
 
+def test_renewal_active() -> None:
+    subscription = generate()
+    subscription.renewal(date(2023, 1, 2))
+
+    subscription.renewal(date(2023, 1, 3))
+
+    assert subscription.next_payment_date == date(2023, 3, 2)
+    assert subscription.state == State.ACTIVE
+
+
 def test_expire() -> None:
     subscription = generate()
     subscription.renewal(date(2023, 1, 1))

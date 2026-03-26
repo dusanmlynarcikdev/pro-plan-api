@@ -53,6 +53,9 @@ class Subscription:
         self.__period = period
 
     def renewal(self, payment_date: date) -> None:
+        if self.state == State.ACTIVE and self.next_payment_date is not None:
+            payment_date = self.next_payment_date
+
         match self.period:
             case Period.MONTHLY:
                 self.__next_payment_date = payment_date + relativedelta(months=1)
