@@ -1,9 +1,24 @@
+from dataclasses import dataclass
 from decimal import Decimal
 
+from pydantic import TypeAdapter, ValidationError
 from pydantic_extra_types.currency_code import ISO4217
-from sqlmodel import SQLModel
+
+from app.domain.subscription.errors import InvalidAmount, InvalidCurrency
+
+_CURRENCY_TYPE_ADAPTER = TypeAdapter(ISO4217)
 
 
-class Price(SQLModel):
+@dataclass(frozen=True, slots=True)
+class Price:
     amount: Decimal
-    currency: ISO4217
+    currency: str
+
+    def __post_init__(self) -> None:
+        if self.amount <= 0:
+            raise InvalidAmount()
+
+        try:
+            _CURRENCY_TYPE_ADAPTER.validate_python(self.currency)
+        except ValidationError:
+            raise InvalidCurrency()
