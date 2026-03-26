@@ -47,7 +47,7 @@ class Subscription:
         """
         :raises SubscriptionExpired:
         """
-        self.check_expiration()
+        self.__check_expiration()
 
         self.__price = price
         self.__period = period
@@ -65,12 +65,12 @@ class Subscription:
         """
         :raises SubscriptionExpired:
         """
-        self.check_expiration()
+        self.__check_expiration()
 
         self.__next_payment_date = None
         self.__state = State.EXPIRED
 
-    def check_expiration(self) -> None:
+    def __check_expiration(self) -> None:
         """
         :raises SubscriptionExpired:
         """

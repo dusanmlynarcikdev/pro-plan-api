@@ -27,3 +27,4 @@ anyio_mode = "auto"
 
 [tool.ruff.lint]
 select = ["I"]
+extend-select = ["ANN"]
