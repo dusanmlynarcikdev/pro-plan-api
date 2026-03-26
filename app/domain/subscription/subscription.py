@@ -1,5 +1,5 @@
 from datetime import date
-from uuid import UUID, uuid7
+from uuid import UUID
 
 from dateutil.relativedelta import relativedelta
 
