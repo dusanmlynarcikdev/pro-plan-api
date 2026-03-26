@@ -11,6 +11,11 @@ _CURRENCY_TYPE_ADAPTER = TypeAdapter(ISO4217)
 
 @dataclass(frozen=True, slots=True)
 class Price:
+    """
+    :raises InvalidAmount:
+    :raises InvalidCurrency:
+    """
+
     amount: Decimal
     currency: str
 

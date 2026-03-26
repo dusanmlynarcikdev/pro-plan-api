@@ -9,6 +9,10 @@ _EMAIL_TYPE_ADAPTER = TypeAdapter(EmailStr)
 
 @dataclass(frozen=True, slots=True)
 class Email:
+    """
+    :raises InvalidEmail:
+    """
+
     value: str
 
     def __post_init__(self) -> None:
