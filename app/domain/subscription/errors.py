@@ -1,3 +1,3 @@
 class SubscriptionExpired(Exception):
     def __init__(self) -> None:
-        super().__init__("Subscription has expired")
+        super().__init__("Subscription expired")

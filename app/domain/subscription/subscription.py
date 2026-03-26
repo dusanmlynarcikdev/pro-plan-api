@@ -4,10 +4,10 @@ from uuid import UUID, uuid7
 from dateutil.relativedelta import relativedelta
 
 from app.domain.subscription.email import Email
+from app.domain.subscription.errors import SubscriptionExpired
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
-from app.domain.subscription.subscription_expired import SubscriptionExpired
 
 
 class Subscription:
