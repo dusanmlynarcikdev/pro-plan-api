@@ -8,7 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 load_dotenv(".env.test")
 
-from app.infrastructure.database import DATABASE_URL, engine, get_session
+from app.infrastructure.persistence.connection import DATABASE_URL, engine, get_session
 from app.main import app
 
 
