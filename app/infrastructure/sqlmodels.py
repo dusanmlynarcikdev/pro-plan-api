@@ -6,8 +6,8 @@ from pydantic import EmailStr
 from sqlalchemy import Index, text
 from sqlmodel import Field, SQLModel
 
-from app.domain.price.price import Price
 from app.domain.subscription.period import Period
+from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
 
 
