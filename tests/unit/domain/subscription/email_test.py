@@ -4,7 +4,7 @@ from app.domain.subscription.email import Email
 from app.domain.subscription.errors import InvalidEmail
 
 
-def test_success() -> None:
+def test_create() -> None:
     result = Email("john@doe.com")
 
     assert "john@doe.com" == result.value
