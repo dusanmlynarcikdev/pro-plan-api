@@ -29,10 +29,3 @@ anyio_mode = "auto"
 [tool.ruff.lint]
 select = ["I"]
 extend-select = ["ANN"]
-
-
-[tool.alembic]
-script_location = "%(here)s/app/infrastructure/persistence/migrations"
-prepend_sys_path = [
-    "."
-]
