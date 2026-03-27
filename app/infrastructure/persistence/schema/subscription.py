@@ -60,7 +60,6 @@ class SubscriptionSchema(SQLModel, table=True):
         return subscription
 
     def update_from_domain(self, subscription: Subscription) -> None:
-        self.email = subscription.email.value
         self.amount = subscription.price.amount
         self.currency = subscription.price.currency
         self.period = subscription.period

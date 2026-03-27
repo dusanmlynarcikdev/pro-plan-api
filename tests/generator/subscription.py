@@ -7,9 +7,9 @@ from app.domain.subscription.price import Price
 from app.domain.subscription.subscription import Subscription
 
 
-def generate() -> Subscription:
+def generate(id: UUID = UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")) -> Subscription:
     return Subscription(
-        UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
+        id,
         Email("john@doe.com"),
         Price(Decimal("1"), "USD"),
         Period.MONTHLY,

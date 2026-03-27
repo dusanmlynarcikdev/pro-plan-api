@@ -1,4 +1,3 @@
-from sqlalchemy.orm.util import identity_key
 from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -28,13 +27,10 @@ class SubscriptionRepository:
         await self.session.flush()
 
     async def update(self, subscription: Subscription) -> None:
-        key = identity_key(SubscriptionSchema, (subscription.id,))
-        stored = self.session.sync_session.identity_map.get(key)
+        _subscription = await self.session.get(SubscriptionSchema, subscription.id)
 
-        if stored is None:
-            raise RuntimeError(
-                f"Subscription {subscription.id} is not loaded in the current session"
-            )
+        if _subscription is None:
+            raise RuntimeError("Subscription not found")
 
-        stored.update_from_domain(subscription)
+        _subscription.update_from_domain(subscription)
         await self.session.flush()
