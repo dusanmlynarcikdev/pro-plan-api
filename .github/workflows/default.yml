@@ -32,7 +32,7 @@ jobs:
             -e POSTGRES_DB=test \
             postgres:18.3
 
-      - name: Schema
+      - name: Database schema
         run: |
           docker run --network network -e DATABASE_URL="$DATABASE_URL" api make mu
           docker run --network network -e DATABASE_URL="$DATABASE_URL" api make mc
