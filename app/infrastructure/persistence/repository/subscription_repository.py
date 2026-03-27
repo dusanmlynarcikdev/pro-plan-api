@@ -1,7 +1,6 @@
-from sqlmodel import col, select
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.domain.subscription.state import State
 from app.domain.subscription.subscription import Subscription
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 
@@ -14,11 +13,10 @@ class SubscriptionRepository:
         self.session.add(SubscriptionSchema.from_domain(subscription))
         await self.session.flush()
 
-    async def find_one_open_by_email(self, email: str) -> Subscription | None:
+    async def find_one_by_email(self, email: str) -> Subscription | None:
         query = (
             select(SubscriptionSchema)
             .where(SubscriptionSchema.email == email)
-            .where(col(SubscriptionSchema.state).in_((State.NEW, State.ACTIVE)))
         )
 
         result = await self.session.exec(query)

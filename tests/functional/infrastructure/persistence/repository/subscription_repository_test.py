@@ -47,14 +47,14 @@ async def test_add_duplicity(session: AsyncSession) -> None:
             )
 
 
-async def test_find_one_open_by_email_new_exists(session: AsyncSession) -> None:
+async def test_find_one_by_email(session: AsyncSession) -> None:
     session.add(SubscriptionSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
     repository_subscription = await SubscriptionRepository(
         session
-    ).find_one_open_by_email("john@doe.com")
+    ).find_one_by_email("john@doe.com")
 
     assert repository_subscription is not None
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
@@ -66,36 +66,7 @@ async def test_find_one_open_by_email_new_exists(session: AsyncSession) -> None:
     assert repository_subscription.state == State.NEW
 
 
-async def test_find_one_open_by_email_active_exists(session: AsyncSession) -> None:
-    subscription = generate()
-    subscription.renew(date(2026, 1, 1))
-    session.add(SubscriptionSchema.from_domain(subscription))
-    await session.flush()
-    session.expunge_all()
-
-    repository_subscription = await SubscriptionRepository(
-        session
-    ).find_one_open_by_email("john@doe.com")
-
-    assert repository_subscription is not None
-    assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-
-
-async def test_find_one_open_by_email_expired_exists(session: AsyncSession) -> None:
-    subscription = generate()
-    subscription.expire()
-    session.add(SubscriptionSchema.from_domain(subscription))
-    await session.flush()
-    session.expunge_all()
-
-    repository_subscription = await SubscriptionRepository(
-        session
-    ).find_one_open_by_email("john@doe.com")
-
-    assert repository_subscription is None
-
-
-async def test_find_one_open_by_email_another_subscription_exists(
+async def test_find_one_by_email_another_subscription_exists(
     session: AsyncSession,
 ) -> None:
     session.add(SubscriptionSchema.from_domain(generate()))
@@ -104,17 +75,17 @@ async def test_find_one_open_by_email_another_subscription_exists(
 
     repository_subscription = await SubscriptionRepository(
         session
-    ).find_one_open_by_email("john2@doe.com")
+    ).find_one_by_email("john2@doe.com")
 
     assert repository_subscription is None
 
 
-async def test_find_one_open_by_email_empty_repository(
+async def test_find_one_by_email_empty_repository(
     session: AsyncSession,
 ) -> None:
     repository_subscription = await SubscriptionRepository(
         session
-    ).find_one_open_by_email("john@doe.com")
+    ).find_one_by_email("john@doe.com")
 
     assert repository_subscription is None
 

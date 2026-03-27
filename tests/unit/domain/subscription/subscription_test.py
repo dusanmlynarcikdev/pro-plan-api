@@ -83,6 +83,14 @@ def test_cancel() -> None:
     assert subscription.state == State.CANCELED
 
 
+def test_cancel_expired() -> None:
+    subscription = generate()
+    subscription.expire()
+
+    with raises(SubscriptionExpired):
+        subscription.cancel()
+
+
 def test_expire() -> None:
     subscription = generate()
     subscription.renew(date(2023, 1, 1))
