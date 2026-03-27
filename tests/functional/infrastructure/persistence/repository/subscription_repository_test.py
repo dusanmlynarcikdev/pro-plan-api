@@ -19,12 +19,12 @@ from tests.generator.subscription import generate
 
 async def test_add(session: AsyncSession) -> None:
     subscription = generate()
-    subscription.renewal(date(2026, 1, 1))
+    subscription.renew(date(2026, 1, 1))
 
     await SubscriptionRepository(session).add(subscription)
     session.expunge_all()
 
-    repository_subscription = await get_subscription_schema(session, subscription.id)
+    repository_subscription = await get_subscription(session, subscription.id)
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
@@ -68,7 +68,7 @@ async def test_find_one_open_by_email_new_exists(session: AsyncSession) -> None:
 
 async def test_find_one_open_by_email_active_exists(session: AsyncSession) -> None:
     subscription = generate()
-    subscription.renewal(date(2026, 1, 1))
+    subscription.renew(date(2026, 1, 1))
     session.add(SubscriptionSchema.from_domain(subscription))
     await session.flush()
     session.expunge_all()
@@ -126,12 +126,12 @@ async def test_update(session: AsyncSession) -> None:
     session.expunge_all()
 
     subscription.change(Price(Decimal("2"), "CZK"), Period.YEARLY)
-    subscription.renewal(date(2026, 2, 1))
+    subscription.renew(date(2026, 2, 1))
 
     await SubscriptionRepository(session).update(subscription)
     session.expunge_all()
 
-    repository_subscription = await get_subscription_schema(session, subscription.id)
+    repository_subscription = await get_subscription(session, subscription.id)
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
@@ -153,7 +153,7 @@ async def test_update_unknown(session: AsyncSession) -> None:
         )
 
 
-async def get_subscription_schema(session: AsyncSession, id: UUID) -> SubscriptionSchema:
+async def get_subscription(session: AsyncSession, id: UUID) -> SubscriptionSchema:
     query = select(SubscriptionSchema).where(SubscriptionSchema.id == id)
     result = await session.exec(query)
 

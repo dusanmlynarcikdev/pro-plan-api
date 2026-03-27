@@ -9,11 +9,17 @@ from app.domain.subscription.errors import SubscriptionExpired
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
+from app.domain.subscription.subscription import Subscription
 from tests.generator.subscription import generate
 
 
 def test_create() -> None:
-    result = generate()
+    result = Subscription(
+        UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
+        Email("john@doe.com"),
+        Price(Decimal("1"), "USD"),
+        Period.MONTHLY,
+    )
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.email == Email("john@doe.com")
@@ -48,29 +54,38 @@ def test_change_expired() -> None:
     "period, expected_date",
     ((Period.MONTHLY, date(2023, 2, 1)), (Period.YEARLY, date(2024, 1, 1))),
 )
-def test_renewal(period: Period, expected_date: date) -> None:
-    subscription = generate()
-    subscription.change(subscription.price, period)
+def test_renew(period: Period, expected_date: date) -> None:
+    subscription = generate(period=period)
 
-    subscription.renewal(payment_date=date(2023, 1, 1))
+    subscription.renew(payment_date=date(2023, 1, 1))
 
     assert subscription.next_payment_date == expected_date
     assert subscription.state == State.ACTIVE
 
 
-def test_renewal_active() -> None:
+def test_renew_after_next_payment_date() -> None:
     subscription = generate()
-    subscription.renewal(date(2023, 1, 2))
+    subscription.renew(date(2023, 1, 1))
 
-    subscription.renewal(date(2023, 1, 3))
+    subscription.renew(date(2023, 2, 2))
 
-    assert subscription.next_payment_date == date(2023, 3, 2)
+    assert subscription.next_payment_date == date(2023, 3, 1)
+    assert subscription.state == State.ACTIVE
+
+
+def test_renew_before_next_payment_date() -> None:
+    subscription = generate()
+    subscription.renew(date(2023, 1, 1))
+
+    subscription.renew(date(2023, 1, 30))
+
+    assert subscription.next_payment_date == date(2023, 3, 1)
     assert subscription.state == State.ACTIVE
 
 
 def test_expire() -> None:
     subscription = generate()
-    subscription.renewal(date(2023, 1, 1))
+    subscription.renew(date(2023, 1, 1))
 
     subscription.expire()
 

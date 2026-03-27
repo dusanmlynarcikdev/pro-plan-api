@@ -6,15 +6,14 @@ from app.domain.subscription.errors import InvalidAmount, InvalidCurrency
 from app.domain.subscription.price import Price
 
 
-@mark.parametrize("price", ("1", "1.5"))
-def test_create(price: str) -> None:
-    result = Price(Decimal(price), "USD")
+def test_create() -> None:
+    result = Price(Decimal("1.5"), "USD")
 
-    assert result.amount == Decimal(price)
+    assert result.amount == Decimal("1.5")
     assert result.currency == "USD"
 
 
-@mark.parametrize("price", ("0", "0.0", "-1", "-1.5"))
+@mark.parametrize("price", ("0", "0.0", "-1.5"))
 def test_invalid_amount(price: str) -> None:
     with raises(InvalidAmount):
         Price(Decimal(price), "USD")

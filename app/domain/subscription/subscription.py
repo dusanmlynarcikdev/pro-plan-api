@@ -52,7 +52,7 @@ class Subscription:
         self.__price = price
         self.__period = period
 
-    def renewal(self, payment_date: date) -> None:
+    def renew(self, payment_date: date) -> None:
         if self.state == State.ACTIVE and self.next_payment_date is not None:
             payment_date = self.next_payment_date
 

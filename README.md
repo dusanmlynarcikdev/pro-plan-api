@@ -21,7 +21,7 @@ A simple subscription management REST API for internal use — focused on a sing
 - **Single subscription model**
 - **Identified by email**
 - **One active subscription per email**
-- **Full lifecycle management** (renewals, cancellations)
+- **Full lifecycle management** (renewals, cancellations, expirations)
 - **Payment required 7 days before period end**
 - **7-day grace period** after a missed payment
 
