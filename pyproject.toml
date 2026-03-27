@@ -3,9 +3,12 @@ name = "pro-subscription-management-api"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "alembic>=1.18.4",
     "dotenv>=0.9.9",
     "fastapi[standard]>=0.135.2",
     "psycopg[binary]>=3.3.3",
+    "pydantic-extra-types[pycountry]>=2.11.1",
+    "python-dateutil>=2.9.0.post0",
     "sqlalchemy>=2.0.48",
     "sqlalchemy-utils>=0.42.1",
     "sqlmodel>=0.0.37",
@@ -24,4 +27,5 @@ dev = [
 anyio_mode = "auto"
 
 [tool.ruff.lint]
+extend-select = ["ANN"]
 select = ["I"]

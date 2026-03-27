@@ -9,6 +9,18 @@ l:
 lf:
 	ruff check --fix && ruff format
 
+# check migrations
+mc:
+	alembic check
+
+# run database migrations
+mu:
+	alembic upgrade head
+
+# generate database migrations
+mg:
+	alembic revision -m "autogenerate" --autogenerate
+
 # types
 ty:
 	ty check

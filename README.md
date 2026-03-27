@@ -10,7 +10,7 @@ A simple subscription management REST API for internal use — focused on a sing
 - **Real-World Domain:** A practical foundation you can use or extend.
 
 ## ⭐️ Highlights
-- **Minimal design**
+- **Minimalist design**
 - **Authentication-free** — intended for internal network environments
 - **Ready to use** out of the box
 - **Modern technology stack**
@@ -21,7 +21,7 @@ A simple subscription management REST API for internal use — focused on a sing
 - **Single subscription model**
 - **Identified by email**
 - **One active subscription per email**
-- **Full lifecycle management** (renewals, cancellations)
+- **Full lifecycle management** (renewals, cancellations, expirations)
 - **Payment required 7 days before period end**
 - **7-day grace period** after a missed payment
 
@@ -37,7 +37,7 @@ A simple subscription management REST API for internal use — focused on a sing
 - **Domain:** Rich domain models (not anemic), organized into domain modules
 - **Data:** Value Objects & UUIDs as primary identifies
 - **Principles:** SOLID, KISS (Keep It Simple), DRY (Don't Repeat Yourself)
-- **Quality:** Testable domain logic & functional tests for the entire REST API
+- **Quality:** Unit & functional tests covering domain logic and the entire API
 
 ## 💻 Dev Environment
 
