@@ -6,6 +6,9 @@ jobs:
   checks:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@database:5432/test
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -19,7 +22,7 @@ jobs:
       - name: Types
         run: docker run api make ty
 
-      - name: Tests
+      - name: Start database
         run: |
           docker network create network
           docker run -d \
@@ -28,4 +31,11 @@ jobs:
             -e POSTGRES_PASSWORD=postgres \
             -e POSTGRES_DB=test \
             postgres:18.3
-          docker run --network network api make t
+
+      - name: Schema
+        run: |
+          docker run --network network -e DATABASE_URL="$DATABASE_URL" api make mu
+          docker run --network network -e DATABASE_URL="$DATABASE_URL" api make mc
+
+      - name: Tests
+        run: docker run --network network -e DATABASE_URL="$DATABASE_URL" api make t

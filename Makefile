@@ -9,6 +9,10 @@ l:
 lf:
 	ruff check --fix && ruff format
 
+# check migrations
+mc:
+	alembic check
+
 # run database migrations
 mu:
 	alembic upgrade head
