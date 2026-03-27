@@ -41,42 +41,14 @@ async def test_add_duplicity(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    with raises(IntegrityError, match="duplicate key value violates unique constraint \"uq_subscription_email\""):
-        await SubscriptionRepository(session).add(generate(UUID("019d2fc4-e06a-7dce-a23c-b8ce364f46a2")))
-
-
-async def test_update(session: AsyncSession) -> None:
-    subscription = generate()
-    session.add(SubscriptionSchema.from_domain(subscription))
-    await session.flush()
-    session.expunge_all()
-
-    subscription.change(Price(Decimal("2"), "CZK"), Period.YEARLY)
-    subscription.renewal(date(2026, 2, 1))
-
-    await SubscriptionRepository(session).update(subscription)
-    session.expunge_all()
-
-    repository_subscription = await get_subscription(session, subscription.id)
-
-    assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_subscription.email == "john@doe.com"
-    assert repository_subscription.amount == Decimal("2")
-    assert repository_subscription.currency == "CZK"
-    assert repository_subscription.period == Period.YEARLY
-    assert repository_subscription.next_payment_date == date(2027, 2, 1)
-    assert repository_subscription.state == State.ACTIVE
-
-
-async def test_update_unknown_subscription(session: AsyncSession) -> None:
-    session.add(SubscriptionSchema.from_domain(generate()))
-    await session.flush()
-    session.expunge_all()
-
-    with raises(RuntimeError, match="Subscription not found"):
-        await SubscriptionRepository(session).update(
-            generate(UUID("019d2fb0-b4d2-7731-9924-9de4130ec63e"))
-        )
+    with raises(
+        IntegrityError,
+        match='duplicate key value violates unique constraint "uq_subscription_email"',
+    ):
+        async with session.begin_nested():
+            await SubscriptionRepository(session).add(
+                generate(UUID("019d2fc4-e06a-7dce-a23c-b8ce364f46a2"))
+            )
 
 
 async def test_find_one_open_by_email_new_exists(session: AsyncSession) -> None:
@@ -155,6 +127,40 @@ async def test_find_one_open_by_email_empty_repository(
     ).find_one_open_by_email("john@doe.com")
 
     assert repository_subscription is None
+
+
+async def test_update(session: AsyncSession) -> None:
+    subscription = generate()
+    session.add(SubscriptionSchema.from_domain(subscription))
+    await session.flush()
+    session.expunge_all()
+
+    subscription.change(Price(Decimal("2"), "CZK"), Period.YEARLY)
+    subscription.renewal(date(2026, 2, 1))
+
+    await SubscriptionRepository(session).update(subscription)
+    session.expunge_all()
+
+    repository_subscription = await get_subscription(session, subscription.id)
+
+    assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert repository_subscription.email == "john@doe.com"
+    assert repository_subscription.amount == Decimal("2")
+    assert repository_subscription.currency == "CZK"
+    assert repository_subscription.period == Period.YEARLY
+    assert repository_subscription.next_payment_date == date(2027, 2, 1)
+    assert repository_subscription.state == State.ACTIVE
+
+
+async def test_update_unknown_subscription(session: AsyncSession) -> None:
+    session.add(SubscriptionSchema.from_domain(generate()))
+    await session.flush()
+    session.expunge_all()
+
+    with raises(RuntimeError, match="Subscription not found"):
+        await SubscriptionRepository(session).update(
+            generate(UUID("019d2fb0-b4d2-7731-9924-9de4130ec63e"))
+        )
 
 
 async def get_subscription(session: AsyncSession, id: UUID) -> SubscriptionSchema:

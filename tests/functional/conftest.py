@@ -31,8 +31,7 @@ async def session() -> AsyncGenerator[AsyncSession]:
                 yield session_
             finally:
                 app.dependency_overrides.pop(get_session, None)
-        if transaction.is_active:
-            await transaction.rollback()
+        await transaction.rollback()
 
 
 @fixture(scope="session", autouse=True)
