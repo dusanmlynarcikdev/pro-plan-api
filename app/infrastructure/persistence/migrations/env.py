@@ -1,10 +1,20 @@
+from importlib import import_module
 from logging.config import fileConfig
 from os import getenv
+from pkgutil import walk_packages
 
 from alembic import context
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
+
+from app.infrastructure.persistence import schema
+
+
+def import_all_schemas() -> None:
+    for module in walk_packages(schema.__path__, prefix=f"{schema.__name__}."):
+        import_module(module.name)
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -24,6 +34,8 @@ if not database_url:
     )
 
 config.set_main_option("sqlalchemy.url", database_url)
+
+import_all_schemas()
 
 # add your model's MetaData object here
 # for 'autogenerate' support
