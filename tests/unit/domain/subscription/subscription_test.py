@@ -5,7 +5,7 @@ from uuid import UUID
 from pytest import mark, raises
 
 from app.domain.subscription.email import Email
-from app.domain.subscription.errors import SubscriptionExpired
+from app.domain.subscription.errors import SubscriptionCanceled, SubscriptionExpired
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
@@ -42,14 +42,6 @@ def test_change() -> None:
     assert subscription.state == State.NEW
 
 
-def test_change_expired() -> None:
-    subscription = generate()
-    subscription.expire()
-
-    with raises(SubscriptionExpired):
-        subscription.change(Price(Decimal("2"), "CZK"), Period.YEARLY)
-
-
 @mark.parametrize(
     "period, expected_date",
     ((Period.MONTHLY, date(2023, 2, 1)), (Period.YEARLY, date(2024, 1, 1))),
@@ -83,6 +75,14 @@ def test_cancel() -> None:
     assert subscription.state == State.CANCELED
 
 
+def test_canceled_expired() -> None:
+    subscription = generate()
+    subscription.cancel()
+
+    with raises(SubscriptionCanceled):
+        subscription.cancel()
+
+
 def test_cancel_expired() -> None:
     subscription = generate()
     subscription.expire()
@@ -99,6 +99,14 @@ def test_expire() -> None:
 
     assert subscription.next_payment_date is None
     assert subscription.state == State.EXPIRED
+
+
+def test_expire_canceled() -> None:
+    subscription = generate()
+    subscription.cancel()
+
+    with raises(SubscriptionCanceled):
+        subscription.expire()
 
 
 def test_expire_expired() -> None:

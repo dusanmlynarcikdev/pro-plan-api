@@ -14,10 +14,7 @@ class SubscriptionRepository:
         await self.session.flush()
 
     async def find_one_by_email(self, email: str) -> Subscription | None:
-        query = (
-            select(SubscriptionSchema)
-            .where(SubscriptionSchema.email == email)
-        )
+        query = select(SubscriptionSchema).where(SubscriptionSchema.email == email)
 
         result = await self.session.exec(query)
         subscription = result.one_or_none()

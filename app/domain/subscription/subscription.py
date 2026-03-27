@@ -4,7 +4,7 @@ from uuid import UUID
 from dateutil.relativedelta import relativedelta
 
 from app.domain.subscription.email import Email
-from app.domain.subscription.errors import SubscriptionExpired
+from app.domain.subscription.errors import SubscriptionCanceled, SubscriptionExpired
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
@@ -44,11 +44,6 @@ class Subscription:
         return self.__state
 
     def change(self, price: Price, period: Period) -> None:
-        """
-        :raises SubscriptionExpired:
-        """
-        self.__check_expiration()
-
         self.__price = price
         self.__period = period
 
@@ -66,25 +61,31 @@ class Subscription:
 
     def cancel(self) -> None:
         """
+        :raises SubscriptionCanceled:
         :raises SubscriptionExpired:
         """
-        self.__check_expiration()
+        self.__check_openness()
 
         self.__next_payment_date = None
         self.__state = State.CANCELED
 
     def expire(self) -> None:
         """
+        :raises SubscriptionCanceled:
         :raises SubscriptionExpired:
         """
-        self.__check_expiration()
+        self.__check_openness()
 
         self.__next_payment_date = None
         self.__state = State.EXPIRED
 
-    def __check_expiration(self) -> None:
+    def __check_openness(self) -> None:
         """
+        :raises SubscriptionCanceled:
         :raises SubscriptionExpired:
         """
+        if self.__state == State.CANCELED:
+            raise SubscriptionCanceled()
+
         if self.__state == State.EXPIRED:
             raise SubscriptionExpired()

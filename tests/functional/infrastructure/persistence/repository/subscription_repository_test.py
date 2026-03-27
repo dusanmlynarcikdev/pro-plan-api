@@ -52,9 +52,9 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    repository_subscription = await SubscriptionRepository(
-        session
-    ).find_one_by_email("john@doe.com")
+    repository_subscription = await SubscriptionRepository(session).find_one_by_email(
+        "john@doe.com"
+    )
 
     assert repository_subscription is not None
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
@@ -73,9 +73,9 @@ async def test_find_one_by_email_another_subscription_exists(
     await session.flush()
     session.expunge_all()
 
-    repository_subscription = await SubscriptionRepository(
-        session
-    ).find_one_by_email("john2@doe.com")
+    repository_subscription = await SubscriptionRepository(session).find_one_by_email(
+        "john2@doe.com"
+    )
 
     assert repository_subscription is None
 
@@ -83,9 +83,9 @@ async def test_find_one_by_email_another_subscription_exists(
 async def test_find_one_by_email_empty_repository(
     session: AsyncSession,
 ) -> None:
-    repository_subscription = await SubscriptionRepository(
-        session
-    ).find_one_by_email("john@doe.com")
+    repository_subscription = await SubscriptionRepository(session).find_one_by_email(
+        "john@doe.com"
+    )
 
     assert repository_subscription is None
 

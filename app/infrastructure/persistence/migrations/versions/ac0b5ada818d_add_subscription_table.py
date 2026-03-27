@@ -36,7 +36,9 @@ def upgrade() -> None:
         ),
         sa.Column("next_payment_date", sa.Date(), nullable=True),
         sa.Column(
-            "state", sa.Enum("NEW", "ACTIVE", "CANCELED", "EXPIRED", name="state"), nullable=False
+            "state",
+            sa.Enum("NEW", "ACTIVE", "CANCELED", "EXPIRED", name="state"),
+            nullable=False,
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("email", name="uq_subscription_email"),

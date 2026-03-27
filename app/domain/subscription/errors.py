@@ -16,6 +16,11 @@ class InvalidEmail(DomainError):
         super().__init__("Invalid email")
 
 
+class SubscriptionCanceled(DomainError):
+    def __init__(self) -> None:
+        super().__init__("Subscription canceled")
+
+
 class SubscriptionExpired(DomainError):
     def __init__(self) -> None:
         super().__init__("Subscription expired")
