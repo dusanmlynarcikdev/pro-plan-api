@@ -58,3 +58,11 @@ class SubscriptionSchema(SQLModel, table=True):
         setattr(subscription, "_Subscription__state", self.state)
 
         return subscription
+
+    def update_from_domain(self, subscription: Subscription) -> None:
+        self.email = subscription.email.value
+        self.amount = subscription.price.amount
+        self.currency = subscription.price.currency
+        self.period = subscription.period
+        self.next_payment_date = subscription.next_payment_date
+        self.state = subscription.state
