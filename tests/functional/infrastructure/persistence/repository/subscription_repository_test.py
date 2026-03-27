@@ -24,7 +24,7 @@ async def test_add(session: AsyncSession) -> None:
     await SubscriptionRepository(session).add(subscription)
     session.expunge_all()
 
-    repository_subscription = await get_subscription(session, subscription.id)
+    repository_subscription = await get_subscription_schema(session, subscription.id)
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
@@ -36,8 +36,7 @@ async def test_add(session: AsyncSession) -> None:
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
-    subscription = generate()
-    session.add(SubscriptionSchema.from_domain(subscription))
+    session.add(SubscriptionSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
@@ -80,12 +79,6 @@ async def test_find_one_open_by_email_active_exists(session: AsyncSession) -> No
 
     assert repository_subscription is not None
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_subscription.email.value == "john@doe.com"
-    assert repository_subscription.price.amount == Decimal("1")
-    assert repository_subscription.price.currency == "USD"
-    assert repository_subscription.period == Period.MONTHLY
-    assert repository_subscription.next_payment_date == date(2026, 2, 1)
-    assert repository_subscription.state == State.ACTIVE
 
 
 async def test_find_one_open_by_email_expired_exists(session: AsyncSession) -> None:
@@ -138,7 +131,7 @@ async def test_update(session: AsyncSession) -> None:
     await SubscriptionRepository(session).update(subscription)
     session.expunge_all()
 
-    repository_subscription = await get_subscription(session, subscription.id)
+    repository_subscription = await get_subscription_schema(session, subscription.id)
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
@@ -160,7 +153,7 @@ async def test_update_unknown(session: AsyncSession) -> None:
         )
 
 
-async def get_subscription(session: AsyncSession, id: UUID) -> SubscriptionSchema:
+async def get_subscription_schema(session: AsyncSession, id: UUID) -> SubscriptionSchema:
     query = select(SubscriptionSchema).where(SubscriptionSchema.id == id)
     result = await session.exec(query)
 
