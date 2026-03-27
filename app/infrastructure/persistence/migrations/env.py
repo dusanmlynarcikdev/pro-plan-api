@@ -1,6 +1,5 @@
 from importlib import import_module
 from logging.config import fileConfig
-from os import getenv
 from pkgutil import walk_packages
 
 from alembic import context
@@ -10,11 +9,9 @@ from sqlmodel import SQLModel
 
 from app.infrastructure.persistence import schema
 
+load_dotenv(".env")
 
-def import_all_schemas() -> None:
-    for module in walk_packages(schema.__path__, prefix=f"{schema.__name__}."):
-        import_module(module.name)
-
+from app.infrastructure.persistence.connection import DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -25,15 +22,13 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-load_dotenv(".env")
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
-database_url = getenv("DATABASE_URL", "")
-if not database_url:
-    raise RuntimeError(
-        "DATABASE_URL is not set. Alembic cannot connect to the database."
-    )
 
-config.set_main_option("sqlalchemy.url", database_url)
+def import_all_schemas() -> None:
+    for module in walk_packages(schema.__path__, prefix=f"{schema.__name__}."):
+        import_module(module.name)
+
 
 import_all_schemas()
 
