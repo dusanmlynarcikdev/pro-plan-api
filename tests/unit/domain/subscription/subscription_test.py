@@ -63,21 +63,12 @@ def test_renew(period: Period, expected_date: date) -> None:
     assert subscription.state == State.ACTIVE
 
 
-def test_renew_after_next_payment_date() -> None:
+@mark.parametrize("payment_date", (date(2023, 1, 31), date(2023, 2, 2)))
+def test_renew_outside_next_payment_date(payment_date: date) -> None:
     subscription = generate()
     subscription.renew(date(2023, 1, 1))
 
-    subscription.renew(date(2023, 2, 2))
-
-    assert subscription.next_payment_date == date(2023, 3, 1)
-    assert subscription.state == State.ACTIVE
-
-
-def test_renew_before_next_payment_date() -> None:
-    subscription = generate()
-    subscription.renew(date(2023, 1, 1))
-
-    subscription.renew(date(2023, 1, 30))
+    subscription.renew(payment_date)
 
     assert subscription.next_payment_date == date(2023, 3, 1)
     assert subscription.state == State.ACTIVE
