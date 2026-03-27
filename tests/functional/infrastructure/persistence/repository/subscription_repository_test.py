@@ -3,6 +3,7 @@ from decimal import Decimal
 from uuid import UUID
 
 from pytest import raises
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -32,6 +33,16 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_subscription.period == Period.MONTHLY
     assert repository_subscription.next_payment_date == date(2026, 2, 1)
     assert repository_subscription.state == State.ACTIVE
+
+
+async def test_add_duplicity(session: AsyncSession) -> None:
+    subscription = generate()
+    session.add(SubscriptionSchema.from_domain(subscription))
+    await session.flush()
+    session.expunge_all()
+
+    with raises(IntegrityError, match="duplicate key value violates unique constraint \"uq_subscription_email\""):
+        await SubscriptionRepository(session).add(generate(UUID("019d2fc4-e06a-7dce-a23c-b8ce364f46a2")))
 
 
 async def test_update(session: AsyncSession) -> None:

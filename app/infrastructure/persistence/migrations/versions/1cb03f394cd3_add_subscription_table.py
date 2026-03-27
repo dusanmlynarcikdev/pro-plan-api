@@ -57,7 +57,6 @@ def upgrade() -> None:
         "subscription",
         ["email"],
         unique=True,
-        postgresql_where=sa.text("state IN ('NEW', 'ACTIVE')"),
     )
     # ### end Alembic commands ###
 
@@ -68,7 +67,6 @@ def downgrade() -> None:
     op.drop_index(
         "uq_subscription_email",
         table_name="subscription",
-        postgresql_where=sa.text("state IN ('NEW', 'ACTIVE')"),
     )
     op.drop_index(op.f("ix_subscription_state"), table_name="subscription")
     op.drop_index(op.f("ix_subscription_next_payment_date"), table_name="subscription")

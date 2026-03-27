@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Annotated
 from uuid import UUID
 
-from sqlalchemy import Index, text
+from sqlalchemy import Index
 from sqlmodel import Field, SQLModel
 
 from app.domain.subscription.email import Email
@@ -21,7 +21,6 @@ class SubscriptionSchema(SQLModel, table=True):
             "uq_subscription_email",
             "email",
             unique=True,
-            postgresql_where=text("state IN ('NEW', 'ACTIVE')"),
         ),
     )
 
