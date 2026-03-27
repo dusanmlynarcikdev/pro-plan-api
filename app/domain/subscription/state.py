@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 
 
 class State(StrEnum):
-    NEW = "new"
-    ACTIVE = "active"
-    EXPIRED = "expired"
+    NEW = auto()
+    ACTIVE = auto()
+    EXPIRED = auto()

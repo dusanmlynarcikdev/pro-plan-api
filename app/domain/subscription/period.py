@@ -1,6 +1,6 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 
 
 class Period(StrEnum):
-    MONTHLY = "monthly"
-    YEARLY = "yearly"
+    MONTHLY = auto()
+    YEARLY = auto()
