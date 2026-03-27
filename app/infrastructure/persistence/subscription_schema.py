@@ -21,7 +21,7 @@ class SubscriptionSchema(SQLModel, table=True):
             "uq_subscription_email",
             "email",
             unique=True,
-            postgresql_where=text("state IN ('new', 'active')"),
+            postgresql_where=text("state IN ('NEW', 'ACTIVE')"),
         ),
     )
 
