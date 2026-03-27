@@ -152,7 +152,7 @@ async def test_update(session: AsyncSession) -> None:
     assert repository_subscription.state == State.ACTIVE
 
 
-async def test_update_unknown_subscription(session: AsyncSession) -> None:
+async def test_update_unknown(session: AsyncSession) -> None:
     session.add(SubscriptionSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
