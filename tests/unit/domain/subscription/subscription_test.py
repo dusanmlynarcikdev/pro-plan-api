@@ -74,6 +74,15 @@ def test_renew_outside_next_payment_date(payment_date: date) -> None:
     assert subscription.state == State.ACTIVE
 
 
+def test_cancel() -> None:
+    subscription = generate()
+
+    subscription.cancel()
+
+    assert subscription.next_payment_date is None
+    assert subscription.state == State.CANCELED
+
+
 def test_expire() -> None:
     subscription = generate()
     subscription.renew(date(2023, 1, 1))

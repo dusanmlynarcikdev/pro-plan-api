@@ -64,6 +64,15 @@ class Subscription:
 
         self.__state = State.ACTIVE
 
+    def cancel(self) -> None:
+        """
+        :raises SubscriptionExpired:
+        """
+        self.__check_expiration()
+
+        self.__next_payment_date = None
+        self.__state = State.CANCELED
+
     def expire(self) -> None:
         """
         :raises SubscriptionExpired:
