@@ -3,7 +3,6 @@ from decimal import Decimal
 from typing import Annotated
 from uuid import UUID
 
-from sqlalchemy import Index
 from sqlmodel import Field, SQLModel
 
 from app.domain.subscription.email import Email
@@ -16,16 +15,8 @@ from app.domain.subscription.subscription import Subscription
 class SubscriptionSchema(SQLModel, table=True):
     __tablename__ = "subscription"
 
-    __table_args__ = (
-        Index(
-            "uq_subscription_email",
-            "email",
-            unique=True,
-        ),
-    )
-
     id: Annotated[UUID, Field(primary_key=True)]
-    email: Annotated[str, Field(index=True)]
+    email: Annotated[str, Field(unique=True)]
     amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)]
     currency: Annotated[str, Field(min_length=3, max_length=3)]
     period: Period
