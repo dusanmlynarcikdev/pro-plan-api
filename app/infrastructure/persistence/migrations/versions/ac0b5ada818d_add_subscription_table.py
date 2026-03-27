@@ -39,7 +39,7 @@ def upgrade() -> None:
             "state", sa.Enum("NEW", "ACTIVE", "EXPIRED", name="state"), nullable=False
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("email"),
+        sa.UniqueConstraint("email", name="uq_subscription_email"),
     )
     op.create_index(
         op.f("ix_subscription_next_payment_date"),

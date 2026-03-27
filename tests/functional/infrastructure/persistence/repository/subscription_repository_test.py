@@ -41,7 +41,7 @@ async def test_add_duplicity(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    with raises(IntegrityError, match="subscription_email_key"):
+    with raises(IntegrityError, match="uq_subscription_email"):
         async with session.begin_nested():
             await SubscriptionRepository(session).add(
                 generate(UUID("019d2fc4-e06a-7dce-a23c-b8ce364f46a2"))
