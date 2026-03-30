@@ -8,7 +8,7 @@ from sqlmodel import Field, SQLModel
 from app.domain.payment.payment import Payment
 from app.domain.subscription.price import Price
 
-from .attributes import amount, currency, id
+from .types import Amount, Currency, Id
 
 
 class PaymentSchema(SQLModel, table=True):
@@ -22,12 +22,12 @@ class PaymentSchema(SQLModel, table=True):
         ),
     )
 
-    id: id
+    id: Id
     subscription_id: Annotated[
         UUID, Field(foreign_key="subscription.id", ondelete="RESTRICT")
     ]
-    amount: amount
-    currency: currency
+    amount: Amount
+    currency: Currency
     paid_at: date
 
     @classmethod

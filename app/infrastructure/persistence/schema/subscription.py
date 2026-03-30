@@ -10,17 +10,17 @@ from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
 from app.domain.subscription.subscription import Subscription
 
-from .attributes import amount, currency, id
+from .types import Amount, Currency, Id
 
 
 class SubscriptionSchema(SQLModel, table=True):
     __tablename__ = "subscription"
     __table_args__ = (UniqueConstraint("email", name="uq_subscription_email"),)
 
-    id: id
+    id: Id
     email: str
-    amount: amount
-    currency: currency
+    amount: Amount
+    currency: Currency
     period: Period
     next_payment_date: Annotated[date | None, Field(index=True)]
     state: Annotated[State, Field(index=True)]
