@@ -1,7 +1,7 @@
 from typing import AsyncIterator, Protocol
 from uuid import UUID
 
-from .payment import Payment
+from app.domain.payment.payment import Payment
 
 
 class PaymentRepository(Protocol):
