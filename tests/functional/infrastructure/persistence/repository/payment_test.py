@@ -66,22 +66,23 @@ async def test_find_by_subscription_id(session: AsyncSession) -> None:
 
 
 async def test_find_by_subscription_id_with_offset_one(session: AsyncSession) -> None:
-    subscription = generate_subscription()
-    session.add(SubscriptionSchema.from_domain(subscription))
+    session.add(SubscriptionSchema.from_domain(generate_subscription()))
     await session.flush()
 
-    payment1 = generate()
-    payment2 = generate(UUID("019d3ea9-e070-7c88-ad30-c3a3f6a61730"))
-    session.add(PaymentSchema.from_domain(payment1))
-    session.add(PaymentSchema.from_domain(payment2))
+    payment = generate()
+    session.add(PaymentSchema.from_domain(payment))
+    session.add(
+        PaymentSchema.from_domain(
+            generate(UUID("019d3ea9-e070-7c88-ad30-c3a3f6a61730"))
+        )
+    )
     await session.flush()
     session.expunge_all()
 
     repository_payments = await get_payments(session, offset=1)
 
     assert len(repository_payments) == 1
-
-    assert repository_payments[0].id == payment1.id
+    assert repository_payments[0].id == payment.id
 
 
 async def test_find_by_subscription_id_payment_for_another_subscription(
