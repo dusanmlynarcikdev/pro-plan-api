@@ -10,7 +10,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
-from app.infrastructure.persistence.repository.subscription_repository import (
+from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
