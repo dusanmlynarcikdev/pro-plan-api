@@ -2,7 +2,6 @@ from datetime import date
 from typing import Annotated
 from uuid import UUID
 
-from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, SQLModel
 
 from app.domain.payment.payment import Payment
@@ -13,13 +12,10 @@ from .attributes import amount, currency, id
 
 class PaymentSchema(SQLModel, table=True):
     __tablename__ = "payment"
-    __table_args__ = (
-        UniqueConstraint("subscription_id", "paid_at", name="uq_subscription_paid"),
-    )
 
     id: id
     subscription_id: Annotated[
-        UUID, Field(foreign_key="subscription.id", ondelete="RESTRICT")
+        UUID, Field(foreign_key="subscription.id", index=True, ondelete="RESTRICT")
     ]
     amount: amount
     currency: currency
