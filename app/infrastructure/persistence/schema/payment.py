@@ -2,6 +2,7 @@ from datetime import date
 from typing import Annotated
 from uuid import UUID
 
+from sqlalchemy import Index
 from sqlmodel import Field, SQLModel
 
 from app.domain.payment.payment import Payment
@@ -12,10 +13,18 @@ from .attributes import amount, currency, id
 
 class PaymentSchema(SQLModel, table=True):
     __tablename__ = "payment"
+    __table_args__ = (
+        Index(
+            "ix_payment_subscription_id_paid_at_id",
+            "subscription_id",
+            "paid_at",
+            "id",
+        ),
+    )
 
     id: id
     subscription_id: Annotated[
-        UUID, Field(foreign_key="subscription.id", index=True, ondelete="RESTRICT")
+        UUID, Field(foreign_key="subscription.id", ondelete="RESTRICT")
     ]
     amount: amount
     currency: currency
