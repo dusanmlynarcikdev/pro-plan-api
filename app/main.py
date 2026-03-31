@@ -8,7 +8,7 @@ load_dotenv(".env")
 
 from app.presentation.api.health_check import router as health_check_router
 from app.presentation.api.subscription.create_or_update import (
-    router as subscription_router,
+    router as create_or_update_subscription_router,
 )
 
 app = FastAPI(
@@ -29,4 +29,4 @@ async def domain_exception_handler(request: Request, exc: DomainError) -> JSONRe
 
 
 app.include_router(health_check_router)
-app.include_router(subscription_router)
+app.include_router(create_or_update_subscription_router)

@@ -10,8 +10,8 @@ router = APIRouter()
 @router.post("/subscriptions", status_code=status.HTTP_204_NO_CONTENT)
 async def create_or_update(
     request: CreateOrUpdateRequest,
-    create_update_subscription: CreateOrUpdateSubscriptionCommand,
+    create_or_update_command: CreateOrUpdateSubscriptionCommand,
 ) -> None:
-    await create_update_subscription.__call__(
+    await create_or_update_command.__call__(
         Email(request.email), request.price, request.period
     )
