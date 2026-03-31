@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.domain.subscription.email import Email
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
@@ -53,7 +54,7 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
     session.expunge_all()
 
     repository_subscription = await SubscriptionRepository(session).find_one_by_email(
-        "john@doe.com"
+        Email("john@doe.com")
     )
 
     assert repository_subscription is not None
@@ -74,7 +75,7 @@ async def test_find_one_by_email_another_subscription_exists(
     session.expunge_all()
 
     repository_subscription = await SubscriptionRepository(session).find_one_by_email(
-        "john2@doe.com"
+        Email("john2@doe.com")
     )
 
     assert repository_subscription is None
@@ -84,7 +85,7 @@ async def test_find_one_by_email_empty_repository(
     session: AsyncSession,
 ) -> None:
     repository_subscription = await SubscriptionRepository(session).find_one_by_email(
-        "john@doe.com"
+        Email("john@doe.com")
     )
 
     assert repository_subscription is None
