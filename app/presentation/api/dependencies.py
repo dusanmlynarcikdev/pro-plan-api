@@ -3,8 +3,8 @@ from typing import Annotated, AsyncGenerator
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.application.subscription.create_update_command import (
-    CreateUpdateSubscriptionCommand,
+from app.application.subscription.create_or_update_command import (
+    CreateOrUpdateSubscriptionCommand as _CreateOrUpdateSubscriptionCommand,
 )
 from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
@@ -21,12 +21,13 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_create_update_subscription_command(
+async def get_create_or_update_subscription_command(
     session: Session,
-) -> CreateUpdateSubscriptionCommand:
-    return CreateUpdateSubscriptionCommand(SubscriptionRepository(session))
+) -> _CreateOrUpdateSubscriptionCommand:
+    return _CreateOrUpdateSubscriptionCommand(SubscriptionRepository(session))
 
 
-CreateUpdateSubscriptionCommandDependency = Annotated[
-    CreateUpdateSubscriptionCommand, Depends(get_create_update_subscription_command)
+CreateOrUpdateSubscriptionCommand = Annotated[
+    _CreateOrUpdateSubscriptionCommand,
+    Depends(get_create_or_update_subscription_command),
 ]
