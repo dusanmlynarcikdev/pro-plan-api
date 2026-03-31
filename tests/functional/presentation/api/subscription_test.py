@@ -1,10 +1,10 @@
 from decimal import Decimal
 
 from fastapi import status
+from fastapi.testclient import TestClient
 from pytest import mark
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from starlette.testclient import TestClient
 
 from app.domain.subscription.period import Period
 from app.domain.subscription.state import State

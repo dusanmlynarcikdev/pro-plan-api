@@ -15,7 +15,7 @@ class Email:
 
     def __post_init__(self) -> None:
         try:
-            validated = validate_email(self.value)
+            validated = validate_email(self.value, check_deliverability=False)
         except EmailNotValidError:
             raise InvalidEmail()
 

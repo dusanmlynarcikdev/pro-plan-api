@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, status
-from starlette.responses import JSONResponse
+from fastapi.responses import JSONResponse
 
 from app.domain.errors import DomainError
 
