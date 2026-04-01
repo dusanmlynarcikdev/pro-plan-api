@@ -53,11 +53,11 @@ async def test_unknown_email(client: TestClient, session: AsyncSession) -> None:
     response = client.post("/subscriptions/john2@doe.com/renewal")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.content == b'{"message":"Subscription not found"}'
+    assert response.content == b'{"detail":"Subscription not found"}'
 
 
 def test_invalid_email(client: TestClient) -> None:
     response = client.post("/subscriptions/johndoe.com/renewal")
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert response.content == b'{"message":"Invalid email"}'
+    assert response.content == b'{"detail":"Invalid email"}'

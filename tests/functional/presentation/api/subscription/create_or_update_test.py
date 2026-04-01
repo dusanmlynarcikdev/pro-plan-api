@@ -114,7 +114,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": 124.55, "currency": "EUR"},
                 "period": "yearly",
             },
-            b'{"message":"Invalid email"}',
+            b'{"detail":"Invalid email"}',
         ),
         (
             {
@@ -122,7 +122,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": -1, "currency": "EUR"},
                 "period": "yearly",
             },
-            b'{"message":"Amount must be greater than 0"}',
+            b'{"detail":"Amount must be greater than 0"}',
         ),
         (
             {
@@ -130,7 +130,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": 124.55, "currency": "XYZ"},
                 "period": "yearly",
             },
-            b'{"message":"Invalid currency"}',
+            b'{"detail":"Invalid currency"}',
         ),
         (
             {

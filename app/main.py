@@ -44,7 +44,7 @@ def _get_domain_error_status(error: DomainError) -> int:
 async def domain_error_handler(request: Request, error: DomainError) -> JSONResponse:
     return JSONResponse(
         status_code=_get_domain_error_status(error),
-        content={"message": str(error)},
+        content={"detail": str(error)},
     )
 
 
