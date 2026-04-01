@@ -12,7 +12,6 @@ router = APIRouter()
     status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_404_NOT_FOUND: ERROR_RESPONSE_MODEL,
-        status.HTTP_422_UNPROCESSABLE_CONTENT: ERROR_RESPONSE_MODEL,
     },
 )
 async def renewal(email: str, renewal_command: RenewalSubscriptionCommand) -> Response:
