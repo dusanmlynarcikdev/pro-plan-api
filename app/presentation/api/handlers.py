@@ -21,7 +21,7 @@ def _get_domain_error_status(error: DomainError) -> int:
         case DomainValidationError():
             return status.HTTP_422_UNPROCESSABLE_CONTENT
         case _:
-            return status.HTTP_400_BAD_REQUEST
+            return status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
 def register_exception_handlers(app: FastAPI) -> None:
