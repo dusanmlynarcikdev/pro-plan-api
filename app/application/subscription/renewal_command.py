@@ -20,10 +20,7 @@ class RenewalSubscriptionCommand:
         """
         :raises SubscriptionNotFound:
         """
-        subscription = await self.__subscription_repository.find_one_by_email(email)
-
-        if subscription is None:
-            raise SubscriptionNotFound()
+        subscription = await self.__subscription_repository.get_one_by_email(email)
 
         today = date.today()
 
