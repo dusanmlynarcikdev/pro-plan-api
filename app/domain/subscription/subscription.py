@@ -16,7 +16,7 @@ class Subscription:
         self.__email: Email = email
         self.__price: Price = price
         self.__period: Period = period
-        self.__next_payment_date: date | None = None
+        self.__expires_at: date | None = None
         self.__state: State = State.NEW
 
     @property
@@ -36,8 +36,8 @@ class Subscription:
         return self.__period
 
     @property
-    def next_payment_date(self) -> date | None:
-        return self.__next_payment_date
+    def expires_at(self) -> date | None:
+        return self.__expires_at
 
     @property
     def state(self) -> State:
@@ -48,14 +48,14 @@ class Subscription:
         self.__period = period
 
     def renew(self, today: date) -> None:
-        if self.state == State.ACTIVE and self.next_payment_date is not None:
-            today = self.next_payment_date
+        if self.state == State.ACTIVE and self.expires_at is not None:
+            today = self.expires_at
 
         match self.period:
             case Period.MONTHLY:
-                self.__next_payment_date = today + relativedelta(months=1)
+                self.__expires_at = today + relativedelta(months=1)
             case Period.YEARLY:
-                self.__next_payment_date = today + relativedelta(months=12)
+                self.__expires_at = today + relativedelta(months=12)
 
         self.__state = State.ACTIVE
 
@@ -66,7 +66,7 @@ class Subscription:
         """
         self.__check_openness()
 
-        self.__next_payment_date = None
+        self.__expires_at = None
         self.__state = State.CANCELED
 
     def expire(self) -> None:
@@ -76,7 +76,7 @@ class Subscription:
         """
         self.__check_openness()
 
-        self.__next_payment_date = None
+        self.__expires_at = None
         self.__state = State.EXPIRED
 
     def __check_openness(self) -> None:

@@ -35,7 +35,7 @@ async def test_success(client: TestClient, session: AsyncSession) -> None:
     assert repository_subscription.amount == Decimal("1")
     assert repository_subscription.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
-    assert repository_subscription.next_payment_date == date(2026, 2, 1)
+    assert repository_subscription.expires_at == date(2026, 2, 1)
     assert repository_subscription.state == State.ACTIVE
 
 

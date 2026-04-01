@@ -44,14 +44,14 @@ async def test_create(client: TestClient, session: AsyncSession) -> None:
     assert repository_subscriptions[0].amount == Decimal("1")
     assert repository_subscriptions[0].currency == "USD"
     assert repository_subscriptions[0].period == Period.MONTHLY
-    assert repository_subscriptions[0].next_payment_date is None
+    assert repository_subscriptions[0].expires_at is None
     assert repository_subscriptions[0].state == State.NEW
 
     assert repository_subscriptions[1].email == "john2@doe.com"
     assert repository_subscriptions[1].amount == Decimal("123.45")
     assert repository_subscriptions[1].currency == "EUR"
     assert repository_subscriptions[1].period == Period.YEARLY
-    assert repository_subscriptions[1].next_payment_date is None
+    assert repository_subscriptions[1].expires_at is None
     assert repository_subscriptions[1].state == State.NEW
 
 
@@ -91,7 +91,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
     assert repository_subscriptions[0].amount == Decimal("1")
     assert repository_subscriptions[0].currency == "USD"
     assert repository_subscriptions[0].period == Period.MONTHLY
-    assert repository_subscriptions[0].next_payment_date is None
+    assert repository_subscriptions[0].expires_at is None
     assert repository_subscriptions[0].state == State.NEW
 
     assert repository_subscriptions[1].id == UUID(
@@ -101,7 +101,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
     assert repository_subscriptions[1].amount == Decimal("123.45")
     assert repository_subscriptions[1].currency == "EUR"
     assert repository_subscriptions[1].period == Period.YEARLY
-    assert repository_subscriptions[1].next_payment_date is None
+    assert repository_subscriptions[1].expires_at is None
     assert repository_subscriptions[1].state == State.NEW
 
 

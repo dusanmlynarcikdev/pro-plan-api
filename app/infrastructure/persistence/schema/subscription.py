@@ -22,7 +22,7 @@ class SubscriptionSchema(SQLModel, table=True):
     amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)]
     currency: Annotated[str, Field(min_length=3, max_length=3)]
     period: Period
-    next_payment_date: Annotated[date | None, Field(index=True)]
+    expires_at: Annotated[date | None, Field(index=True)]
     state: Annotated[State, Field(index=True)]
 
     @classmethod
@@ -33,7 +33,7 @@ class SubscriptionSchema(SQLModel, table=True):
             amount=subscription.price.amount,
             currency=subscription.price.currency,
             period=subscription.period,
-            next_payment_date=subscription.next_payment_date,
+            expires_at=subscription.expires_at,
             state=subscription.state,
         )
 
@@ -44,9 +44,7 @@ class SubscriptionSchema(SQLModel, table=True):
             Price(self.amount, self.currency),
             self.period,
         )
-        setattr(
-            subscription, "_Subscription__next_payment_date", self.next_payment_date
-        )
+        setattr(subscription, "_Subscription__expires_at", self.expires_at)
         setattr(subscription, "_Subscription__state", self.state)
 
         return subscription
@@ -55,5 +53,5 @@ class SubscriptionSchema(SQLModel, table=True):
         self.amount = subscription.price.amount
         self.currency = subscription.price.currency
         self.period = subscription.period
-        self.next_payment_date = subscription.next_payment_date
+        self.expires_at = subscription.expires_at
         self.state = subscription.state

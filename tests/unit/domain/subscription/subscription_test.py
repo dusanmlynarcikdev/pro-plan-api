@@ -25,7 +25,7 @@ def test_create() -> None:
     assert result.email == Email("john@doe.com")
     assert result.price == Price(Decimal("1"), "USD")
     assert result.period == Period.MONTHLY
-    assert result.next_payment_date is None
+    assert result.expires_at is None
     assert result.state == State.NEW
 
 
@@ -38,7 +38,7 @@ def test_change() -> None:
     assert subscription.email == Email("john@doe.com")
     assert subscription.price == Price(Decimal("2"), "CZK")
     assert subscription.period == Period.YEARLY
-    assert subscription.next_payment_date is None
+    assert subscription.expires_at is None
     assert subscription.state == State.NEW
 
 
@@ -51,18 +51,18 @@ def test_renew(period: Period, expected_date: date) -> None:
 
     subscription.renew(date(2023, 1, 1))
 
-    assert subscription.next_payment_date == expected_date
+    assert subscription.expires_at == expected_date
     assert subscription.state == State.ACTIVE
 
 
 @mark.parametrize("today", (date(2023, 1, 31), date(2023, 2, 2)))
-def test_renew_outside_next_payment_date(today: date) -> None:
+def test_renew_outside_expires_at(today: date) -> None:
     subscription = generate()
     subscription.renew(date(2023, 1, 1))
 
     subscription.renew(today)
 
-    assert subscription.next_payment_date == date(2023, 3, 1)
+    assert subscription.expires_at == date(2023, 3, 1)
     assert subscription.state == State.ACTIVE
 
 
@@ -72,7 +72,7 @@ def test_cancel() -> None:
 
     subscription.cancel()
 
-    assert subscription.next_payment_date is None
+    assert subscription.expires_at is None
     assert subscription.state == State.CANCELED
 
 
@@ -98,7 +98,7 @@ def test_expire() -> None:
 
     subscription.expire()
 
-    assert subscription.next_payment_date is None
+    assert subscription.expires_at is None
     assert subscription.state == State.EXPIRED
 
 

@@ -33,7 +33,7 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_subscription.amount == Decimal("1")
     assert repository_subscription.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
-    assert repository_subscription.next_payment_date == date(2026, 2, 1)
+    assert repository_subscription.expires_at == date(2026, 2, 1)
     assert repository_subscription.state == State.ACTIVE
 
 
@@ -64,7 +64,7 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
     assert repository_subscription.price.amount == Decimal("1")
     assert repository_subscription.price.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
-    assert repository_subscription.next_payment_date is None
+    assert repository_subscription.expires_at is None
     assert repository_subscription.state == State.NEW
 
 
@@ -139,7 +139,7 @@ async def test_update(session: AsyncSession) -> None:
     assert repository_subscription.amount == Decimal("2")
     assert repository_subscription.currency == "CZK"
     assert repository_subscription.period == Period.YEARLY
-    assert repository_subscription.next_payment_date == date(2027, 2, 1)
+    assert repository_subscription.expires_at == date(2027, 2, 1)
     assert repository_subscription.state == State.ACTIVE
 
 
