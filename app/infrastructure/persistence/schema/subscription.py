@@ -21,7 +21,7 @@ class SubscriptionSchema(SQLModel, table=True):
     amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)]
     currency: Annotated[str, Field(min_length=3, max_length=3)]
     period: Period
-    expires_at: Annotated[date | None, Field(index=True)]
+    expires_at: date | None
 
     @classmethod
     def from_domain(cls, subscription: Subscription) -> SubscriptionSchema:
