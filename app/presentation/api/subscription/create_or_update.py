@@ -12,6 +12,7 @@ async def create_or_update(
     request: CreateOrUpdateRequest,
     create_or_update_command: CreateOrUpdateSubscriptionCommand,
 ) -> None:
-    await create_or_update_command.__call__(
-        Email(request.email), request.price, request.period
-    )
+    """
+    :raises InvalidEmail:
+    """
+    await create_or_update_command(Email(request.email), request.price, request.period)

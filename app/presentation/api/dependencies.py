@@ -6,7 +6,11 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.application.subscription.create_or_update_command import (
     CreateOrUpdateSubscriptionCommand as _CreateOrUpdateSubscriptionCommand,
 )
+from app.application.subscription.renewal_command import (
+    RenewalSubscriptionCommand as _RenewalSubscriptionCommand,
+)
 from app.infrastructure.persistence.connection import session_factory
+from app.infrastructure.persistence.repository.payment import PaymentRepository
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
@@ -30,4 +34,17 @@ async def get_create_or_update_subscription_command(
 CreateOrUpdateSubscriptionCommand = Annotated[
     _CreateOrUpdateSubscriptionCommand,
     Depends(get_create_or_update_subscription_command),
+]
+
+
+async def get_renewal_subscription_command(
+    session: Session,
+) -> _RenewalSubscriptionCommand:
+    return _RenewalSubscriptionCommand(
+        PaymentRepository(session), SubscriptionRepository(session)
+    )
+
+
+RenewalSubscriptionCommand = Annotated[
+    _RenewalSubscriptionCommand, Depends(get_renewal_subscription_command)
 ]

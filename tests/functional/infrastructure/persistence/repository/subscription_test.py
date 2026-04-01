@@ -8,6 +8,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.subscription.email import Email
+from app.domain.subscription.errors import SubscriptionNotFound
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
 from app.domain.subscription.state import State
@@ -89,6 +90,34 @@ async def test_find_one_by_email_empty_repository(
     )
 
     assert repository_subscription is None
+
+
+async def test_get_one_by_email(session: AsyncSession) -> None:
+    session.add(SubscriptionSchema.from_domain(generate()))
+    await session.flush()
+    session.expunge_all()
+
+    repository_subscription = await SubscriptionRepository(session).get_one_by_email(
+        Email("john@doe.com")
+    )
+
+    assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+
+
+async def test_get_one_by_email_another_subscription_exists(
+    session: AsyncSession,
+) -> None:
+    session.add(SubscriptionSchema.from_domain(generate()))
+    await session.flush()
+    session.expunge_all()
+
+    with raises(SubscriptionNotFound, match="Subscription not found"):
+        await SubscriptionRepository(session).get_one_by_email(Email("john2@doe.com"))
+
+
+async def test_get_one_by_email_empty_repository(session: AsyncSession) -> None:
+    with raises(SubscriptionNotFound, match="Subscription not found"):
+        await SubscriptionRepository(session).get_one_by_email(Email("john@doe.com"))
 
 
 async def test_update(session: AsyncSession) -> None:

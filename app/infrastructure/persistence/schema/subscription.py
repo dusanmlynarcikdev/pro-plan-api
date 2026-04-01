@@ -26,7 +26,7 @@ class SubscriptionSchema(SQLModel, table=True):
     state: Annotated[State, Field(index=True)]
 
     @classmethod
-    def from_domain(cls, subscription: Subscription) -> "SubscriptionSchema":
+    def from_domain(cls, subscription: Subscription) -> SubscriptionSchema:
         return cls(
             id=subscription.id,
             email=subscription.email.value,
