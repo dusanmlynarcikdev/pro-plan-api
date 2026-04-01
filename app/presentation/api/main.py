@@ -5,11 +5,11 @@ from .handlers import register_exception_handlers
 
 load_dotenv(".env")
 
-from app.presentation.api.health_check import router as health_check_router
-from app.presentation.api.subscription import router as subscription_router
+from app.presentation.api.router.health_check import router as health_check_router
+from app.presentation.api.router.subscription import router as subscription_router
 
 app = FastAPI(
-    title="Pro Subscription Management API",
+    title="Pro Plan API",
     servers=[
         {"url": "http://localhost", "description": "Local"},
     ],

@@ -1,5 +1,5 @@
 [project]
-name = "pro-subscription-management-api"
+name = "pro-plan-api"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
@@ -8,10 +8,8 @@ dependencies = [
     "email-validator>=2.3.0",
     "fastapi[standard]>=0.135.2",
     "psycopg[binary]>=3.3.3",
-    "pydantic-extra-types[pycountry]>=2.11.1",
     "python-dateutil>=2.9.0.post0",
     "sqlalchemy>=2.0.48",
-    "sqlalchemy-utils>=0.42.1",
     "sqlmodel>=0.0.37",
 ]
 

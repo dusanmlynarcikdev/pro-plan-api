@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 
 from app.domain.subscription.email import Email
 from app.presentation.api.dependencies import CreateOrUpdateSubscriptionCommand
-from app.presentation.api.subscription.request import CreateOrUpdateRequest
+from app.presentation.api.router.subscription.requests import CreateOrUpdateRequest
 
 router = APIRouter()
 
@@ -15,4 +15,4 @@ async def create_or_update(
     """
     :raises InvalidEmail:
     """
-    await create_or_update_command(Email(request.email), request.price, request.period)
+    await create_or_update_command(Email(request.email), request.period)

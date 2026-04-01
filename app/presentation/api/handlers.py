@@ -4,7 +4,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.domain.errors import (
-    DomainConflictError,
     DomainError,
     DomainNotFoundError,
     DomainValidationError,
@@ -14,8 +13,6 @@ from app.presentation.api.responses import ErrorResponse
 
 def _get_domain_error_status(error: DomainError) -> int:
     match error:
-        case DomainConflictError():
-            return status.HTTP_409_CONFLICT
         case DomainNotFoundError():
             return status.HTTP_404_NOT_FOUND
         case DomainValidationError():

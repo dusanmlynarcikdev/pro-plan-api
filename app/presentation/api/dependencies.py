@@ -10,7 +10,6 @@ from app.application.subscription.renewal_command import (
     RenewalSubscriptionCommand as _RenewalSubscriptionCommand,
 )
 from app.infrastructure.persistence.connection import session_factory
-from app.infrastructure.persistence.repository.payment import PaymentRepository
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
@@ -40,9 +39,7 @@ CreateOrUpdateSubscriptionCommand = Annotated[
 async def get_renewal_subscription_command(
     session: Session,
 ) -> _RenewalSubscriptionCommand:
-    return _RenewalSubscriptionCommand(
-        PaymentRepository(session), SubscriptionRepository(session)
-    )
+    return _RenewalSubscriptionCommand(SubscriptionRepository(session))
 
 
 RenewalSubscriptionCommand = Annotated[
