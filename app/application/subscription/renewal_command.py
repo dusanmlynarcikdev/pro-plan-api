@@ -15,4 +15,5 @@ class RenewalSubscriptionCommand:
         subscription = await self.__repository.get_one_by_email(email)
 
         subscription.renew(date.today())
+
         await self.__repository.update(subscription)

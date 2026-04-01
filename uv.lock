@@ -414,7 +414,6 @@ dependencies = [
     { name = "psycopg", extra = ["binary"] },
     { name = "python-dateutil" },
     { name = "sqlalchemy" },
-    { name = "sqlalchemy-utils" },
     { name = "sqlmodel" },
 ]
 
@@ -436,7 +435,6 @@ requires-dist = [
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.3" },
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
     { name = "sqlalchemy", specifier = ">=2.0.48" },
-    { name = "sqlalchemy-utils", specifier = ">=0.42.1" },
     { name = "sqlmodel", specifier = ">=0.0.37" },
 ]
 

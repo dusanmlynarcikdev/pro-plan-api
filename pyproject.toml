@@ -10,7 +10,6 @@ dependencies = [
     "psycopg[binary]>=3.3.3",
     "python-dateutil>=2.9.0.post0",
     "sqlalchemy>=2.0.48",
-    "sqlalchemy-utils>=0.42.1",
     "sqlmodel>=0.0.37",
 ]
 
