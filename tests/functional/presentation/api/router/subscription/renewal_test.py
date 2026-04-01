@@ -23,7 +23,7 @@ async def test_success(client: TestClient, session: AsyncSession) -> None:
         mock_date.today.return_value = date(2026, 1, 1)
         response = client.post(PATH.format(email="john@doe.com"))
 
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     assert response.content == b""
 
     repository_subscription = (await session.exec(select(SubscriptionSchema))).one()
