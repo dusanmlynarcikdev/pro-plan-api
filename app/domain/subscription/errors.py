@@ -24,3 +24,8 @@ class SubscriptionCanceled(DomainError):
 class SubscriptionExpired(DomainError):
     def __init__(self) -> None:
         super().__init__("Subscription expired")
+
+
+class SubscriptionNotFound(DomainError):
+    def __init__(self) -> None:
+        super().__init__("Subscription not found")
