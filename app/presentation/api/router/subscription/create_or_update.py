@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 
 from app.domain.subscription.email import Email
 from app.presentation.api.dependencies import CreateOrUpdateSubscriptionCommand
-from app.presentation.api.subscription.request import CreateOrUpdateRequest
+from app.presentation.api.router.subscription.request import CreateOrUpdateRequest
 
 router = APIRouter()
 

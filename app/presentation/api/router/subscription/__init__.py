@@ -1,6 +1,7 @@
 from fastapi import APIRouter, status
 
-from ..responses import ERROR_RESPONSE_MODEL
+from app.presentation.api.responses import ERROR_RESPONSE_MODEL
+
 from .create_or_update import router as create_or_update_router
 from .renewal import router as renewal_router
 
