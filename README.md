@@ -1,45 +1,30 @@
-# 💰 Pro Subscription Management API
+# ⭐️ Pro Plan API
 
-A simple subscription management REST API for internal use — focused on a single subscription model.
+A simple REST API for managing Pro plan subscriptions.
 
 > 🚧 Work in progress — actively being developed
 
-## 🎯 Project Goals
-- **FastAPI & Python:** Production-ready REST API built with a modern Python stack.
-- **Clean Architecture:** Clear separation of concerns for long-term maintainability and scalability.
-- **Real-World Domain:** A practical foundation you can use or extend.
-
-## ⭐️ Highlights
+## ⚡ Highlights
 - **Minimalist design**
-- **Authentication-free** — intended for internal network environments
-- **Ready to use** out of the box
+- **Authentication-free** — intended for backend services
+- **Ready to use** — out of the box
 - **Modern technology stack**
 
-## 🧠 Domains
-
-### Subscription
+## 📦 Subscription
 - **Single subscription model**
-- **Identified by email**
-- **One active subscription per email**
-- **Full lifecycle management** (renewals, cancellations, expirations)
-- **Payment required 7 days before period end**
-- **7-day grace period** after a missed payment
-
-### Payment
-- **Extends the subscription** for the next billing period
-- **Confirmation document** (proof of payment)
-- **Payment history** with total paid amount per customer
+- **Identified by email** — no external identifiers for the client
+- **Simple lifecycle management** — no states, only validity period
+- **Grace period** — after a missed renewal, configurable
 
 ## 🏗️ Stack & Architecture
-- **Language:** Python + FastAPI
-- **Architecture:** Clean Architecture (Domain, Application, Presentation, Infrastructure)
-- **Patterns:** Use-case driven design (one command per use-case)
-- **Domain:** Rich domain models (not anemic), organized into domain modules
-- **Data:** Value Objects & UUIDs as primary identifies
-- **Principles:** SOLID, KISS (Keep It Simple), DRY (Don't Repeat Yourself)
-- **Quality:** Unit & functional tests covering domain logic and the entire API
+- **Python + FastAPI**
+- **Clean Architecture**
+- **Use-case driven design**
+- **Rich domain models** — organized into domain modules
+- **Value Objects & UUIDs** — primary identifiers
+- **Unit & functional tests** — covering domain logic and the entire API
 
-## 💻 Dev Environment
+## ⚙️ Development
 
 ### Requirements
 - Docker
@@ -52,13 +37,18 @@ Run the project:
 docker compose up -d
 ```
 
+Run database migrations:
+```shell
+docker compose exec api make mu
+```
+
 The API will be available at:
 - **API (base path & health check):** http://localhost
-- **API Doc:** http://localhost/docs
+- **API Docs:** http://localhost/docs
 
-## 👤 Maintainer
+## 👤 Author
 
-**Dušan Mlynarčík**  — Software Engineer & Product Builder
+**Dušan Mlynarčík** — Software Engineer & Product Builder
 
 - LinkedIn: https://www.linkedin.com/in/dusanmlynarcik/
 - GitHub: https://github.com/dusanmlynarcikdev
