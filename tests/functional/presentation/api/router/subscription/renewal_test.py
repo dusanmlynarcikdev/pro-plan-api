@@ -1,5 +1,4 @@
 from datetime import date
-from decimal import Decimal
 from unittest.mock import patch
 from uuid import UUID
 
@@ -31,8 +30,6 @@ async def test_success(client: TestClient, session: AsyncSession) -> None:
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
-    assert repository_subscription.amount == Decimal("1")
-    assert repository_subscription.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
     assert repository_subscription.expires_at == date(2026, 2, 1)
 

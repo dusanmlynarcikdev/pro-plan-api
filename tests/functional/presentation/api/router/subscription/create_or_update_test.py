@@ -1,4 +1,3 @@
-from decimal import Decimal
 from uuid import UUID
 
 from fastapi import status
@@ -24,7 +23,6 @@ async def test_create(client: TestClient, session: AsyncSession) -> None:
         PATH,
         json={
             "email": "john2@doe.com",
-            "price": {"amount": 123.45, "currency": "EUR"},
             "period": "yearly",
         },
     )
@@ -40,14 +38,10 @@ async def test_create(client: TestClient, session: AsyncSession) -> None:
         "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"
     )
     assert repository_subscriptions[0].email == "john@doe.com"
-    assert repository_subscriptions[0].amount == Decimal("1")
-    assert repository_subscriptions[0].currency == "USD"
     assert repository_subscriptions[0].period == Period.MONTHLY
     assert repository_subscriptions[0].expires_at is None
 
     assert repository_subscriptions[1].email == "john2@doe.com"
-    assert repository_subscriptions[1].amount == Decimal("123.45")
-    assert repository_subscriptions[1].currency == "EUR"
     assert repository_subscriptions[1].period == Period.YEARLY
     assert repository_subscriptions[1].expires_at is None
 
@@ -69,7 +63,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
         PATH,
         json={
             "email": "john2@doe.com",
-            "price": {"amount": 123.45, "currency": "EUR"},
             "period": "yearly",
         },
     )
@@ -85,8 +78,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
         "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"
     )
     assert repository_subscriptions[0].email == "john@doe.com"
-    assert repository_subscriptions[0].amount == Decimal("1")
-    assert repository_subscriptions[0].currency == "USD"
     assert repository_subscriptions[0].period == Period.MONTHLY
     assert repository_subscriptions[0].expires_at is None
 
@@ -94,8 +85,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
         "019d43e5-eecd-7ab5-a891-7688443b13f6"
     )
     assert repository_subscriptions[1].email == "john2@doe.com"
-    assert repository_subscriptions[1].amount == Decimal("123.45")
-    assert repository_subscriptions[1].currency == "EUR"
     assert repository_subscriptions[1].period == Period.YEARLY
     assert repository_subscriptions[1].expires_at is None
 
@@ -106,7 +95,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
         (
             {
                 "email": "doe.com",
-                "price": {"amount": 124.55, "currency": "EUR"},
                 "period": "yearly",
             },
             b'{"detail":"Invalid email"}',
@@ -114,23 +102,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
         (
             {
                 "email": "john@doe.com",
-                "price": {"amount": -1, "currency": "EUR"},
-                "period": "yearly",
-            },
-            b'{"detail":"Amount must be greater than 0"}',
-        ),
-        (
-            {
-                "email": "john@doe.com",
-                "price": {"amount": 124.55, "currency": "XYZ"},
-                "period": "yearly",
-            },
-            b'{"detail":"Invalid currency"}',
-        ),
-        (
-            {
-                "email": "john@doe.com",
-                "price": {"amount": 124.55, "currency": "EUR"},
                 "period": "unknown",
             },
             b'{"detail":"Invalid request"',
@@ -139,7 +110,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
 )
 def test_invalid_value(
     client: TestClient,
-    json: dict[str, str | dict[str, str | float]],
+    json: dict[str, str],
     expected_content: bytes,
 ) -> None:
     response = client.post(PATH, json=json)

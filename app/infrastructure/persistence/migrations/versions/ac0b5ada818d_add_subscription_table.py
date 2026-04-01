@@ -26,10 +26,6 @@ def upgrade() -> None:
         "subscription",
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("amount", sa.Numeric(precision=12, scale=2), nullable=False),
-        sa.Column(
-            "currency", sqlmodel.sql.sqltypes.AutoString(length=3), nullable=False
-        ),
         sa.Column(
             "period", sa.Enum("MONTHLY", "YEARLY", name="period"), nullable=False
         ),

@@ -1,9 +1,7 @@
-from decimal import Decimal
 from uuid import UUID
 
 from app.domain.subscription.email import Email
 from app.domain.subscription.period import Period
-from app.domain.subscription.price import Price
 from app.domain.subscription.subscription import Subscription
 
 
@@ -12,9 +10,4 @@ def generate(
     email: Email = Email("john@doe.com"),
     period: Period = Period.MONTHLY,
 ) -> Subscription:
-    return Subscription(
-        id,
-        email,
-        Price(Decimal("1"), "USD"),
-        period,
-    )
+    return Subscription(id, email, period)

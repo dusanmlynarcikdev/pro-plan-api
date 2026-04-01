@@ -1,5 +1,4 @@
 from datetime import date
-from decimal import Decimal
 from uuid import UUID
 
 from pytest import raises
@@ -10,7 +9,6 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.domain.subscription.email import Email
 from app.domain.subscription.errors import SubscriptionNotFound
 from app.domain.subscription.period import Period
-from app.domain.subscription.price import Price
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
@@ -29,8 +27,6 @@ async def test_add(session: AsyncSession) -> None:
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
-    assert repository_subscription.amount == Decimal("1")
-    assert repository_subscription.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
     assert repository_subscription.expires_at == date(2026, 2, 1)
 
@@ -59,8 +55,6 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
     assert repository_subscription is not None
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email.value == "john@doe.com"
-    assert repository_subscription.price.amount == Decimal("1")
-    assert repository_subscription.price.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
     assert repository_subscription.expires_at is None
 
@@ -123,7 +117,7 @@ async def test_update(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    subscription.change(Price(Decimal("2"), "CZK"), Period.YEARLY)
+    subscription.period = Period.YEARLY
     subscription.renew(date(2026, 2, 1))
 
     await SubscriptionRepository(session).update(subscription)
@@ -133,8 +127,6 @@ async def test_update(session: AsyncSession) -> None:
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
-    assert repository_subscription.amount == Decimal("2")
-    assert repository_subscription.currency == "CZK"
     assert repository_subscription.period == Period.YEARLY
     assert repository_subscription.expires_at == date(2027, 2, 1)
 

@@ -1,5 +1,4 @@
 from datetime import date
-from decimal import Decimal
 from typing import Annotated
 from uuid import UUID
 
@@ -8,7 +7,6 @@ from sqlmodel import Field, SQLModel
 
 from app.domain.subscription.email import Email
 from app.domain.subscription.period import Period
-from app.domain.subscription.price import Price
 from app.domain.subscription.subscription import Subscription
 
 
@@ -18,8 +16,6 @@ class SubscriptionSchema(SQLModel, table=True):
 
     id: Annotated[UUID, Field(primary_key=True)]
     email: str
-    amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)]
-    currency: Annotated[str, Field(min_length=3, max_length=3)]
     period: Period
     expires_at: date | None
 
@@ -28,8 +24,6 @@ class SubscriptionSchema(SQLModel, table=True):
         return cls(
             id=subscription.id,
             email=subscription.email.value,
-            amount=subscription.price.amount,
-            currency=subscription.price.currency,
             period=subscription.period,
             expires_at=subscription.expires_at,
         )
@@ -38,7 +32,6 @@ class SubscriptionSchema(SQLModel, table=True):
         subscription = Subscription(
             self.id,
             Email(self.email),
-            Price(self.amount, self.currency),
             self.period,
         )
         setattr(subscription, "_Subscription__expires_at", self.expires_at)
@@ -46,7 +39,5 @@ class SubscriptionSchema(SQLModel, table=True):
         return subscription
 
     def update_from_domain(self, subscription: Subscription) -> None:
-        self.amount = subscription.price.amount
-        self.currency = subscription.price.currency
         self.period = subscription.period
         self.expires_at = subscription.expires_at

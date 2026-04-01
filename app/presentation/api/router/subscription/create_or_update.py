@@ -15,4 +15,4 @@ async def create_or_update(
     """
     :raises InvalidEmail:
     """
-    await create_or_update_command(Email(request.email), request.price, request.period)
+    await create_or_update_command(Email(request.email), request.period)
