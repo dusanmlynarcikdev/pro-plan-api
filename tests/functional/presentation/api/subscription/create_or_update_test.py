@@ -138,7 +138,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": 124.55, "currency": "EUR"},
                 "period": "unknown",
             },
-            b'"loc":["body","period"]',
+            b'{"detail":"Invalid request"',
         ),
     ],
 )

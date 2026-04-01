@@ -1,13 +1,7 @@
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, status
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 
-from app.domain.errors import (
-    DomainConflictError,
-    DomainError,
-    DomainNotFoundError,
-    DomainValidationError,
-)
+from .handlers import register_exception_handlers
 
 load_dotenv(".env")
 
@@ -27,26 +21,7 @@ app = FastAPI(
     swagger_ui_parameters={"operationsSorter": "alpha"},
 )
 
-
-def _get_domain_error_status(error: DomainError) -> int:
-    match error:
-        case DomainConflictError():
-            return status.HTTP_409_CONFLICT
-        case DomainNotFoundError():
-            return status.HTTP_404_NOT_FOUND
-        case DomainValidationError():
-            return status.HTTP_422_UNPROCESSABLE_CONTENT
-        case _:
-            return status.HTTP_400_BAD_REQUEST
-
-
-@app.exception_handler(DomainError)
-async def domain_error_handler(request: Request, error: DomainError) -> JSONResponse:
-    return JSONResponse(
-        status_code=_get_domain_error_status(error),
-        content={"detail": str(error)},
-    )
-
+register_exception_handlers(app)
 
 app.include_router(health_check_router)
 app.include_router(create_or_update_subscription_router, tags=["subscription"])

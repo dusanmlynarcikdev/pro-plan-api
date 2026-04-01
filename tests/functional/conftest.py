@@ -12,8 +12,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 load_dotenv(".env.test")
 
 from app.infrastructure.persistence.connection import DATABASE_URL, engine
-from app.presentation.api.main import app
 from app.presentation.api.dependencies import get_session
+from app.presentation.api.main import app
 
 
 @fixture
