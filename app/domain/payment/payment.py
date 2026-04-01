@@ -14,7 +14,7 @@ class Payment:
     paid_at: date
 
     @classmethod
-    def from_subscription(cls, subscription: Subscription, today: date) -> "Payment":
+    def from_subscription(cls, subscription: Subscription, today: date) -> Payment:
         return cls(
             uuid7(),
             subscription.id,

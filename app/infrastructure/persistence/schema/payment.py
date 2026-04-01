@@ -31,7 +31,7 @@ class PaymentSchema(SQLModel, table=True):
     paid_at: date
 
     @classmethod
-    def from_domain(cls, payment: Payment) -> "PaymentSchema":
+    def from_domain(cls, payment: Payment) -> PaymentSchema:
         return cls(
             id=payment.id,
             subscription_id=payment.subscription_id,
