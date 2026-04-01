@@ -1,4 +1,4 @@
-name: pro-subscription-management-api
+name: pro-plan-api
 
 services:
   api:

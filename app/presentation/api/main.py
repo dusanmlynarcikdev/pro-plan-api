@@ -9,7 +9,7 @@ from app.presentation.api.router.health_check import router as health_check_rout
 from app.presentation.api.router.subscription import router as subscription_router
 
 app = FastAPI(
-    title="Pro Subscription Management API",
+    title="Pro Plan API",
     servers=[
         {"url": "http://localhost", "description": "Local"},
     ],

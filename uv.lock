@@ -403,7 +403,7 @@ wheels = [
 ]
 
 [[package]]
-name = "pro-subscription-management-api"
+name = "pro-plan-api"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
