@@ -20,6 +20,6 @@ async def renewal(email: str, renewal_command: RenewalSubscriptionCommand) -> Re
     :raises InvalidEmail:
     :raises SubscriptionNotFound:
     """
-    await renewal_command.__call__(Email(email))
+    await renewal_command(Email(email))
 
     return Response(status_code=status.HTTP_201_CREATED)
