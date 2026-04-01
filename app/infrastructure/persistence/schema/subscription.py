@@ -9,7 +9,6 @@ from sqlmodel import Field, SQLModel
 from app.domain.subscription.email import Email
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
-from app.domain.subscription.state import State
 from app.domain.subscription.subscription import Subscription
 
 
@@ -23,7 +22,6 @@ class SubscriptionSchema(SQLModel, table=True):
     currency: Annotated[str, Field(min_length=3, max_length=3)]
     period: Period
     expires_at: Annotated[date | None, Field(index=True)]
-    state: Annotated[State, Field(index=True)]
 
     @classmethod
     def from_domain(cls, subscription: Subscription) -> SubscriptionSchema:
@@ -34,7 +32,6 @@ class SubscriptionSchema(SQLModel, table=True):
             currency=subscription.price.currency,
             period=subscription.period,
             expires_at=subscription.expires_at,
-            state=subscription.state,
         )
 
     def to_domain(self) -> Subscription:
@@ -45,7 +42,6 @@ class SubscriptionSchema(SQLModel, table=True):
             self.period,
         )
         setattr(subscription, "_Subscription__expires_at", self.expires_at)
-        setattr(subscription, "_Subscription__state", self.state)
 
         return subscription
 
@@ -54,4 +50,3 @@ class SubscriptionSchema(SQLModel, table=True):
         self.currency = subscription.price.currency
         self.period = subscription.period
         self.expires_at = subscription.expires_at
-        self.state = subscription.state

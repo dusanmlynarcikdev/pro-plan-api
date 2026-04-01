@@ -2,13 +2,11 @@ from datetime import date
 from decimal import Decimal
 from uuid import UUID
 
-from pytest import mark, raises
+from pytest import mark
 
 from app.domain.subscription.email import Email
-from app.domain.subscription.errors import SubscriptionCanceled, SubscriptionExpired
 from app.domain.subscription.period import Period
 from app.domain.subscription.price import Price
-from app.domain.subscription.state import State
 from app.domain.subscription.subscription import Subscription
 from tests.generator.subscription import generate
 
@@ -26,7 +24,6 @@ def test_create() -> None:
     assert result.price == Price(Decimal("1"), "USD")
     assert result.period == Period.MONTHLY
     assert result.expires_at is None
-    assert result.state == State.NEW
 
 
 def test_change() -> None:
@@ -39,7 +36,6 @@ def test_change() -> None:
     assert subscription.price == Price(Decimal("2"), "CZK")
     assert subscription.period == Period.YEARLY
     assert subscription.expires_at is None
-    assert subscription.state == State.NEW
 
 
 @mark.parametrize(
@@ -52,7 +48,6 @@ def test_renew(period: Period, expected_date: date) -> None:
     subscription.renew(date(2023, 1, 1))
 
     assert subscription.expires_at == expected_date
-    assert subscription.state == State.ACTIVE
 
 
 @mark.parametrize("today", (date(2023, 1, 31), date(2023, 2, 2)))
@@ -63,56 +58,3 @@ def test_renew_outside_expires_at(today: date) -> None:
     subscription.renew(today)
 
     assert subscription.expires_at == date(2023, 3, 1)
-    assert subscription.state == State.ACTIVE
-
-
-def test_cancel() -> None:
-    subscription = generate()
-    subscription.renew(date(2023, 1, 1))
-
-    subscription.cancel()
-
-    assert subscription.expires_at is None
-    assert subscription.state == State.CANCELED
-
-
-def test_cancel_canceled() -> None:
-    subscription = generate()
-    subscription.cancel()
-
-    with raises(SubscriptionCanceled):
-        subscription.cancel()
-
-
-def test_cancel_expired() -> None:
-    subscription = generate()
-    subscription.expire()
-
-    with raises(SubscriptionExpired):
-        subscription.cancel()
-
-
-def test_expire() -> None:
-    subscription = generate()
-    subscription.renew(date(2023, 1, 1))
-
-    subscription.expire()
-
-    assert subscription.expires_at is None
-    assert subscription.state == State.EXPIRED
-
-
-def test_expire_canceled() -> None:
-    subscription = generate()
-    subscription.cancel()
-
-    with raises(SubscriptionCanceled):
-        subscription.expire()
-
-
-def test_expire_expired() -> None:
-    subscription = generate()
-    subscription.expire()
-
-    with raises(SubscriptionExpired):
-        subscription.expire()

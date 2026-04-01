@@ -1,8 +1,4 @@
-from app.domain.errors import (
-    DomainConflictError,
-    DomainNotFoundError,
-    DomainValidationError,
-)
+from app.domain.errors import DomainNotFoundError, DomainValidationError
 
 
 class InvalidAmount(DomainValidationError):
@@ -18,16 +14,6 @@ class InvalidCurrency(DomainValidationError):
 class InvalidEmail(DomainValidationError):
     def __init__(self) -> None:
         super().__init__("Invalid email")
-
-
-class SubscriptionCanceled(DomainConflictError):
-    def __init__(self) -> None:
-        super().__init__("Subscription canceled")
-
-
-class SubscriptionExpired(DomainConflictError):
-    def __init__(self) -> None:
-        super().__init__("Subscription expired")
 
 
 class SubscriptionNotFound(DomainNotFoundError):

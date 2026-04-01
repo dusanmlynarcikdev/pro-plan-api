@@ -9,7 +9,6 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.subscription.period import Period
-from app.domain.subscription.state import State
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 from tests.generator.subscription import generate
 
@@ -36,7 +35,6 @@ async def test_success(client: TestClient, session: AsyncSession) -> None:
     assert repository_subscription.currency == "USD"
     assert repository_subscription.period == Period.MONTHLY
     assert repository_subscription.expires_at == date(2026, 2, 1)
-    assert repository_subscription.state == State.ACTIVE
 
 
 async def test_unknown_email(client: TestClient, session: AsyncSession) -> None:
