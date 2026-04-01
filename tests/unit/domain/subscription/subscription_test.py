@@ -49,18 +49,18 @@ def test_change() -> None:
 def test_renew(period: Period, expected_date: date) -> None:
     subscription = generate(period=period)
 
-    subscription.renew(payment_date=date(2023, 1, 1))
+    subscription.renew(date(2023, 1, 1))
 
     assert subscription.next_payment_date == expected_date
     assert subscription.state == State.ACTIVE
 
 
-@mark.parametrize("payment_date", (date(2023, 1, 31), date(2023, 2, 2)))
-def test_renew_outside_next_payment_date(payment_date: date) -> None:
+@mark.parametrize("today", (date(2023, 1, 31), date(2023, 2, 2)))
+def test_renew_outside_next_payment_date(today: date) -> None:
     subscription = generate()
     subscription.renew(date(2023, 1, 1))
 
-    subscription.renew(payment_date)
+    subscription.renew(today)
 
     assert subscription.next_payment_date == date(2023, 3, 1)
     assert subscription.state == State.ACTIVE

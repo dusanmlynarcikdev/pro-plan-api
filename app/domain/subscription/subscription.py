@@ -47,15 +47,15 @@ class Subscription:
         self.__price = price
         self.__period = period
 
-    def renew(self, payment_date: date) -> None:
+    def renew(self, today: date) -> None:
         if self.state == State.ACTIVE and self.next_payment_date is not None:
-            payment_date = self.next_payment_date
+            today = self.next_payment_date
 
         match self.period:
             case Period.MONTHLY:
-                self.__next_payment_date = payment_date + relativedelta(months=1)
+                self.__next_payment_date = today + relativedelta(months=1)
             case Period.YEARLY:
-                self.__next_payment_date = payment_date + relativedelta(months=12)
+                self.__next_payment_date = today + relativedelta(months=12)
 
         self.__state = State.ACTIVE
 
