@@ -106,7 +106,7 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
 
 
 @mark.parametrize(
-    "json, expected_status, expected_content",
+    "json, expected_content",
     [
         (
             {
@@ -114,7 +114,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": 124.55, "currency": "EUR"},
                 "period": "yearly",
             },
-            status.HTTP_400_BAD_REQUEST,
             b'{"message":"Invalid email"}',
         ),
         (
@@ -123,7 +122,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": -1, "currency": "EUR"},
                 "period": "yearly",
             },
-            status.HTTP_400_BAD_REQUEST,
             b'{"message":"Amount must be greater than 0"}',
         ),
         (
@@ -132,7 +130,6 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": 124.55, "currency": "XYZ"},
                 "period": "yearly",
             },
-            status.HTTP_400_BAD_REQUEST,
             b'{"message":"Invalid currency"}',
         ),
         (
@@ -141,18 +138,16 @@ async def test_update(client: TestClient, session: AsyncSession) -> None:
                 "price": {"amount": 124.55, "currency": "EUR"},
                 "period": "unknown",
             },
-            status.HTTP_422_UNPROCESSABLE_CONTENT,
             b'"loc":["body","period"]',
         ),
     ],
 )
-async def test_invalid_value(
+def test_invalid_value(
     client: TestClient,
     json: dict[str, str | dict[str, str | float]],
-    expected_status: int,
     expected_content: bytes,
 ) -> None:
     response = client.post(PATH, json=json)
 
-    assert response.status_code == expected_status
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert expected_content in response.content
