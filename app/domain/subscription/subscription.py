@@ -34,6 +34,9 @@ class Subscription:
             day=31 if self.__is_last_day_of_month(base_date) else base_date.day,
         )
 
+    def is_active(self, today: date) -> bool:
+        return self.expires_at is not None and self.expires_at >= today
+
     def __get_period_months(self) -> int:
         match self.period:
             case Period.MONTHLY:

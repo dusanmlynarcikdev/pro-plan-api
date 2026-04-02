@@ -49,3 +49,24 @@ def test_renew_before_expiration() -> None:
     subscription.renew(date(2025, 12, 31))
 
     assert subscription.expires_at == date(2026, 2, 1)
+
+
+@mark.parametrize(
+    "expires_at, expected_result",
+    (
+        (date(2026, 1, 1), True),
+        (date(2026, 1, 2), True),
+        (date(2025, 12, 31), False),
+    ),
+)
+def test_is_active(expires_at: date, expected_result: bool) -> None:
+    subscription = generate()
+    setattr(subscription, "_Subscription__expires_at", expires_at)
+
+    assert subscription.is_active(date(2026, 1, 1)) == expected_result
+
+
+def test_is_active_expires_at_none() -> None:
+    subscription = generate()
+
+    assert subscription.is_active(date(2026, 1, 1)) == False
