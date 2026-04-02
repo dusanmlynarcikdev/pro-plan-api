@@ -5,16 +5,16 @@ A simple REST API for managing Pro plan subscriptions.
 > 🚧 Work in progress — actively being developed
 
 ## ⚡ Highlights
-- **Minimalist design**
+- **Minimalist domain design**
 - **Authentication-free** — intended for backend services
-- **Ready to use** — out of the box
-- **Modern technology stack**
+- **Ready to run** — out of the box with Docker
+- **Unit and functional tests** — covering domain logic and API behavior
 
 ## 📦 Subscription
 - **Single subscription model**
-- **Identified by email** — no external identifiers for the client
+- **Identified by email** — no external identifiers required
 - **Simple lifecycle management** — no states, only validity period
-- **Grace period** — after a missed renewal, configurable
+- **End-of-month renewals** — calendar-based, including leap years
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**
@@ -22,7 +22,6 @@ A simple REST API for managing Pro plan subscriptions.
 - **Use-case driven design**
 - **Rich domain models** — organized into domain modules
 - **Value Objects & UUIDs** — primary identifiers
-- **Unit & functional tests** — covering domain logic and the entire API
 
 ## ⚙️ Development
 
