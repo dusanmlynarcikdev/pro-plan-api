@@ -54,9 +54,9 @@ def test_renew_before_expiration() -> None:
 @mark.parametrize(
     "expires_at, expected_result",
     (
+        (date(2025, 12, 31), False),
         (date(2026, 1, 1), True),
         (date(2026, 1, 2), True),
-        (date(2025, 12, 31), False),
     ),
 )
 def test_is_active(expires_at: date, expected_result: bool) -> None:
