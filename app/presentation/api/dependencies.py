@@ -6,6 +6,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.application.subscription.create_or_update_command import (
     CreateOrUpdateSubscriptionCommand as _CreateOrUpdateSubscriptionCommand,
 )
+from app.application.subscription.get_use_case import (
+    GetSubscriptionUseCase as _GetSubscriptionUseCase,
+)
 from app.application.subscription.renewal_command import (
     RenewalSubscriptionCommand as _RenewalSubscriptionCommand,
 )
@@ -44,4 +47,15 @@ async def get_renewal_subscription_command(
 
 RenewalSubscriptionCommand = Annotated[
     _RenewalSubscriptionCommand, Depends(get_renewal_subscription_command)
+]
+
+
+async def get_get_subscription_use_case(
+    session: Session,
+) -> _GetSubscriptionUseCase:
+    return _GetSubscriptionUseCase(SubscriptionRepository(session))
+
+
+GetSubscriptionUseCase = Annotated[
+    _GetSubscriptionUseCase, Depends(get_get_subscription_use_case)
 ]
