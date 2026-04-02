@@ -19,7 +19,7 @@ async def test_success(client: TestClient, session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    with patch("app.application.subscription.renewal_command.date") as mock_date:
+    with patch("app.application.subscription.renewal_use_case.date") as mock_date:
         mock_date.today.return_value = date(2026, 1, 1)
         response = client.post(PATH.format(email="john@doe.com"))
 

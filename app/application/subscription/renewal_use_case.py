@@ -4,7 +4,7 @@ from app.domain.subscription.email import Email
 from app.domain.subscription.repository import SubscriptionRepository
 
 
-class RenewalSubscriptionCommand:
+class RenewalSubscriptionUseCase:
     def __init__(self, repository: SubscriptionRepository) -> None:
         self.__repository: SubscriptionRepository = repository
 
