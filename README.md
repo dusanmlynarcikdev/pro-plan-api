@@ -2,8 +2,6 @@
 
 A simple REST API for managing Pro plan subscriptions.
 
-> 🚧 Work in progress — actively being developed
-
 ## ⚡ Highlights
 - **Minimalist domain design**
 - **Authentication-free** — intended for backend services
@@ -15,6 +13,12 @@ A simple REST API for managing Pro plan subscriptions.
 - **Identified by email** — no external identifiers required
 - **Simple lifecycle management** — no states, only validity period
 - **End-of-month renewals** — calendar-based, including leap years
+
+## 🔌 API Endpoints
+- **Health check** — service availability
+- **Upsert subscription** — create or update a subscription
+- **Get subscription** — retrieve a subscription
+- **Renew subscription** — extend the current validity
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**
@@ -45,7 +49,10 @@ The API will be available at:
 - **API (base path & health check):** http://localhost
 - **API Docs:** http://localhost/docs
 
-## 👤 Author
+## 🎯 About the Project
+This project was created to demonstrate backend system design and apply architectural principles to build well-structured, maintainable applications.
+
+## 🧑‍💼 Author
 
 **Dušan Mlynarčík** — Software Engineer & Product Builder
 
