@@ -66,7 +66,7 @@ def test_is_active(expires_at: date, expected_result: bool) -> None:
     assert subscription.is_active(date(2026, 1, 1)) == expected_result
 
 
-def test_is_active_expires_at_none() -> None:
+def test_is_active_expires_at_is_none() -> None:
     subscription = generate()
 
     assert subscription.is_active(date(2026, 1, 1)) == False
