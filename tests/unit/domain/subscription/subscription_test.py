@@ -23,22 +23,29 @@ def test_create() -> None:
 
 
 @mark.parametrize(
-    "period, expected_date",
-    ((Period.MONTHLY, date(2023, 2, 1)), (Period.YEARLY, date(2024, 1, 1))),
+    "period, today, expected_date",
+    (
+        (Period.MONTHLY, date(2026, 1, 1), date(2026, 2, 1)),
+        (Period.MONTHLY, date(2026, 1, 31), date(2026, 2, 28)),
+        (Period.MONTHLY, date(2024, 1, 31), date(2024, 2, 29)),
+        (Period.MONTHLY, date(2026, 2, 28), date(2026, 3, 31)),
+        (Period.YEARLY, date(2026, 1, 1), date(2027, 1, 1)),
+        (Period.YEARLY, date(2023, 2, 28), date(2024, 2, 29)),
+        (Period.YEARLY, date(2024, 2, 29), date(2025, 2, 28)),
+    ),
 )
-def test_renew(period: Period, expected_date: date) -> None:
+def test_renew(period: Period, today: date, expected_date: date) -> None:
     subscription = generate(period=period)
 
-    subscription.renew(date(2023, 1, 1))
+    subscription.renew(today)
 
     assert subscription.expires_at == expected_date
 
 
-@mark.parametrize("today", (date(2023, 1, 31), date(2023, 2, 2)))
-def test_renew_outside_expires_at(today: date) -> None:
+def test_renew_before_expiration() -> None:
     subscription = generate()
-    subscription.renew(date(2023, 1, 1))
+    setattr(subscription, "_Subscription__expires_at", date(2026, 1, 1))
 
-    subscription.renew(today)
+    subscription.renew(date(2025, 12, 31))
 
-    assert subscription.expires_at == date(2023, 3, 1)
+    assert subscription.expires_at == date(2026, 2, 1)

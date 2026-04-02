@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from uuid import UUID
 
 from dateutil.relativedelta import relativedelta
@@ -27,11 +27,20 @@ class Subscription:
         return self.__expires_at
 
     def renew(self, today: date) -> None:
-        if self.expires_at is not None:
-            today = self.expires_at
+        base_date = max(today, self.expires_at or today)
 
+        self.__expires_at = base_date + relativedelta(
+            months=self.__get_period_months(),
+            day=31 if self.__is_last_day_of_month(base_date) else base_date.day,
+        )
+
+    def __get_period_months(self) -> int:
         match self.period:
             case Period.MONTHLY:
-                self.__expires_at = today + relativedelta(months=1)
+                return 1
             case Period.YEARLY:
-                self.__expires_at = today + relativedelta(months=12)
+                return 12
+
+    @staticmethod
+    def __is_last_day_of_month(date: date) -> bool:
+        return (date + timedelta(days=1)).day == 1
