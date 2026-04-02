@@ -3,11 +3,14 @@ from typing import Annotated, AsyncGenerator
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.application.subscription.create_or_update_command import (
-    CreateOrUpdateSubscriptionCommand as _CreateOrUpdateSubscriptionCommand,
+from app.application.subscription.create_or_update_use_case import (
+    CreateOrUpdateSubscriptionUseCase as _CreateOrUpdateSubscriptionUseCase,
 )
-from app.application.subscription.renewal_command import (
-    RenewalSubscriptionCommand as _RenewalSubscriptionCommand,
+from app.application.subscription.get_use_case import (
+    GetSubscriptionUseCase as _GetSubscriptionUseCase,
+)
+from app.application.subscription.renewal_use_case import (
+    RenewalSubscriptionUseCase as _RenewalSubscriptionUseCase,
 )
 from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
@@ -24,24 +27,35 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_create_or_update_subscription_command(
+async def get_create_or_update_subscription_use_case(
     session: Session,
-) -> _CreateOrUpdateSubscriptionCommand:
-    return _CreateOrUpdateSubscriptionCommand(SubscriptionRepository(session))
+) -> _CreateOrUpdateSubscriptionUseCase:
+    return _CreateOrUpdateSubscriptionUseCase(SubscriptionRepository(session))
 
 
-CreateOrUpdateSubscriptionCommand = Annotated[
-    _CreateOrUpdateSubscriptionCommand,
-    Depends(get_create_or_update_subscription_command),
+CreateOrUpdateSubscriptionUseCase = Annotated[
+    _CreateOrUpdateSubscriptionUseCase,
+    Depends(get_create_or_update_subscription_use_case),
 ]
 
 
-async def get_renewal_subscription_command(
+async def get_renewal_subscription_use_case(
     session: Session,
-) -> _RenewalSubscriptionCommand:
-    return _RenewalSubscriptionCommand(SubscriptionRepository(session))
+) -> _RenewalSubscriptionUseCase:
+    return _RenewalSubscriptionUseCase(SubscriptionRepository(session))
 
 
-RenewalSubscriptionCommand = Annotated[
-    _RenewalSubscriptionCommand, Depends(get_renewal_subscription_command)
+RenewalSubscriptionUseCase = Annotated[
+    _RenewalSubscriptionUseCase, Depends(get_renewal_subscription_use_case)
+]
+
+
+async def get_get_subscription_use_case(
+    session: Session,
+) -> _GetSubscriptionUseCase:
+    return _GetSubscriptionUseCase(SubscriptionRepository(session))
+
+
+GetSubscriptionUseCase = Annotated[
+    _GetSubscriptionUseCase, Depends(get_get_subscription_use_case)
 ]

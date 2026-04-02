@@ -6,7 +6,7 @@ from app.domain.subscription.repository import SubscriptionRepository
 from app.domain.subscription.subscription import Subscription
 
 
-class CreateOrUpdateSubscriptionCommand:
+class CreateOrUpdateSubscriptionUseCase:
     def __init__(self, repository: SubscriptionRepository) -> None:
         self.__repository: SubscriptionRepository = repository
 
