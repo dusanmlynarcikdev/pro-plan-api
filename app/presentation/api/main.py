@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 
 from .handlers import register_exception_handlers
 
@@ -18,5 +18,8 @@ app = FastAPI(
 
 register_exception_handlers(app)
 
-app.include_router(health_check_router)
-app.include_router(subscription_router)
+api_router = APIRouter(prefix="/api")
+api_router.include_router(health_check_router)
+api_router.include_router(subscription_router)
+
+app.include_router(api_router)

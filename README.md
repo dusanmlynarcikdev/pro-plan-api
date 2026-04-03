@@ -49,11 +49,11 @@ docker compose up -d
 docker compose exec api make m
 ```
 
-### API Base Path
+### URLs
 
-http://localhost (serves as a health check)
+API Base URL: http://localhost/api
 
-### Tools
+#### Tools
 - API Docs: http://localhost/docs
 - Mailcatcher: http://localhost:81
 

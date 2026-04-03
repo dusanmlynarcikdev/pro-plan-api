@@ -13,7 +13,7 @@ from app.infrastructure.persistence.schema.subscription import SubscriptionSchem
 from tests.functional.fake_email_sender import FakeEmailSender
 from tests.generator.subscription import generate
 
-PATH = "/subscriptions/{email}/renew"
+PATH = "/api/subscriptions/{email}/renew"
 
 
 async def test_success(
