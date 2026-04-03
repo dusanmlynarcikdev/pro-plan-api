@@ -13,7 +13,7 @@ from app.infrastructure.persistence.schema.subscription import SubscriptionSchem
 from tests.functional.fake_email_sender import FakeEmailSender
 from tests.generator.subscription import generate
 
-PATH = "/subscriptions/{email}/renewal"
+PATH = "/subscriptions/{email}/renew"
 
 
 async def test_success(
@@ -23,7 +23,7 @@ async def test_success(
     await session.flush()
     session.expunge_all()
 
-    with patch("app.application.subscription.renewal_use_case.date") as mock_date:
+    with patch("app.application.subscription.renew_use_case.date") as mock_date:
         mock_date.today.return_value = date(2026, 1, 1)
         response = client.post(PATH.format(email="john@doe.com"))
 

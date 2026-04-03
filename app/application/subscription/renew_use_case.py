@@ -6,7 +6,7 @@ from app.domain.subscription.email import Email
 from app.domain.subscription.repository import SubscriptionRepository
 
 
-class RenewalSubscriptionUseCase:
+class RenewSubscriptionUseCase:
     def __init__(
         self, email_sender: Sender, repository: SubscriptionRepository
     ) -> None:
