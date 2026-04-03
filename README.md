@@ -1,5 +1,4 @@
 # ⭐️ Pro Plan API
-
 A simple REST API for managing Pro plan subscriptions.
 
 ## ⚡ Highlights
@@ -13,6 +12,9 @@ A simple REST API for managing Pro plan subscriptions.
 - **Identified by email** — no external identifiers required
 - **Simple lifecycle management** — no states, only validity period
 - **End-of-month renewals** — calendar-based, including leap years
+
+## 📬 Notifications
+- **Email notification on subscription renewal**
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
@@ -29,32 +31,35 @@ A simple REST API for managing Pro plan subscriptions.
 - **UUIDs** — primary identifiers
 
 ## ⚙️ Development
-
 ### Requirements
 - Docker
 - Docker Compose
 
 ### Getting Started
-
-Run the project:
+1. Run the project:
 ```shell
 docker compose up -d
 ```
 
-Run database migrations:
+2. Run database migrations:
 ```shell
-docker compose exec api make mu
+docker compose exec api make m
 ```
 
-The API will be available at:
-- **API (base path & health check):** http://localhost
-- **API Docs:** http://localhost/docs
+### URLs
+API Base URL: http://localhost/api
+
+#### Tools
+- API Docs: http://localhost/docs
+- Mailcatcher: http://localhost:81
+
+### Commands
+Useful commands are available in the Makefile.
 
 ## 🎯 About the Project
 A reference project demonstrating backend system design and implementation.
 
 ## 🧑‍💼 Author
-
 **Dušan Mlynarčík** — Software Engineer & Product Builder
 
 - LinkedIn: https://www.linkedin.com/in/dusanmlynarcik/

@@ -1,7 +1,7 @@
 # all checks & fixes
-cf: lf ty t
+cf: lf ty s t
 
-# lint
+# lint check
 l:
 	ruff check && ruff format --check
 
@@ -9,22 +9,22 @@ l:
 lf:
 	ruff check --fix && ruff format
 
-# check migrations
-mc:
-	alembic check
-
 # run database migrations
-mu:
+m:
 	alembic upgrade head
 
-# generate database migrations
+# generate database migration from diff
 mg:
 	alembic revision -m "autogenerate" --autogenerate
 
-# types
-ty:
-	ty check
+# check database schema
+s:
+	alembic check
 
-# tests
+# run tests
 t:
 	pytest tests -v
+
+# check types
+ty:
+	ty check

@@ -34,8 +34,8 @@ jobs:
 
       - name: Database schema
         run: |
-          docker run --network network -e DATABASE_URL="$DATABASE_URL" api make mu
-          docker run --network network -e DATABASE_URL="$DATABASE_URL" api make mc
+          docker run --network network -e DATABASE_URL="$DATABASE_URL" api make m
+          docker run --network network -e DATABASE_URL="$DATABASE_URL" api make s
 
       - name: Tests
         run: docker run --network network -e DATABASE_URL="$DATABASE_URL" api make t

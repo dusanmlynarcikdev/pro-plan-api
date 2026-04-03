@@ -8,7 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 from tests.generator.subscription import generate
 
-PATH = "/subscriptions/{email}"
+PATH = "/api/subscriptions/{email}"
 
 
 async def test_get_subscription(client: TestClient, session: AsyncSession) -> None:

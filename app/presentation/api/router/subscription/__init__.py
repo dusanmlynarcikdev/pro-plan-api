@@ -4,7 +4,7 @@ from app.presentation.api.responses import ERROR_RESPONSE_MODEL
 
 from .create_or_update import router as create_or_update_router
 from .get import router as get_subscription_router
-from .renewal import router as renewal_router
+from .renew import router as renew_router
 
 router = APIRouter(
     tags=["subscription"],
@@ -12,6 +12,6 @@ router = APIRouter(
 )
 router.include_router(create_or_update_router)
 router.include_router(get_subscription_router)
-router.include_router(renewal_router)
+router.include_router(renew_router)
 
 __all__ = ["router"]

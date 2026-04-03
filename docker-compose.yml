@@ -24,3 +24,10 @@ services:
     restart: always
     volumes:
       - ./.docker/postgres:/var/lib/postgresql
+
+  mailcatcher:
+    container_name: mailcatcher
+    image: schickling/mailcatcher
+    ports:
+      - '81:1080'
+    restart: always

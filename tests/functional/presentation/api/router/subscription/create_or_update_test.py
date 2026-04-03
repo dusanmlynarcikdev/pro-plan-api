@@ -11,7 +11,7 @@ from app.domain.subscription.period import Period
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 from tests.generator.subscription import generate
 
-PATH = "/subscriptions"
+PATH = "/api/subscriptions"
 
 
 async def test_create(client: TestClient, session: AsyncSession) -> None:
