@@ -43,7 +43,7 @@ docker compose up -d
 
 Run database migrations:
 ```shell
-docker compose exec api make mu
+docker compose exec api make m
 ```
 
 The API will be available at:
