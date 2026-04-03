@@ -27,6 +27,7 @@ def client() -> Generator[TestClient]:
 @fixture
 def email_sender() -> Generator[FakeEmailSender]:
     email_sender = FakeEmailSender()
+
     app.dependency_overrides[get_email_sender] = lambda: email_sender
     yield email_sender
     app.dependency_overrides.pop(get_email_sender, None)

@@ -11,7 +11,9 @@ from app.infrastructure.email_sender import EmailSender
 def test_send() -> None:
     background_tasks = Mock(BackgroundTasks)
 
-    EmailSender(background_tasks).send(Message(Email("john@doe.com"), "subject", "body"))
+    EmailSender(background_tasks).send(
+        Message(Email("john@doe.com"), "subject", "body")
+    )
 
     background_tasks.add_task.assert_called_once()
 

@@ -41,8 +41,8 @@ CreateOrUpdateSubscriptionUseCase = Annotated[
 ]
 
 
-async def get_email_sender(queue: BackgroundTasks) -> EmailSender:
-    return EmailSender(queue)
+async def get_email_sender(background_tasks: BackgroundTasks) -> EmailSender:
+    return EmailSender(background_tasks)
 
 
 async def get_renewal_subscription_use_case(
