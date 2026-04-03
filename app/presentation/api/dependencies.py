@@ -1,5 +1,6 @@
 from typing import Annotated, AsyncGenerator
 
+from fastapi import BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -12,6 +13,7 @@ from app.application.subscription.get_use_case import (
 from app.application.subscription.renewal_use_case import (
     RenewalSubscriptionUseCase as _RenewalSubscriptionUseCase,
 )
+from app.infrastructure.email_sender import EmailSender
 from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
@@ -40,9 +42,12 @@ CreateOrUpdateSubscriptionUseCase = Annotated[
 
 
 async def get_renewal_subscription_use_case(
+    queue: BackgroundTasks,
     session: Session,
 ) -> _RenewalSubscriptionUseCase:
-    return _RenewalSubscriptionUseCase(SubscriptionRepository(session))
+    return _RenewalSubscriptionUseCase(
+        EmailSender(queue), SubscriptionRepository(session)
+    )
 
 
 RenewalSubscriptionUseCase = Annotated[

@@ -37,8 +37,9 @@ def test_create() -> None:
 def test_renew(period: Period, today: date, expected_date: date) -> None:
     subscription = generate(period=period)
 
-    subscription.renew(today)
+    result = subscription.renew(today)
 
+    assert result == expected_date
     assert subscription.expires_at == expected_date
 
 

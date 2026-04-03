@@ -26,13 +26,15 @@ class Subscription:
     def expires_at(self) -> date | None:
         return self.__expires_at
 
-    def renew(self, today: date) -> None:
+    def renew(self, today: date) -> date:
         base_date = max(today, self.expires_at or today)
 
         self.__expires_at = base_date + relativedelta(
             months=self.__get_period_months(),
             day=31 if self.__is_last_day_of_month(base_date) else base_date.day,
         )
+
+        return self.__expires_at
 
     def is_active(self, today: date) -> bool:
         return self.expires_at is not None and self.expires_at >= today
