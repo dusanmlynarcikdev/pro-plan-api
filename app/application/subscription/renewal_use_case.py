@@ -24,9 +24,9 @@ class RenewalSubscriptionUseCase:
 
         self.__send_confirmation_email(subscription.email, expires_at)
 
-    def __send_confirmation_email(self, email: Email, expires_at: date) -> None:
+    def __send_confirmation_email(self, recipient: Email, expires_at: date) -> None:
         message = Message(
-            email,
+            recipient,
             "Subscription renewed",
             f"Subscription renewed. Expires on {expires_at.strftime('%b %-d, %Y')}.",
         )

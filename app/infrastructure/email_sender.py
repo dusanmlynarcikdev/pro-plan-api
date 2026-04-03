@@ -14,20 +14,20 @@ class EmailSender:
         self.__background_tasks = background_tasks
 
     def send(self, message: Message) -> None:
-        email = self.__create_email(message)
+        _message = self.__create_message(message)
 
-        self.__background_tasks.add_task(self.__send_email, email)
-
-    @staticmethod
-    def __create_email(message: Message) -> EmailMessage:
-        email = EmailMessage()
-        email["To"] = message.recipient.value
-        email["Subject"] = message.subject
-        email.set_content(message.body)
-
-        return email
+        self.__background_tasks.add_task(self.__send_email, _message)
 
     @staticmethod
-    def __send_email(email: EmailMessage) -> None:
+    def __create_message(message: Message) -> EmailMessage:
+        _message = EmailMessage()
+        _message["To"] = message.recipient.value
+        _message["Subject"] = message.subject
+        _message.set_content(message.body)
+
+        return _message
+
+    @staticmethod
+    def __send_email(message: EmailMessage) -> None:
         with SMTP(SMTP_DSN) as s:
-            s.send_message(email)
+            s.send_message(message)
