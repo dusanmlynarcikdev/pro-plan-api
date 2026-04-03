@@ -1,5 +1,5 @@
 # all checks & fixes
-cf: lf ty d t
+cf: lf ty s t
 
 # lint check
 l:
@@ -9,10 +9,6 @@ l:
 lf:
 	ruff check --fix && ruff format
 
-# check database schema
-d:
-	alembic check
-
 # run database migrations
 m:
 	alembic upgrade head
@@ -20,6 +16,10 @@ m:
 # generate database migration from diff
 mg:
 	alembic revision -m "autogenerate" --autogenerate
+
+# check database schema
+s:
+	alembic check
 
 # check types
 ty:
