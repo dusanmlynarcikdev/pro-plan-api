@@ -25,7 +25,8 @@ A simple REST API for managing Pro plan subscriptions.
 - **Clean Architecture**
 - **Use-case driven design**
 - **Rich domain models** — organized into domain modules
-- **Value Objects & UUIDs** — primary identifiers
+- **Value Objects**
+- **UUIDs** — primary identifiers
 
 ## ⚙️ Development
 
@@ -50,7 +51,7 @@ The API will be available at:
 - **API Docs:** http://localhost/docs
 
 ## 🎯 About the Project
-This project was created to demonstrate backend system design and apply architectural principles to build well-structured, maintainable applications.
+A reference project demonstrating backend system design and implementation.
 
 ## 🧑‍💼 Author
 
