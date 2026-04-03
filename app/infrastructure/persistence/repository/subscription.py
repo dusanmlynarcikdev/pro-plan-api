@@ -2,7 +2,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.subscription.email import Email
-from app.domain.subscription.errors import SubscriptionNotFound
+from app.domain.subscription.errors import SubscriptionNotFoundError
 from app.domain.subscription.subscription import Subscription
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 
@@ -32,7 +32,7 @@ class SubscriptionRepository:
         subscription = await self.find_one_by_email(email)
 
         if subscription is None:
-            raise SubscriptionNotFound()
+            raise SubscriptionNotFoundError()
 
         return subscription
 

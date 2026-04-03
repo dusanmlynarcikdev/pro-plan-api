@@ -7,7 +7,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.subscription.email import Email
-from app.domain.subscription.errors import SubscriptionNotFound
+from app.domain.subscription.errors import SubscriptionNotFoundError
 from app.domain.subscription.period import Period
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
@@ -102,12 +102,12 @@ async def test_get_one_by_email_another_subscription_exists(
     await session.flush()
     session.expunge_all()
 
-    with raises(SubscriptionNotFound, match="Subscription not found"):
+    with raises(SubscriptionNotFoundError, match="Subscription not found"):
         await SubscriptionRepository(session).get_one_by_email(Email("john2@doe.com"))
 
 
 async def test_get_one_by_email_empty_repository(session: AsyncSession) -> None:
-    with raises(SubscriptionNotFound, match="Subscription not found"):
+    with raises(SubscriptionNotFoundError, match="Subscription not found"):
         await SubscriptionRepository(session).get_one_by_email(Email("john@doe.com"))
 
 
