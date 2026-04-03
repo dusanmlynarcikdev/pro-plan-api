@@ -1,5 +1,4 @@
 # ⭐️ Pro Plan API
-
 A simple REST API for managing Pro plan subscriptions.
 
 ## ⚡ Highlights
@@ -32,13 +31,11 @@ A simple REST API for managing Pro plan subscriptions.
 - **UUIDs** — primary identifiers
 
 ## ⚙️ Development
-
 ### Requirements
 - Docker
 - Docker Compose
 
 ### Getting Started
-
 1. Run the project:
 ```shell
 docker compose up -d
@@ -50,7 +47,6 @@ docker compose exec api make m
 ```
 
 ### URLs
-
 API Base URL: http://localhost/api
 
 #### Tools
@@ -64,7 +60,6 @@ Useful commands are available in the Makefile.
 A reference project demonstrating backend system design and implementation.
 
 ## 🧑‍💼 Author
-
 **Dušan Mlynarčík** — Software Engineer & Product Builder
 
 - LinkedIn: https://www.linkedin.com/in/dusanmlynarcik/
