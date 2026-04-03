@@ -16,7 +16,7 @@ from tests.generator.subscription import generate
 PATH = "/api/subscriptions/{email}/renew"
 
 
-async def test_success(
+async def test_renew(
     client: TestClient, email_sender: FakeEmailSender, session: AsyncSession
 ) -> None:
     session.add(SubscriptionSchema.from_domain(generate()))
