@@ -25,7 +25,7 @@ A simple REST API for managing Pro plan subscriptions.
 - **Clean Architecture**
 - **Use-case driven design**
 - **Rich domain models** — organized into domain modules
-- **Value Objects**
+- **Value objects**
 - **UUIDs** — primary identifiers
 
 ## ⚙️ Development
