@@ -21,10 +21,10 @@ mg:
 s:
 	alembic check
 
-# check types
-ty:
-	ty check
-
 # run tests
 t:
 	pytest tests -v
+
+# check types
+ty:
+	ty check
