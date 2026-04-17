@@ -57,7 +57,7 @@ API Base URL: http://localhost/api
 Useful commands are available in the Makefile.
 
 ## 🎯 About the Project
-A reference project demonstrating backend system design and implementation.
+An example project demonstrating backend system design.
 
 ## 🧑‍💼 Author
 **Dušan Mlynarčík** — Software Engineer & Product Builder
