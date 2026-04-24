@@ -54,7 +54,7 @@ API Base URL: http://localhost/api
 - Mailcatcher: http://localhost:81
 
 ### Commands
-Useful commands are available in the Makefile.
+Useful commands are available in the [Makefile](./Makefile).
 
 ## 🎯 About the Project
 An example project demonstrating backend system design.
