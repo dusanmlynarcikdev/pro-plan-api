@@ -15,7 +15,8 @@ class CreateOrUpdateSubscriptionUseCase:
 
         if subscription is None:
             await self.__repository.add(Subscription(uuid7(), email, period))
-            return
+        else:
+            subscription.period = period
+            await self.__repository.update(subscription)
 
-        subscription.period = period
-        await self.__repository.update(subscription)
+        await self.__repository.commit()
