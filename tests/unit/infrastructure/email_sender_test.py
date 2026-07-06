@@ -12,9 +12,12 @@ from app.infrastructure.email_sender import EmailSender
 def test_send() -> None:
     background_tasks = Mock(BackgroundTasks)
 
-    EmailSender(background_tasks).send(
-        Message(Email("john@doe.com"), "subject", "body")
-    )
+    with patch(
+        "app.infrastructure.email_sender.EMAIL_SENDER", "Acme <noreply@acme.test>"
+    ):
+        EmailSender(background_tasks).send(
+            Message(Email("john@doe.com"), "subject", "body")
+        )
 
     background_tasks.add_task.assert_called_once()
 
@@ -23,6 +26,7 @@ def test_send() -> None:
     assert callback == getattr(EmailSender, "_EmailSender__send_email")
 
     assert isinstance(email, EmailMessage)
+    assert email["From"] == "Acme <noreply@acme.test>"
     assert email["To"] == "john@doe.com"
     assert email["Subject"] == "subject"
     assert email.get_content().strip() == "body"

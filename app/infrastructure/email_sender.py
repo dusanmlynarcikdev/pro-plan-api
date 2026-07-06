@@ -7,6 +7,7 @@ from fastapi import BackgroundTasks
 
 from app.application.email.message import Message
 
+EMAIL_SENDER = getenv("EMAIL_SENDER", "")
 SMTP_DSN = getenv("SMTP_DSN", "")
 
 
@@ -22,6 +23,7 @@ class EmailSender:
     @staticmethod
     def __create_message(message: Message) -> EmailMessage:
         _message = EmailMessage()
+        _message["From"] = EMAIL_SENDER
         _message["To"] = message.recipient.value
         _message["Subject"] = message.subject
         _message.set_content(message.body)
