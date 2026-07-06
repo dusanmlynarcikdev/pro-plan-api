@@ -12,12 +12,9 @@ from app.infrastructure.email_sender import EmailSender
 def test_send() -> None:
     background_tasks = Mock(BackgroundTasks)
 
-    with patch(
-        "app.infrastructure.email_sender.EMAIL_SENDER", "Acme <noreply@acme.test>"
-    ):
-        EmailSender(background_tasks).send(
-            Message(Email("john@doe.com"), "subject", "body")
-        )
+    EmailSender(background_tasks).send(
+        Message(Email("john@doe.com"), "subject", "body")
+    )
 
     background_tasks.add_task.assert_called_once()
 
@@ -41,13 +38,7 @@ async def test_send_email() -> None:
     smtp = MagicMock(SMTP)
     smtp_client = smtp.return_value.__aenter__.return_value
 
-    with (
-        patch("app.infrastructure.email_sender.SMTP", smtp),
-        patch(
-            "app.infrastructure.email_sender.SMTP_DSN",
-            "smtp://john:secret@example.com:465",
-        ),
-    ):
+    with patch("app.infrastructure.email_sender.SMTP", smtp):
         await getattr(EmailSender, "_EmailSender__send_email")(email)
 
     smtp.assert_called_once_with(

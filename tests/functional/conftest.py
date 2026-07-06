@@ -11,7 +11,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from tests.functional.fake_email_sender import FakeEmailSender
 
-load_dotenv(".env.test")
+load_dotenv(".env")
+load_dotenv(".env.test", override=True)
 
 from app.infrastructure.persistence.connection import DATABASE_URL, engine
 from app.presentation.api.dependencies import get_email_sender, get_session
