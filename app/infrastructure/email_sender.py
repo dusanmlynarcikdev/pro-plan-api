@@ -3,6 +3,7 @@ from os import getenv
 from urllib.parse import urlparse
 
 from aiosmtplib import SMTP
+from aiosmtplib.smtp import SMTP_TLS_PORT
 from fastapi import BackgroundTasks
 
 from app.application.email.message import Message
@@ -37,7 +38,7 @@ class EmailSender:
         async with SMTP(
             hostname=parsed_dsn.hostname,
             port=parsed_dsn.port,
-            use_tls=parsed_dsn.port == 465,
+            use_tls=parsed_dsn.port == SMTP_TLS_PORT,
         ) as client:
             if parsed_dsn.username and parsed_dsn.password:
                 await client.login(parsed_dsn.username, parsed_dsn.password)
