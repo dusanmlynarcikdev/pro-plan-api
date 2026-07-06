@@ -21,6 +21,7 @@ class RenewSubscriptionUseCase:
 
         expires_at = subscription.renew(date.today())
         await self.__repository.update(subscription)
+        await self.__repository.commit()
 
         self.__send_confirmation_email(subscription.email, expires_at)
 

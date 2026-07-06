@@ -24,7 +24,6 @@ from app.infrastructure.persistence.repository.subscription import (
 async def get_session() -> AsyncGenerator[AsyncSession]:
     async with session_factory() as session:
         yield session
-        await session.commit()
 
 
 Session = Annotated[AsyncSession, Depends(get_session)]
