@@ -1,7 +1,8 @@
 from email.message import EmailMessage
 from os import getenv
-from smtplib import SMTP
+from urllib.parse import urlparse
 
+from aiosmtplib import SMTP
 from fastapi import BackgroundTasks
 
 from app.application.email.message import Message
@@ -28,6 +29,15 @@ class EmailSender:
         return _message
 
     @staticmethod
-    def __send_email(message: EmailMessage) -> None:
-        with SMTP(SMTP_DSN) as s:
-            s.send_message(message)
+    async def __send_email(message: EmailMessage) -> None:
+        parsed_dsn = urlparse(SMTP_DSN)
+
+        async with SMTP(
+            hostname=parsed_dsn.hostname,
+            port=parsed_dsn.port,
+            use_tls=parsed_dsn.port == 465,
+        ) as client:
+            if parsed_dsn.username and parsed_dsn.password:
+                await client.login(parsed_dsn.username, parsed_dsn.password)
+
+            await client.send_message(message)
