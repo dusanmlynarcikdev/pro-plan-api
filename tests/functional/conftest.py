@@ -9,14 +9,13 @@ from pytest import fixture
 from sqlalchemy_utils import create_database, database_exists, drop_database
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from tests.functional.fake_email_sender import FakeEmailSender
-
-load_dotenv(".env")
 load_dotenv(".env.test", override=True)
 
-from app.infrastructure.persistence.connection import DATABASE_URL, engine
+from app.infrastructure.persistence.connection import engine
+from app.infrastructure.settings import get_settings
 from app.presentation.api.dependencies import get_email_sender, get_session
 from app.presentation.api.main import app
+from tests.functional.fake_email_sender import FakeEmailSender
 
 
 @fixture
@@ -49,15 +48,17 @@ async def session() -> AsyncGenerator[AsyncSession]:
 
 @fixture(scope="session", autouse=True)
 def prepare_database() -> None:
-    alembic_config = Config("alembic.ini")
-    alembic_config.set_main_option("sqlalchemy.url", DATABASE_URL)
+    database_url = str(get_settings().database_url)
 
-    if database_exists(DATABASE_URL):
+    alembic_config = Config("alembic.ini")
+    alembic_config.set_main_option("sqlalchemy.url", database_url)
+
+    if database_exists(database_url):
         try:
             command.check(alembic_config)
             return
         except CommandError:
-            drop_database(DATABASE_URL)
+            drop_database(database_url)
 
-    create_database(DATABASE_URL)
+    create_database(database_url)
     command.upgrade(alembic_config, "head")
