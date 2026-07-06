@@ -3,6 +3,7 @@ name = "pro-plan-api"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "aiosmtplib>=5.1.2",
     "alembic>=1.18.4",
     "dotenv>=0.9.9",
     "email-validator>=2.3.0",
