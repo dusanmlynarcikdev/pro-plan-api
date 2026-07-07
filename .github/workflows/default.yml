@@ -38,4 +38,4 @@ jobs:
           docker run --network network -e DATABASE_URL="$DATABASE_URL" api make s
 
       - name: Tests
-        run: docker run --network network -e DATABASE_URL="$DATABASE_URL" api make t
+        run: docker run --network network api make t
