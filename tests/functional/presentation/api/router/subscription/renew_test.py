@@ -41,7 +41,10 @@ async def test_renew(
     assert len(email_sender.sent) == 1
     assert email_sender.sent[0].recipient == Email("john@doe.com")
     assert email_sender.sent[0].subject == "Subscription renewed"
-    assert email_sender.sent[0].body == "Subscription renewed. Expires on Feb 1, 2026."
+    assert email_sender.sent[0].body == (
+        "Your subscription has been successfully renewed and "
+        "is active until Feb 1, 2026."
+    )
 
 
 async def test_unknown_email(client: TestClient, session: AsyncSession) -> None:

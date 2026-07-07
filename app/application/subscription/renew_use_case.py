@@ -29,7 +29,8 @@ class RenewSubscriptionUseCase:
         message = Message(
             recipient,
             "Subscription renewed",
-            f"Subscription renewed. Expires on {expires_at.strftime('%b %-d, %Y')}.",
+            f"Your subscription has been successfully renewed and is active "
+            f"until {expires_at.strftime('%b %-d, %Y')}.",
         )
 
         self.__email_sender.send(message)
