@@ -30,31 +30,37 @@ A simple REST API for managing Pro plan subscriptions.
 - **Value objects**
 - **UUIDs** — primary identifiers
 
-## ⚙️ Development
+## ⚙️ Getting Started
 ### Requirements
 - Docker
 - Docker Compose
 
-### Getting Started
-1. Run the project:
+### Development
+Run the project:
 ```shell
 docker compose up -d
 ```
+This starts the whole project, including database migrations, which run automatically before the API starts.
 
-2. Run database migrations:
-```shell
-docker compose exec api make m
-```
-
-### URLs
+#### URLs
 API Base URL: http://localhost/api
 
-#### Tools
+##### Tools
 - API Docs: http://localhost/docs
 - Mailcatcher: http://localhost:81
 
-### Commands
+#### Commands
 Useful commands are available in the [Makefile](./Makefile).
+
+### Production
+Set the environment variables from [.env.dist](./.env.dist) to production values, and use a strong `DATABASE_PASSWORD` matching `DATABASE_URL`:
+```shell
+DATABASE_PASSWORD='...' \
+DATABASE_URL='...' \
+EMAIL_SENDER='...' \
+SMTP_DSN='...' \
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
 
 ## 🎯 About the Project
 An example project demonstrating backend system design.
