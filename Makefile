@@ -7,7 +7,7 @@ l:
 
 # lint fix
 lf:
-	ruff check --fix && ruff format
+	ruff format && ruff check --fix
 
 # run database migrations
 m:
