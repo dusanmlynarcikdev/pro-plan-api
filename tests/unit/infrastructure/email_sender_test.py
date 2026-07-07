@@ -28,11 +28,11 @@ async def test_send() -> None:
         await background_tasks()
 
     smtp.assert_called_once_with(hostname="example.com", port=465, use_tls=True)
+
     smtp_client.login.assert_called_once_with("john", "secret")
-
     smtp_client.send_message.assert_called_once()
-    email = smtp_client.send_message.call_args.args[0]
 
+    email = smtp_client.send_message.call_args.args[0]
     assert isinstance(email, EmailMessage)
     assert email["From"] == "Acme <noreply@acme.test>"
     assert email["To"] == "john@doe.com"
