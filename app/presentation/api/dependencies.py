@@ -14,13 +14,13 @@ from app.application.subscription.get_use_case import (
 from app.application.subscription.renew_use_case import (
     RenewSubscriptionUseCase as _RenewSubscriptionUseCase,
 )
+from app.infrastructure.config import Config as _Config
+from app.infrastructure.config import get_config
 from app.infrastructure.email_sender import EmailSender
 from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
-from app.infrastructure.settings import Settings as _Settings
-from app.infrastructure.settings import get_settings
 
 
 async def get_session() -> AsyncGenerator[AsyncSession]:
@@ -31,7 +31,7 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-Settings = Annotated[_Settings, Depends(get_settings)]
+Config = Annotated[_Config, Depends(get_config)]
 
 
 async def get_create_or_update_subscription_use_case(
@@ -47,7 +47,7 @@ CreateOrUpdateSubscriptionUseCase = Annotated[
 
 
 async def get_email_sender(
-    background_tasks: BackgroundTasks, settings: Settings
+    background_tasks: BackgroundTasks, settings: Config
 ) -> EmailSender:
     return EmailSender(background_tasks, settings.email_sender, settings.smtp_dsn)
 

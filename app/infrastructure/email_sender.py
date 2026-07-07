@@ -20,11 +20,11 @@ class EmailSender:
         self._smtp_dsn = smtp_dsn
 
     def send(self, message: Message) -> None:
-        _message = self.__create_message(message)
+        _message = self._create_message(message)
 
-        self._background_tasks.add_task(self.__send_email, _message)
+        self._background_tasks.add_task(self._send_email, _message)
 
-    def __create_message(self, message: Message) -> EmailMessage:
+    def _create_message(self, message: Message) -> EmailMessage:
         _message = EmailMessage()
         _message["From"] = str(self._email_sender)
         _message["To"] = message.recipient.value
@@ -33,7 +33,7 @@ class EmailSender:
 
         return _message
 
-    async def __send_email(self, message: EmailMessage) -> None:
+    async def _send_email(self, message: EmailMessage) -> None:
         async with SMTP(
             hostname=self._smtp_dsn.host,
             port=self._smtp_dsn.port,

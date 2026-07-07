@@ -11,8 +11,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 load_dotenv(".env.test", override=True)
 
+from app.infrastructure.config import get_config
 from app.infrastructure.persistence.connection import engine
-from app.infrastructure.settings import get_settings
 from app.presentation.api.dependencies import get_email_sender, get_session
 from app.presentation.api.main import app
 from tests.functional.fake_email_sender import FakeEmailSender
@@ -48,7 +48,7 @@ async def session() -> AsyncGenerator[AsyncSession]:
 
 @fixture(scope="session", autouse=True)
 def prepare_database() -> None:
-    database_url = str(get_settings().database_url)
+    database_url = str(get_config().database_url)
 
     alembic_config = Config("alembic.ini")
     alembic_config.set_main_option("sqlalchemy.url", database_url)
