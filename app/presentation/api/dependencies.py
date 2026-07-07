@@ -47,9 +47,9 @@ CreateOrUpdateSubscriptionUseCase = Annotated[
 
 
 async def get_email_sender(
-    background_tasks: BackgroundTasks, settings: Config
+    background_tasks: BackgroundTasks, config: Config
 ) -> EmailSender:
-    return EmailSender(background_tasks, settings.email_sender, settings.smtp_dsn)
+    return EmailSender(background_tasks, config.email_sender, config.smtp_dsn)
 
 
 async def get_renew_subscription_use_case(
