@@ -53,7 +53,7 @@ API Base URL: http://localhost/api
 Useful commands are available in the [Makefile](./Makefile).
 
 ### Production
-Run the project with the environment variables from [.env.dist](./.env.dist) set to production values, including a strong `DATABASE_PASSWORD` for the `database` container, matching `DATABASE_URL`:
+Run the project with the environment variables from [.env.dist](./.env.dist) set to production values. Also set `DATABASE_PASSWORD` for the `database` container to match the password in `DATABASE_URL`:
 ```shell
 DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
