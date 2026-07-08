@@ -3,7 +3,6 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## ⚡ Highlights
 - **Minimalist domain design**
-- **Authentication-free** — intended for backend services
 - **Ready to run** — out of the box with Docker
 - **Unit and functional tests** — covering domain logic and API behavior
 
