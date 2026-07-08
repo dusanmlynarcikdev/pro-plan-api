@@ -21,7 +21,7 @@ from tests.functional.fake_email_sender import FakeEmailSender
 @fixture
 def client() -> Generator[TestClient]:
     with TestClient(app) as client:
-        client.headers["Authorization"] = f"Bearer {get_config().api_key}"
+        client.headers["Authorization"] = f"Bearer {get_config().api_token}"
         yield client
 
 

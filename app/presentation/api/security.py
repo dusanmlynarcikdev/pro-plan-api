@@ -13,7 +13,7 @@ def check_authentication(
     config: Config,
     token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
 ) -> None:
-    if compare_digest(config.api_key, token.credentials):
+    if compare_digest(config.api_token, token.credentials):
         return
 
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)

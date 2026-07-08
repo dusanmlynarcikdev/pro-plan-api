@@ -20,8 +20,8 @@ request_parameter = pytest.mark.parametrize(
 
 
 @request_parameter
-def test_invalid_api_key(client: TestClient, method: str, url: str) -> None:
-    client.headers["Authorization"] = "Bearer invalid_api_key"
+def test_invalid_token(client: TestClient, method: str, url: str) -> None:
+    client.headers["Authorization"] = "Bearer invalid_token"
 
     response = client.request(method, url)
 
@@ -30,7 +30,7 @@ def test_invalid_api_key(client: TestClient, method: str, url: str) -> None:
 
 
 @request_parameter
-def test_missing_api_key(client: TestClient, method: str, url: str) -> None:
+def test_missing_token(client: TestClient, method: str, url: str) -> None:
     del client.headers["Authorization"]
 
     response = client.request(method, url)
