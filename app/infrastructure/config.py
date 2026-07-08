@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Config(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env.dist", extra="ignore")
 
+    api_key: str
     database_url: PostgresDsn
     email_sender: NameEmail
     smtp_dsn: Annotated[
