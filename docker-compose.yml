@@ -12,6 +12,7 @@ services:
       migrations:
         condition: service_completed_successfully
     environment:
+      - API_TOKEN
       - DATABASE_URL
       - EMAIL_SENDER
       - SMTP_DSN

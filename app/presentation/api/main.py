@@ -1,9 +1,11 @@
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, Depends, FastAPI, status
 
 from app.presentation.api.router.health_check import router as health_check_router
 from app.presentation.api.router.subscription import router as subscription_router
 
 from .handlers import register_exception_handlers
+from .responses import ERROR_RESPONSE_MODEL
+from .security import check_authentication
 
 app = FastAPI(
     title="Pro Plan API",
@@ -17,6 +19,12 @@ register_exception_handlers(app)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(health_check_router)
-api_router.include_router(subscription_router)
+
+secure_router = APIRouter(
+    dependencies=[Depends(check_authentication)],
+    responses={status.HTTP_401_UNAUTHORIZED: ERROR_RESPONSE_MODEL},
+)
+secure_router.include_router(subscription_router)
+api_router.include_router(secure_router)
 
 app.include_router(api_router)

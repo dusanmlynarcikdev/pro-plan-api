@@ -3,7 +3,6 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## ⚡ Highlights
 - **Minimalist domain design**
-- **Authentication-free** — intended for backend services
 - **Ready to run** — out of the box with Docker
 - **Unit and functional tests** — covering domain logic and API behavior
 
@@ -55,6 +54,7 @@ Useful commands are available in the [Makefile](./Makefile).
 ### Production
 Run the project with the environment variables from [.env.dist](./.env.dist) set to production values. Also set `DATABASE_PASSWORD` for the `database` container to match the password in `DATABASE_URL`:
 ```shell
+API_TOKEN='...' \
 DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
 EMAIL_SENDER='...' \
