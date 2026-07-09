@@ -7,6 +7,7 @@ class IdResponse(BaseModel):
     id: UUID
 
 
-class GetSubscriptionResponse(BaseModel):
+class SubscriptionResponse(BaseModel):
+    id: UUID
     email: str
     is_active: bool

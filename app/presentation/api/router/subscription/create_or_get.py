@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/subscriptions", response_model=IdResponse)
-async def create_or_get(
+async def create_or_get_subscription(
     request: CreateOrGetRequest,
     create_or_get_use_case: CreateOrGetSubscriptionUseCase,
 ) -> Subscription:

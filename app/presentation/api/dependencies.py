@@ -6,9 +6,7 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.application.subscription.create_or_get_use_case import CreateOrGetUseCase
-from app.application.subscription.get_use_case import (
-    GetSubscriptionUseCase as _GetSubscriptionUseCase,
-)
+from app.application.subscription.get_use_case import GetUseCase
 from app.infrastructure.config import Config as _Config
 from app.infrastructure.config import get_config
 from app.infrastructure.email_sender import EmailSender
@@ -17,6 +15,8 @@ from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
 
+Config = Annotated[_Config, Depends(get_config)]
+
 
 async def get_session() -> AsyncGenerator[AsyncSession]:
     async with session_factory() as session:
@@ -24,9 +24,6 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 
 
 Session = Annotated[AsyncSession, Depends(get_session)]
-
-
-Config = Annotated[_Config, Depends(get_config)]
 
 
 async def get_create_or_get_subscription_use_case(
@@ -49,10 +46,8 @@ async def get_email_sender(
 
 async def get_get_subscription_use_case(
     session: Session,
-) -> _GetSubscriptionUseCase:
-    return _GetSubscriptionUseCase(SubscriptionRepository(session))
+) -> GetUseCase:
+    return GetUseCase(SubscriptionRepository(session))
 
 
-GetSubscriptionUseCase = Annotated[
-    _GetSubscriptionUseCase, Depends(get_get_subscription_use_case)
-]
+GetSubscriptionUseCase = Annotated[GetUseCase, Depends(get_get_subscription_use_case)]
