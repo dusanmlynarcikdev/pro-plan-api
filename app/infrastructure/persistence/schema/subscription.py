@@ -25,7 +25,10 @@ class SubscriptionSchema(SQLModel, table=True):
         )
 
     def to_domain(self) -> Subscription:
-        return Subscription(self.id, Email(self.email))
+        subscription = Subscription(self.id, Email(self.email))
+        subscription._is_active = self.is_active
+
+        return subscription
 
     def update_from_domain(self, subscription: Subscription) -> None:
         self.is_active = subscription.is_active
