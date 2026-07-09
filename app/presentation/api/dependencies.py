@@ -11,9 +11,6 @@ from app.application.subscription.create_or_update_use_case import (
 from app.application.subscription.get_use_case import (
     GetSubscriptionUseCase as _GetSubscriptionUseCase,
 )
-from app.application.subscription.renew_use_case import (
-    RenewSubscriptionUseCase as _RenewSubscriptionUseCase,
-)
 from app.infrastructure.config import Config as _Config
 from app.infrastructure.config import get_config
 from app.infrastructure.email_sender import EmailSender
@@ -50,18 +47,6 @@ async def get_email_sender(
     background_tasks: BackgroundTasks, config: Config
 ) -> EmailSender:
     return EmailSender(background_tasks, config.email_sender, config.smtp_dsn)
-
-
-async def get_renew_subscription_use_case(
-    email_sender: Annotated[EmailSender, Depends(get_email_sender)],
-    session: Session,
-) -> _RenewSubscriptionUseCase:
-    return _RenewSubscriptionUseCase(email_sender, SubscriptionRepository(session))
-
-
-RenewSubscriptionUseCase = Annotated[
-    _RenewSubscriptionUseCase, Depends(get_renew_subscription_use_case)
-]
 
 
 async def get_get_subscription_use_case(

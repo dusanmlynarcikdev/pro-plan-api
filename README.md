@@ -10,16 +10,11 @@ A simple REST API for managing Pro plan subscriptions.
 - **Single subscription model**
 - **Identified by email** — no external identifiers required
 - **Simple lifecycle management** — no states, only validity period
-- **End-of-month renewals** — calendar-based, including leap years
-
-## 📬 Notifications
-- **Email notification on subscription renewal**
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
 - **Upsert subscription** — create or update a subscription
 - **Get subscription** — retrieve a subscription
-- **Renew subscription** — extend the current validity
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**
