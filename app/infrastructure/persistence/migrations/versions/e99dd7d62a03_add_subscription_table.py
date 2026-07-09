@@ -1,4 +1,4 @@
-"""autogenerate
+"""add subscription table
 
 Revision ID: e99dd7d62a03
 Revises:
