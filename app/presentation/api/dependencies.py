@@ -5,15 +5,8 @@ from fastapi import BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.application.subscription.create_or_update_use_case import (
-    CreateOrUpdateSubscriptionUseCase as _CreateOrUpdateSubscriptionUseCase,
-)
-from app.application.subscription.get_use_case import (
-    GetSubscriptionUseCase as _GetSubscriptionUseCase,
-)
-from app.application.subscription.renew_use_case import (
-    RenewSubscriptionUseCase as _RenewSubscriptionUseCase,
-)
+from app.application.subscription.create_or_get_use_case import CreateOrGetUseCase
+from app.application.subscription.get_use_case import GetUseCase
 from app.infrastructure.config import Config as _Config
 from app.infrastructure.config import get_config
 from app.infrastructure.email_sender import EmailSender
@@ -21,6 +14,8 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
+
+Config = Annotated[_Config, Depends(get_config)]
 
 
 async def get_session() -> AsyncGenerator[AsyncSession]:
@@ -31,18 +26,15 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-Config = Annotated[_Config, Depends(get_config)]
-
-
-async def get_create_or_update_subscription_use_case(
+async def get_create_or_get_subscription_use_case(
     session: Session,
-) -> _CreateOrUpdateSubscriptionUseCase:
-    return _CreateOrUpdateSubscriptionUseCase(SubscriptionRepository(session))
+) -> CreateOrGetUseCase:
+    return CreateOrGetUseCase(SubscriptionRepository(session))
 
 
-CreateOrUpdateSubscriptionUseCase = Annotated[
-    _CreateOrUpdateSubscriptionUseCase,
-    Depends(get_create_or_update_subscription_use_case),
+CreateOrGetSubscriptionUseCase = Annotated[
+    CreateOrGetUseCase,
+    Depends(get_create_or_get_subscription_use_case),
 ]
 
 
@@ -52,24 +44,10 @@ async def get_email_sender(
     return EmailSender(background_tasks, config.email_sender, config.smtp_dsn)
 
 
-async def get_renew_subscription_use_case(
-    email_sender: Annotated[EmailSender, Depends(get_email_sender)],
-    session: Session,
-) -> _RenewSubscriptionUseCase:
-    return _RenewSubscriptionUseCase(email_sender, SubscriptionRepository(session))
-
-
-RenewSubscriptionUseCase = Annotated[
-    _RenewSubscriptionUseCase, Depends(get_renew_subscription_use_case)
-]
-
-
 async def get_get_subscription_use_case(
     session: Session,
-) -> _GetSubscriptionUseCase:
-    return _GetSubscriptionUseCase(SubscriptionRepository(session))
+) -> GetUseCase:
+    return GetUseCase(SubscriptionRepository(session))
 
 
-GetSubscriptionUseCase = Annotated[
-    _GetSubscriptionUseCase, Depends(get_get_subscription_use_case)
-]
+GetSubscriptionUseCase = Annotated[GetUseCase, Depends(get_get_subscription_use_case)]

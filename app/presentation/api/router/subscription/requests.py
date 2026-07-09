@@ -1,8 +1,5 @@
 from pydantic import BaseModel
 
-from app.domain.subscription.period import Period
 
-
-class CreateOrUpdateRequest(BaseModel):
+class CreateOrGetRequest(BaseModel):
     email: str
-    period: Period

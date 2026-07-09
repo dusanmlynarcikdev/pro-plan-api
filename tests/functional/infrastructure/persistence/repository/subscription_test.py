@@ -1,4 +1,3 @@
-from datetime import date
 from uuid import UUID
 
 from pytest import raises
@@ -8,7 +7,6 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.subscription.email import Email
 from app.domain.subscription.errors import SubscriptionNotFoundError
-from app.domain.subscription.period import Period
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
@@ -18,7 +16,6 @@ from tests.generator.subscription import generate
 
 async def test_add(session: AsyncSession) -> None:
     subscription = generate()
-    subscription.renew(date(2026, 1, 1))
 
     await SubscriptionRepository(session).add(subscription)
     session.expunge_all()
@@ -27,8 +24,7 @@ async def test_add(session: AsyncSession) -> None:
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
-    assert repository_subscription.period == Period.MONTHLY
-    assert repository_subscription.expires_at == date(2026, 2, 1)
+    assert not repository_subscription.is_active
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
@@ -55,8 +51,7 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
     assert repository_subscription is not None
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email.value == "john@doe.com"
-    assert repository_subscription.period == Period.MONTHLY
-    assert repository_subscription.expires_at is None
+    assert not repository_subscription.is_active
 
 
 async def test_find_one_by_email_another_subscription_exists(
@@ -117,8 +112,7 @@ async def test_update(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    subscription.period = Period.YEARLY
-    subscription.renew(date(2026, 2, 1))
+    subscription.activate()
 
     await SubscriptionRepository(session).update(subscription)
     session.expunge_all()
@@ -127,8 +121,7 @@ async def test_update(session: AsyncSession) -> None:
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
-    assert repository_subscription.period == Period.YEARLY
-    assert repository_subscription.expires_at == date(2027, 2, 1)
+    assert repository_subscription.is_active
 
 
 async def test_update_unknown(session: AsyncSession) -> None:

@@ -1,12 +1,13 @@
-from datetime import date
+from uuid import UUID
 
 from pydantic import BaseModel
 
-from app.domain.subscription.period import Period
+
+class IdResponse(BaseModel):
+    id: UUID
 
 
-class GetSubscriptionResponse(BaseModel):
+class SubscriptionResponse(BaseModel):
+    id: UUID
     email: str
-    period: Period
-    expires_at: date | None
     is_active: bool
