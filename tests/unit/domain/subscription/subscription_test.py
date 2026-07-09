@@ -26,7 +26,7 @@ def test_activate() -> None:
 
 def test_deactivate() -> None:
     subscription = generate()
-    subscription.activate()
+    subscription._is_active = True
 
     subscription.deactivate()
 

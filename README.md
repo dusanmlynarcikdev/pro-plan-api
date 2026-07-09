@@ -13,8 +13,8 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
-- **Create or get subscription** — returns the subscription ID
-- **Get subscription** — retrieves the full subscription
+- **Create or get subscription** — returns a subscription ID
+- **Get subscription** — retrieves a full subscription
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**

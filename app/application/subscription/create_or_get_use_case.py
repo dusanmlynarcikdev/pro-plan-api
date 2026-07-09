@@ -7,14 +7,14 @@ from app.domain.subscription.subscription import Subscription
 
 class CreateOrGetUseCase:
     def __init__(self, repository: SubscriptionRepository) -> None:
-        self.__repository: SubscriptionRepository = repository
+        self._repository: SubscriptionRepository = repository
 
     async def __call__(self, email: Email) -> Subscription:
-        subscription = await self.__repository.find_one_by_email(email)
+        subscription = await self._repository.find_one_by_email(email)
 
         if subscription is None:
             subscription = Subscription(uuid7(), email)
-            await self.__repository.add(subscription)
-            await self.__repository.commit()
+            await self._repository.add(subscription)
+            await self._repository.commit()
 
         return subscription

@@ -5,10 +5,10 @@ from app.domain.subscription.subscription import Subscription
 
 class GetUseCase:
     def __init__(self, repository: SubscriptionRepository) -> None:
-        self.__repository: SubscriptionRepository = repository
+        self._repository: SubscriptionRepository = repository
 
     async def __call__(self, email: Email) -> Subscription:
         """
         :raises SubscriptionNotFound:
         """
-        return await self.__repository.get_one_by_email(email)
+        return await self._repository.get_one_by_email(email)
