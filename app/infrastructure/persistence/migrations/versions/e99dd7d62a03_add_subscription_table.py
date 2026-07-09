@@ -1,8 +1,8 @@
-"""add subscription table
+"""autogenerate
 
-Revision ID: ac0b5ada818d
+Revision ID: e99dd7d62a03
 Revises:
-Create Date: 2026-03-27 15:16:39.875345
+Create Date: 2026-07-09 12:58:31.229918
 
 """
 
@@ -13,7 +13,7 @@ import sqlmodel.sql.sqltypes
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "ac0b5ada818d"
+revision: str = "e99dd7d62a03"
 down_revision: str | Sequence[str] | None = None
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
@@ -26,10 +26,7 @@ def upgrade() -> None:
         "subscription",
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column(
-            "period", sa.Enum("MONTHLY", "YEARLY", name="period"), nullable=False
-        ),
-        sa.Column("expires_at", sa.Date(), nullable=True),
+        sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("email", name="uq_subscription_email"),
     )

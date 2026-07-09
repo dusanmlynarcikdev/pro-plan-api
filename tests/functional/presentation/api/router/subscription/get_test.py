@@ -1,6 +1,3 @@
-from datetime import date
-from unittest.mock import patch
-
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -12,22 +9,16 @@ PATH = "/api/subscriptions/{email}"
 
 
 async def test_get_subscription(client: TestClient, session: AsyncSession) -> None:
-    subscription = generate()
-    subscription.renew(date(2026, 1, 1))
-    session.add(SubscriptionSchema.from_domain(subscription))
+    session.add(SubscriptionSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
-    with patch("app.presentation.api.router.subscription.get.date") as mock_date:
-        mock_date.today.return_value = date(2026, 1, 1)
-        response = client.get(PATH.format(email="john@doe.com"))
+    response = client.get(PATH.format(email="john@doe.com"))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "email": "john@doe.com",
-        "period": "monthly",
-        "expires_at": "2026-02-01",
-        "is_active": True,
+        "is_active": False,
     }
 
 

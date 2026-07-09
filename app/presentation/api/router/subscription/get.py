@@ -1,5 +1,3 @@
-from datetime import date
-
 from fastapi import APIRouter, status
 
 from app.domain.subscription.email import Email
@@ -25,7 +23,5 @@ async def get_subscription(
 
     return GetSubscriptionResponse(
         email=subscription.email.value,
-        period=subscription.period,
-        expires_at=subscription.expires_at,
-        is_active=subscription.is_active(date.today()),
+        is_active=subscription.is_active,
     )

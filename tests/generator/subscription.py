@@ -10,4 +10,4 @@ def generate(
     email: Email = Email("john@doe.com"),
     period: Period = Period.MONTHLY,
 ) -> Subscription:
-    return Subscription(id, email, period)
+    return Subscription(id, email)

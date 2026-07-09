@@ -1,5 +1,3 @@
-from datetime import date
-
 from app.application.email.message import Message
 from app.application.email.sender import Sender
 from app.domain.subscription.email import Email
@@ -19,18 +17,16 @@ class RenewSubscriptionUseCase:
         """
         subscription = await self.__repository.get_one_by_email(email)
 
-        expires_at = subscription.renew(date.today())
         await self.__repository.update(subscription)
         await self.__repository.commit()
 
-        self.__send_confirmation_email(subscription.email, expires_at)
+        self.__send_confirmation_email(subscription.email)
 
-    def __send_confirmation_email(self, recipient: Email, expires_at: date) -> None:
+    def __send_confirmation_email(self, recipient: Email) -> None:
         message = Message(
             recipient,
             "Subscription renewed",
-            f"Your subscription has been successfully renewed and is active "
-            f"until {expires_at.strftime('%b %-d, %Y')}.",
+            "Your subscription has been successfully renewed.",
         )
 
         self.__email_sender.send(message)
