@@ -1,4 +1,4 @@
-"""remove subscription columns
+"""switch subscription to is_active flag
 
 Revision ID: e1af5e366665
 Revises: ac0b5ada818d
