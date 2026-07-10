@@ -1,31 +1,27 @@
 from unittest.mock import Mock
 
 import pytest
+from stripe import StripeClient
 
-from app.application.stripe.create_checkout_session_use_case import (
-    CreateCheckoutSessionUseCase,
-)
 from app.application.stripe.enums import BillingPeriod
-from app.application.subscription.get_or_create_subscription_use_case import (
-    GetOrCreateSubscriptionUseCase,
-)
+from app.infrastructure.stripe.checkout_client import CheckoutClient
 
 
 @pytest.mark.parametrize(
     ("billing_period", "expected_price_id"),
-    [
+    (
         (BillingPeriod.MONTHLY, "price-id-monthly"),
         (BillingPeriod.YEARLY, "price-id-yearly"),
-    ],
+    ),
 )
 def test_resolve_price_id(
     billing_period: BillingPeriod, expected_price_id: str
 ) -> None:
-    use_case = CreateCheckoutSessionUseCase(
-        Mock(GetOrCreateSubscriptionUseCase),
-        Mock(),
+    checkout_client = CheckoutClient(
+        Mock(StripeClient),
         "price-id-monthly",
         "price-id-yearly",
+        "https://example.com/success",
     )
 
-    assert use_case._resolve_price_id(billing_period) == expected_price_id
+    assert checkout_client._resolve_price_id(billing_period) == expected_price_id

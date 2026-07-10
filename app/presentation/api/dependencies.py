@@ -30,15 +30,12 @@ Config = Annotated[Config_, Depends(get_config)]
 
 
 async def get_create_checkout_session_use_case(
-    config: Config,
     get_or_create_subscription: GetOrCreateSubscriptionUseCase,
     checkout_client: StripeCheckoutClient,
 ) -> CreateCheckoutSessionUseCase_:
     return CreateCheckoutSessionUseCase_(
         get_or_create_subscription,
         checkout_client,
-        config.stripe_price_id_monthly,
-        config.stripe_price_id_yearly,
     )
 
 
@@ -88,6 +85,8 @@ GetSubscriptionUseCase = Annotated[
 async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
     return CheckoutClient_(
         StripeClient(config.stripe_api_key),
+        config.stripe_price_id_monthly,
+        config.stripe_price_id_yearly,
         config.stripe_checkout_success_url,
     )
 
