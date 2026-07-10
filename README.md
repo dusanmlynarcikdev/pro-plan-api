@@ -13,8 +13,8 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
-- **Create or get subscription** — returns a subscription ID
-- **Get subscription** — retrieves a full subscription
+- **Create Stripe checkout session**
+- **Get subscription** — retrieves detail of a subscription
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**

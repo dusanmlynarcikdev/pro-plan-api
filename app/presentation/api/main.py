@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, FastAPI, status
 
-load_dotenv(".env.local", override=True)
+load_dotenv(".env.local")
 
 import logging
 

@@ -87,7 +87,7 @@ async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
         StripeClient(config.stripe_api_key),
         config.stripe_price_id_monthly,
         config.stripe_price_id_yearly,
-        config.stripe_checkout_success_url,
+        str(config.stripe_checkout_success_url),
     )
 
 
