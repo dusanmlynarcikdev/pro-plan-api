@@ -3,9 +3,9 @@ from fastapi import APIRouter, HTTPException, status
 from app.domain.subscription.email import Email
 from app.infrastructure.stripe.client.errors import ClientError
 from app.presentation.api.dependencies import (
+    CheckoutClient,
     Config,
     CreateOrGetSubscriptionUseCase,
-    StripeClient,
 )
 from app.presentation.api.router.stripe.requests import (
     CreateCheckoutSessionRequest,
@@ -17,7 +17,7 @@ router = APIRouter()
 
 @router.post("/stripe/checkout-sessions")
 async def create_checkout_session(
-    client: StripeClient,
+    client: CheckoutClient,
     config: Config,
     create_or_get_subscription: CreateOrGetSubscriptionUseCase,
     request: CreateCheckoutSessionRequest,
@@ -25,7 +25,7 @@ async def create_checkout_session(
     subscription = await create_or_get_subscription(Email(request.email))
 
     try:
-        redirect_url = await client.create_checkout_session(
+        session_url = await client.create_session(
             request.billing_period.get_stripe_price_id(config), subscription.id
         )
     except ClientError:
@@ -34,4 +34,4 @@ async def create_checkout_session(
             detail="Unable to create Stripe checkout session",
         )
 
-    return UrlResponse(url=redirect_url)
+    return UrlResponse(url=session_url)

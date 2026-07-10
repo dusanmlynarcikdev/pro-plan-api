@@ -7,16 +7,18 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.application.subscription.create_or_get_use_case import CreateOrGetUseCase
 from app.application.subscription.get_use_case import GetUseCase
-from app.infrastructure.config import Config as _Config
+from app.infrastructure.config import Config as Config_
 from app.infrastructure.config import get_config
 from app.infrastructure.email_sender import EmailSender
 from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
-from app.infrastructure.stripe.client.client import Client
+from app.infrastructure.stripe.client.checkout_client import (
+    CheckoutClient as CheckoutClient_,
+)
 
-Config = Annotated[_Config, Depends(get_config)]
+Config = Annotated[Config_, Depends(get_config)]
 
 
 async def get_session() -> AsyncGenerator[AsyncSession]:
@@ -54,8 +56,8 @@ async def get_get_subscription_use_case(
 GetSubscriptionUseCase = Annotated[GetUseCase, Depends(get_get_subscription_use_case)]
 
 
-async def get_stripe_client(config: Config) -> Client:
-    return Client(config.stripe_api_key, config.stripe_checkout_success_url)
+async def get_checkout_client(config: Config) -> CheckoutClient_:
+    return CheckoutClient_(config.stripe_api_key, config.stripe_checkout_success_url)
 
 
-StripeClient = Annotated[Client, Depends(get_stripe_client)]
+CheckoutClient = Annotated[CheckoutClient_, Depends(get_checkout_client)]

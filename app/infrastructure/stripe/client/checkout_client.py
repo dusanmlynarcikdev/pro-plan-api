@@ -13,14 +13,12 @@ from app.infrastructure.stripe.client.errors import ClientError
 logger = logging.getLogger(__name__)
 
 
-class Client:
+class CheckoutClient:
     def __init__(self, api_key: str, success_url: str) -> None:
         self._client = StripeClient(api_key)
         self._success_url = success_url
 
-    async def create_checkout_session(
-        self, price_id: str, subscription_id: UUID
-    ) -> str:
+    async def create_session(self, price_id: str, subscription_id: UUID) -> str:
         params = self._create_request_params(price_id, subscription_id)
 
         try:
