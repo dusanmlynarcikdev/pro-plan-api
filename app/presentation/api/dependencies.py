@@ -5,7 +5,7 @@ from fastapi import BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.application.subscription.create_or_get_use_case import CreateOrGetUseCase
+from app.application.subscription.get_or_create_use_case import GetOrCreateUseCase
 from app.application.subscription.get_use_case import GetUseCase
 from app.infrastructure.config import Config as Config_
 from app.infrastructure.config import get_config
@@ -29,15 +29,15 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_create_or_get_subscription_use_case(
+async def get_get_or_create_subscription_use_case(
     session: Session,
-) -> CreateOrGetUseCase:
-    return CreateOrGetUseCase(SubscriptionRepository(session))
+) -> GetOrCreateUseCase:
+    return GetOrCreateUseCase(SubscriptionRepository(session))
 
 
-CreateOrGetSubscriptionUseCase = Annotated[
-    CreateOrGetUseCase,
-    Depends(get_create_or_get_subscription_use_case),
+GetOrCreateSubscriptionUseCase = Annotated[
+    GetOrCreateUseCase,
+    Depends(get_get_or_create_subscription_use_case),
 ]
 
 

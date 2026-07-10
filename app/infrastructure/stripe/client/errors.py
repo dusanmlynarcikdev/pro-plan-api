@@ -1,2 +1,2 @@
-class ClientError(Exception):
+class CheckoutError(Exception):
     pass

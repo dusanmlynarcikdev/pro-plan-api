@@ -8,7 +8,7 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
-from app.infrastructure.stripe.client.errors import ClientError
+from app.infrastructure.stripe.client.errors import CheckoutError
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +24,10 @@ class CheckoutClient:
         try:
             session = await self._client.v1.checkout.sessions.create_async(params)
         except StripeError as e:
-            message = e.user_message or str(e)
-            logger.error(message)
-            raise ClientError(message)
+            logger.error(e.user_message)
+            raise CheckoutError(e.user_message)
 
-        return self._validate_url(session)
+        return self._validate_response_url(session)
 
     def _create_request_params(
         self, price_id: str, subscription_id: UUID
@@ -41,12 +40,12 @@ class CheckoutClient:
         )
 
     @staticmethod
-    def _validate_url(session: Session) -> str:
+    def _validate_response_url(session: Session) -> str:
         url = session.url
 
         if url is None:
             message = "Stripe checkout session url is missing"
             logger.error(message)
-            raise ClientError(message)
+            raise CheckoutError(message)
 
         return url

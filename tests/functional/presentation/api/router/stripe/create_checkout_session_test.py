@@ -19,17 +19,6 @@ PATH = "/api/stripe/checkout-sessions"
 SESSION_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
 
 
-@fixture
-def stripe_client() -> Generator[Mock]:
-    with patch(
-        "app.infrastructure.stripe.client.checkout_client.StripeClient"
-    ) as client:
-        client.return_value.v1.checkout.sessions.create_async = AsyncMock(
-            return_value=Mock(url=SESSION_URL)
-        )
-        yield client
-
-
 async def test_create(
     client: TestClient, session: AsyncSession, stripe_client: Mock
 ) -> None:
@@ -45,11 +34,11 @@ async def test_create(
     assert subscription.email == "john@doe.com"
     assert not subscription.is_active
 
-    stripe_client.assert_called_once_with("test")
+    stripe_client.assert_called_once_with("example-api-key")
     stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(
         SessionCreateParams(
             client_reference_id=str(subscription.id),
-            line_items=[SessionCreateParamsLineItem(price="price-1", quantity=1)],
+            line_items=[SessionCreateParamsLineItem(price="example-id-1", quantity=1)],
             mode="subscription",
             success_url="https://example.com/success",
         )
@@ -75,7 +64,7 @@ async def test_create_with_existing_subscription_for_yearly_billing_period(
     stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(
         SessionCreateParams(
             client_reference_id="019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
-            line_items=[SessionCreateParamsLineItem(price="price-2", quantity=1)],
+            line_items=[SessionCreateParamsLineItem(price="example-id-2", quantity=1)],
             mode="subscription",
             success_url="https://example.com/success",
         )
@@ -98,3 +87,14 @@ async def test_stripe_error(
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.content == b'{"detail":"Unable to create Stripe checkout session"}'
+
+
+@fixture
+def stripe_client() -> Generator[Mock]:
+    with patch(
+        "app.infrastructure.stripe.client.checkout_client.StripeClient"
+    ) as client:
+        client.return_value.v1.checkout.sessions.create_async = AsyncMock(
+            return_value=Mock(url=SESSION_URL)
+        )
+        yield client

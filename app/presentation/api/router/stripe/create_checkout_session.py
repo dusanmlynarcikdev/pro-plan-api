@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.domain.subscription.email import Email
-from app.infrastructure.stripe.client.errors import ClientError
+from app.infrastructure.stripe.client.errors import CheckoutError
 from app.presentation.api.dependencies import (
     CheckoutClient,
     Config,
-    CreateOrGetSubscriptionUseCase,
+    GetOrCreateSubscriptionUseCase,
 )
 from app.presentation.api.router.stripe.requests import (
     CreateCheckoutSessionRequest,
@@ -19,19 +19,19 @@ router = APIRouter()
 async def create_checkout_session(
     client: CheckoutClient,
     config: Config,
-    create_or_get_subscription: CreateOrGetSubscriptionUseCase,
+    get_or_create_subscription: GetOrCreateSubscriptionUseCase,
     request: CreateCheckoutSessionRequest,
 ) -> UrlResponse:
-    subscription = await create_or_get_subscription(Email(request.email))
+    subscription = await get_or_create_subscription(Email(request.email))
 
     try:
-        session_url = await client.create_session(
+        checkout_url = await client.create_session(
             request.billing_period.get_stripe_price_id(config), subscription.id
         )
-    except ClientError:
+    except CheckoutError:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Unable to create Stripe checkout session",
         )
 
-    return UrlResponse(url=session_url)
+    return UrlResponse(url=checkout_url)
