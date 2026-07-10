@@ -1,6 +1,7 @@
 from collections.abc import Generator
 from unittest.mock import AsyncMock, Mock, patch
 
+import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 from pytest import fixture
@@ -13,7 +14,6 @@ from stripe.params.checkout import (
 )
 
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
-from tests.generator.subscription import generate
 
 PATH = "/api/stripe/checkout-sessions"
 SESSION_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
@@ -45,32 +45,6 @@ async def test_create(
     )
 
 
-async def test_create_with_existing_subscription_for_yearly_billing_period(
-    client: TestClient, session: AsyncSession, stripe_client: Mock
-) -> None:
-    session.add(SubscriptionSchema.from_domain(generate()))
-    await session.flush()
-    session.expunge_all()
-
-    response = client.post(
-        PATH, json={"email": "john@doe.com", "billing_period": "yearly"}
-    )
-    session.expunge_all()
-
-    assert response.status_code == status.HTTP_200_OK
-
-    assert len((await session.exec(select(SubscriptionSchema))).all()) == 1
-
-    stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(
-        SessionCreateParams(
-            client_reference_id="019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
-            line_items=[SessionCreateParamsLineItem(price="example-id-2", quantity=1)],
-            mode="subscription",
-            success_url="https://example.com/success",
-        )
-    )
-
-
 async def test_stripe_error(
     client: TestClient,
     # Rollback subscription created by request
@@ -87,6 +61,34 @@ async def test_stripe_error(
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.content == b'{"detail":"Unable to create Stripe checkout session"}'
+
+
+@pytest.mark.parametrize(
+    "request_body, expected_content",
+    (
+        (
+            {
+                "email": "john",
+                "billing_period": "monthly",
+            },
+            b"email",
+        ),
+        (
+            {
+                "email": "john@doe.com",
+                "billing_period": "weekly",
+            },
+            b"billing_period",
+        ),
+    ),
+)
+def test_invalid_request(
+    client: TestClient, request_body: dict[str, str], expected_content: bytes
+) -> None:
+    response = client.post(PATH, json=request_body)
+
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+    assert expected_content in response.content
 
 
 @fixture

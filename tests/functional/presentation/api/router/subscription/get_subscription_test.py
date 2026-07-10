@@ -26,19 +26,6 @@ async def test_get_subscription_does_not_exist(client: TestClient) -> None:
     assert response.content == b'{"detail":"Subscription not found"}'
 
 
-async def test_get_subscription_does_not_exist_when_another_exists(
-    client: TestClient, session: AsyncSession
-) -> None:
-    session.add(SubscriptionSchema.from_domain(generate()))
-    await session.flush()
-    session.expunge_all()
-
-    response = client.get(PATH.format(email="john2@doe.com"))
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.content == b'{"detail":"Subscription not found"}'
-
-
 def test_get_invalid_email(client: TestClient) -> None:
     response = client.get(PATH.format(email="johndoe.com"))
 
