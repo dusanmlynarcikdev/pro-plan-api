@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from app.infrastructure.stripe.client import Client
+from app.infrastructure.stripe.client.client import Client
 from app.presentation.api.dependencies import Config
 
 
