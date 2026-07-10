@@ -31,7 +31,7 @@ class Client:
             self._log_error(message)
             raise StripeError(message)
 
-        return self._parse_url(session)
+        return self._validate_url(session)
 
     def _create_request_params(
         self, price_id: str, subscription_id: UUID
@@ -48,7 +48,7 @@ class Client:
         logger.error(f"Stripe: {message}")
 
     @staticmethod
-    def _parse_url(session: Session) -> str:
+    def _validate_url(session: Session) -> str:
         url = session.url
 
         if url is None:
