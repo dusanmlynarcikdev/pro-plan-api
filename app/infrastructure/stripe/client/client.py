@@ -28,7 +28,7 @@ class Client:
             session = await self._client.v1.checkout.sessions.create_async(params)
         except StripeApiError as e:
             message = e.user_message or str(e)
-            self._log_error(message)
+            logger.error(message)
             raise StripeError(message)
 
         return self._validate_url(session)
@@ -44,16 +44,12 @@ class Client:
         )
 
     @staticmethod
-    def _log_error(message: str) -> None:
-        logger.error(f"Stripe: {message}")
-
-    @staticmethod
     def _validate_url(session: Session) -> str:
         url = session.url
 
         if url is None:
-            message = f"Stripe checkout session url is missing"
-            Client._log_error(message)
+            message = "Stripe checkout session url is missing"
+            logger.error(message)
             raise StripeError(message)
 
         return url
