@@ -8,8 +8,8 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
-from app.infrastructure.stripe.client.billing_period import BillingPeriod
-from app.infrastructure.stripe.client.errors import CheckoutError
+from app.infrastructure.stripe.checkout.billing_period import BillingPeriod
+from app.infrastructure.stripe.checkout.checkout_error import CheckoutError
 
 logger = logging.getLogger(__name__)
 

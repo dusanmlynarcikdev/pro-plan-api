@@ -18,7 +18,7 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
-from app.infrastructure.stripe.client.checkout_client import (
+from app.infrastructure.stripe.checkout.checkout_client import (
     CheckoutClient as CheckoutClient_,
 )
 

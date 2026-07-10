@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.domain.subscription.email import Email
-from app.infrastructure.stripe.client.errors import CheckoutError
+from app.infrastructure.stripe.checkout.checkout_error import CheckoutError
 from app.presentation.api.dependencies import (
     GetOrCreateSubscriptionUseCase,
     StripeCheckoutClient,

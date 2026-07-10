@@ -94,7 +94,7 @@ def test_invalid_request(
 @fixture
 def stripe_client() -> Generator[Mock]:
     with patch(
-        "app.infrastructure.stripe.client.checkout_client.StripeClient"
+        "app.infrastructure.stripe.checkout.checkout_client.StripeClient"
     ) as client:
         client.return_value.v1.checkout.sessions.create_async = AsyncMock(
             return_value=Mock(url=SESSION_URL)
