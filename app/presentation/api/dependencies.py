@@ -63,7 +63,12 @@ GetSubscriptionUseCase = Annotated[
 
 
 async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
-    return CheckoutClient_(config.stripe_api_key, config.stripe_checkout_success_url)
+    return CheckoutClient_(
+        config.stripe_api_key,
+        config.stripe_price_id_monthly,
+        config.stripe_price_id_yearly,
+        config.stripe_checkout_success_url,
+    )
 
 
 StripeCheckoutClient = Annotated[CheckoutClient_, Depends(get_stripe_checkout_client)]

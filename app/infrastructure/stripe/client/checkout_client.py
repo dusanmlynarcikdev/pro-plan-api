@@ -8,17 +8,29 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
+from app.infrastructure.stripe.client.billing_period import BillingPeriod
 from app.infrastructure.stripe.client.errors import CheckoutError
 
 logger = logging.getLogger(__name__)
 
 
 class CheckoutClient:
-    def __init__(self, api_key: str, success_url: str) -> None:
+    def __init__(
+        self,
+        api_key: str,
+        price_id_monthly: str,
+        price_id_yearly: str,
+        success_url: str,
+    ) -> None:
         self._client = StripeClient(api_key)
+        self._price_id_monthly = price_id_monthly
+        self._price_id_yearly = price_id_yearly
         self._success_url = success_url
 
-    async def create_session(self, price_id: str, subscription_id: UUID) -> str:
+    async def create_session(
+        self, billing_period: BillingPeriod, subscription_id: UUID
+    ) -> str:
+        price_id = self._resolve_price_id(billing_period)
         request_params = self._create_request_params(price_id, subscription_id)
 
         try:
@@ -40,6 +52,13 @@ class CheckoutClient:
             mode="subscription",
             success_url=self._success_url,
         )
+
+    def _resolve_price_id(self, billing_period: BillingPeriod) -> str:
+        match billing_period:
+            case BillingPeriod.MONTHLY:
+                return self._price_id_monthly
+            case BillingPeriod.YEARLY:
+                return self._price_id_yearly
 
     @staticmethod
     def _validate_response_url(session: Session) -> str:
