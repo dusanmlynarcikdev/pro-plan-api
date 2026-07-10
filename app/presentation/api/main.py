@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, FastAPI, status
 
+from app.infrastructure.stripe.router import router as stripe_router
 from app.presentation.api.router.health_check import router as health_check_router
 from app.presentation.api.router.subscription import router as subscription_router
 
@@ -24,6 +25,7 @@ secure_router = APIRouter(
     dependencies=[Depends(check_authentication)],
     responses={status.HTTP_401_UNAUTHORIZED: ERROR_RESPONSE_MODEL},
 )
+secure_router.include_router(stripe_router)
 secure_router.include_router(subscription_router)
 api_router.include_router(secure_router)
 

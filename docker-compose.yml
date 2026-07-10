@@ -16,6 +16,9 @@ services:
       - DATABASE_URL
       - EMAIL_SENDER
       - SMTP_DSN
+      - STRIPE_API_KEY
+      - STRIPE_PRICE_ID_MONTHLY
+      - STRIPE_PRICE_ID_YEARLY
     ports:
       - '80:80'
     restart: always

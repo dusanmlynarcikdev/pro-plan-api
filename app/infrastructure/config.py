@@ -15,6 +15,9 @@ class Config(BaseSettings):
         AnyUrl,
         UrlConstraints(allowed_schemes=["smtp"], host_required=True),
     ]
+    stripe_api_key: str
+    stripe_price_id_monthly: str
+    stripe_price_id_yearly: str
 
 
 @lru_cache
