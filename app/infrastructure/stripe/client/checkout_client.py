@@ -19,10 +19,12 @@ class CheckoutClient:
         self._success_url = success_url
 
     async def create_session(self, price_id: str, subscription_id: UUID) -> str:
-        params = self._create_request_params(price_id, subscription_id)
+        request_params = self._create_request_params(price_id, subscription_id)
 
         try:
-            session = await self._client.v1.checkout.sessions.create_async(params)
+            session = await self._client.v1.checkout.sessions.create_async(
+                request_params
+            )
         except StripeError as e:
             logger.error(e.user_message)
             raise CheckoutError(e.user_message)

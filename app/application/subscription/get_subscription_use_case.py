@@ -3,7 +3,7 @@ from app.domain.subscription.repository import SubscriptionRepository
 from app.domain.subscription.subscription import Subscription
 
 
-class GetUseCase:
+class GetSubscriptionUseCase:
     def __init__(self, repository: SubscriptionRepository) -> None:
         self._repository: SubscriptionRepository = repository
 

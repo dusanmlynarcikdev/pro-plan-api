@@ -3,9 +3,9 @@ from fastapi import APIRouter, HTTPException, status
 from app.domain.subscription.email import Email
 from app.infrastructure.stripe.client.errors import CheckoutError
 from app.presentation.api.dependencies import (
-    CheckoutClient,
     Config,
     GetOrCreateSubscriptionUseCase,
+    StripeCheckoutClient,
 )
 from app.presentation.api.router.stripe.requests import (
     CreateCheckoutSessionRequest,
@@ -17,7 +17,7 @@ router = APIRouter()
 
 @router.post("/stripe/checkout-sessions")
 async def create_checkout_session(
-    client: CheckoutClient,
+    client: StripeCheckoutClient,
     config: Config,
     get_or_create_subscription: GetOrCreateSubscriptionUseCase,
     request: CreateCheckoutSessionRequest,
