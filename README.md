@@ -54,6 +54,9 @@ DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
 EMAIL_SENDER='...' \
 SMTP_DSN='...' \
+STRIPE_API_KEY='...' \
+STRIPE_PRICE_ID_MONTHLY='...' \
+STRIPE_PRICE_ID_YEARLY='...' \
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
