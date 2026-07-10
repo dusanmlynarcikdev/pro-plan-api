@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, FastAPI, status
+
+load_dotenv(".env.local", override=True)
 
 from app.infrastructure.stripe.router import router as stripe_router
 from app.presentation.api.router.health_check import router as health_check_router
