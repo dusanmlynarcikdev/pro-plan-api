@@ -6,6 +6,9 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
+from app.application.stripe.create_checkout_session_use_case import (
+    CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
+)
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase as GetOrCreateSubscriptionUseCase_,
 )
@@ -19,7 +22,7 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
-from app.infrastructure.stripe.checkout.checkout_client import (
+from app.infrastructure.stripe.checkout_client import (
     CheckoutClient as CheckoutClient_,
 )
 
@@ -66,10 +69,27 @@ GetSubscriptionUseCase = Annotated[
 async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
     return CheckoutClient_(
         StripeClient(config.stripe_api_key),
-        config.stripe_price_id_monthly,
-        config.stripe_price_id_yearly,
         config.stripe_checkout_success_url,
     )
 
 
 StripeCheckoutClient = Annotated[CheckoutClient_, Depends(get_stripe_checkout_client)]
+
+
+async def get_create_checkout_session_use_case(
+    config: Config,
+    get_or_create_subscription: GetOrCreateSubscriptionUseCase,
+    checkout_client: StripeCheckoutClient,
+) -> CreateCheckoutSessionUseCase_:
+    return CreateCheckoutSessionUseCase_(
+        get_or_create_subscription,
+        checkout_client,
+        config.stripe_price_id_monthly,
+        config.stripe_price_id_yearly,
+    )
+
+
+CreateCheckoutSessionUseCase = Annotated[
+    CreateCheckoutSessionUseCase_,
+    Depends(get_create_checkout_session_use_case),
+]

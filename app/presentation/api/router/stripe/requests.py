@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.infrastructure.stripe.checkout.billing_period import BillingPeriod
+from app.application.stripe.billing_period import BillingPeriod
 
 
 class CreateCheckoutSessionRequest(BaseModel):
