@@ -38,8 +38,9 @@ class CheckoutClient:
                 request_params
             )
         except StripeError as e:
-            logger.error(e.user_message)
-            raise CheckoutError(e.user_message)
+            message = e.user_message
+            logger.error(message)
+            raise CheckoutError(message)
 
         return self._validate_response_url(session)
 
