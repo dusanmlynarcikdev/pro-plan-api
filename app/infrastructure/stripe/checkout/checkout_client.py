@@ -17,12 +17,12 @@ logger = logging.getLogger(__name__)
 class CheckoutClient:
     def __init__(
         self,
-        api_key: str,
+        client: StripeClient,
         price_id_monthly: str,
         price_id_yearly: str,
         success_url: str,
     ) -> None:
-        self._client = StripeClient(api_key)
+        self._client = client
         self._price_id_monthly = price_id_monthly
         self._price_id_yearly = price_id_yearly
         self._success_url = success_url

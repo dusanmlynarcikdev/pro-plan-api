@@ -4,6 +4,7 @@ from typing import Annotated
 from fastapi import BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
+from stripe import StripeClient
 
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase as GetOrCreateSubscriptionUseCase_,
@@ -64,7 +65,7 @@ GetSubscriptionUseCase = Annotated[
 
 async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
     return CheckoutClient_(
-        config.stripe_api_key,
+        StripeClient(config.stripe_api_key),
         config.stripe_price_id_monthly,
         config.stripe_price_id_yearly,
         config.stripe_checkout_success_url,
