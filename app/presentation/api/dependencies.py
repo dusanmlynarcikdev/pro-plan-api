@@ -29,6 +29,25 @@ from app.infrastructure.stripe.checkout_client import (
 Config = Annotated[Config_, Depends(get_config)]
 
 
+async def get_create_checkout_session_use_case(
+    config: Config,
+    get_or_create_subscription: GetOrCreateSubscriptionUseCase,
+    checkout_client: StripeCheckoutClient,
+) -> CreateCheckoutSessionUseCase_:
+    return CreateCheckoutSessionUseCase_(
+        get_or_create_subscription,
+        checkout_client,
+        config.stripe_price_id_monthly,
+        config.stripe_price_id_yearly,
+    )
+
+
+CreateCheckoutSessionUseCase = Annotated[
+    CreateCheckoutSessionUseCase_,
+    Depends(get_create_checkout_session_use_case),
+]
+
+
 async def get_session() -> AsyncGenerator[AsyncSession]:
     async with session_factory() as session:
         yield session
@@ -74,22 +93,3 @@ async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
 
 
 StripeCheckoutClient = Annotated[CheckoutClient_, Depends(get_stripe_checkout_client)]
-
-
-async def get_create_checkout_session_use_case(
-    config: Config,
-    get_or_create_subscription: GetOrCreateSubscriptionUseCase,
-    checkout_client: StripeCheckoutClient,
-) -> CreateCheckoutSessionUseCase_:
-    return CreateCheckoutSessionUseCase_(
-        get_or_create_subscription,
-        checkout_client,
-        config.stripe_price_id_monthly,
-        config.stripe_price_id_yearly,
-    )
-
-
-CreateCheckoutSessionUseCase = Annotated[
-    CreateCheckoutSessionUseCase_,
-    Depends(get_create_checkout_session_use_case),
-]

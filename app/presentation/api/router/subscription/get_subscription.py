@@ -15,10 +15,10 @@ router = APIRouter()
     responses={status.HTTP_404_NOT_FOUND: ERROR_RESPONSE_MODEL},
 )
 async def get_subscription(
-    email: str, get_subscription_use_case: GetSubscriptionUseCase
+    email: str, get_subscription: GetSubscriptionUseCase
 ) -> Subscription:
     """
     :raises InvalidEmail:
     :raises SubscriptionNotFound:
     """
-    return await get_subscription_use_case(Email(email))
+    return await get_subscription(Email(email))

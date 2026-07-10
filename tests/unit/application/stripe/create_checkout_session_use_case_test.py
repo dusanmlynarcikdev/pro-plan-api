@@ -2,11 +2,10 @@ from unittest.mock import Mock
 
 import pytest
 
-from app.application.stripe.billing_period import BillingPeriod
-from app.application.stripe.checkout_client import CheckoutClient
 from app.application.stripe.create_checkout_session_use_case import (
     CreateCheckoutSessionUseCase,
 )
+from app.application.stripe.enums import BillingPeriod
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -24,7 +23,7 @@ def test_resolve_price_id(
 ) -> None:
     use_case = CreateCheckoutSessionUseCase(
         Mock(GetOrCreateSubscriptionUseCase),
-        Mock(CheckoutClient),
+        Mock(),
         "price-id-monthly",
         "price-id-yearly",
     )

@@ -7,7 +7,7 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
-from app.application.stripe.checkout_error import CheckoutError
+from app.application.stripe.errors import CheckoutError
 
 logger = logging.getLogger(__name__)
 

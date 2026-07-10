@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 
-from app.application.stripe.checkout_error import CheckoutError
+from app.application.stripe.errors import CheckoutError
 from app.domain.subscription.email import Email
 from app.presentation.api.dependencies import CreateCheckoutSessionUseCase
 from app.presentation.api.router.stripe.requests import (

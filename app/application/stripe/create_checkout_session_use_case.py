@@ -1,5 +1,5 @@
-from app.application.stripe.billing_period import BillingPeriod
 from app.application.stripe.checkout_client import CheckoutClient
+from app.application.stripe.enums import BillingPeriod
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -14,12 +14,10 @@ class CreateCheckoutSessionUseCase:
         price_id_monthly: str,
         price_id_yearly: str,
     ) -> None:
-        self._get_or_create_subscription: GetOrCreateSubscriptionUseCase = (
-            get_or_create_subscription
-        )
-        self._checkout_client: CheckoutClient = checkout_client
-        self._price_id_monthly: str = price_id_monthly
-        self._price_id_yearly: str = price_id_yearly
+        self._get_or_create_subscription = get_or_create_subscription
+        self._checkout_client = checkout_client
+        self._price_id_monthly = price_id_monthly
+        self._price_id_yearly = price_id_yearly
 
     async def __call__(self, email: Email, billing_period: BillingPeriod) -> str:
         """
