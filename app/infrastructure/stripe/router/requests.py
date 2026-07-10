@@ -3,11 +3,11 @@ from enum import StrEnum
 from pydantic import BaseModel
 
 
-class SubscriptionPeriod(StrEnum):
+class BillingPeriod(StrEnum):
     MONTHLY = "monthly"
     YEARLY = "yearly"
 
 
 class CreateCheckoutSessionRequest(BaseModel):
     email: str
-    period: SubscriptionPeriod
+    billing_period: BillingPeriod

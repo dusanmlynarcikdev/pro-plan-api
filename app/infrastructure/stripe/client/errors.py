@@ -1,2 +1,2 @@
-class StripeError(Exception):
+class ClientError(Exception):
     pass

@@ -1,15 +1,14 @@
 import logging
 from uuid import UUID
 
-from stripe import StripeClient
-from stripe import StripeError as StripeApiError
+from stripe import StripeClient, StripeError
 from stripe.checkout import Session
 from stripe.params.checkout import (
     SessionCreateParams,
     SessionCreateParamsLineItem,
 )
 
-from app.infrastructure.stripe.client.errors import StripeError
+from app.infrastructure.stripe.client.errors import ClientError
 
 logger = logging.getLogger(__name__)
 
@@ -26,10 +25,10 @@ class Client:
 
         try:
             session = await self._client.v1.checkout.sessions.create_async(params)
-        except StripeApiError as e:
+        except StripeError as e:
             message = e.user_message or str(e)
             logger.error(message)
-            raise StripeError(message)
+            raise ClientError(message)
 
         return self._validate_url(session)
 
@@ -50,6 +49,6 @@ class Client:
         if url is None:
             message = "Stripe checkout session url is missing"
             logger.error(message)
-            raise StripeError(message)
+            raise ClientError(message)
 
         return url
