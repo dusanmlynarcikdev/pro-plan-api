@@ -2,12 +2,15 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.domain.subscription.email import Email
 from app.infrastructure.stripe.client.errors import ClientError
-from app.infrastructure.stripe.router.dependencies import StripeClient
-from app.infrastructure.stripe.router.requests import (
+from app.presentation.api.dependencies import (
+    Config,
+    CreateOrGetSubscriptionUseCase,
+    StripeClient,
+)
+from app.presentation.api.router.stripe.requests import (
     CreateCheckoutSessionRequest,
 )
-from app.infrastructure.stripe.router.responses import UrlResponse
-from app.presentation.api.dependencies import Config, CreateOrGetSubscriptionUseCase
+from app.presentation.api.router.stripe.responses import UrlResponse
 
 router = APIRouter()
 

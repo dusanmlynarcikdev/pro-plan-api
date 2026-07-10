@@ -13,8 +13,8 @@ handler.setFormatter(
 app_logger = logging.getLogger("app")
 app_logger.addHandler(handler)
 
-from app.infrastructure.stripe.router import router as stripe_router
 from app.presentation.api.router.health_check import router as health_check_router
+from app.presentation.api.router.stripe import router as stripe_router
 from app.presentation.api.router.subscription import router as subscription_router
 
 from .handlers import register_exception_handlers

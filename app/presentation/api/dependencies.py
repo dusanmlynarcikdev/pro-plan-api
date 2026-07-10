@@ -14,6 +14,7 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
+from app.infrastructure.stripe.client.client import Client
 
 Config = Annotated[_Config, Depends(get_config)]
 
@@ -51,3 +52,10 @@ async def get_get_subscription_use_case(
 
 
 GetSubscriptionUseCase = Annotated[GetUseCase, Depends(get_get_subscription_use_case)]
+
+
+async def get_stripe_client(config: Config) -> Client:
+    return Client(config.stripe_api_key, config.stripe_checkout_success_url)
+
+
+StripeClient = Annotated[Client, Depends(get_stripe_client)]
