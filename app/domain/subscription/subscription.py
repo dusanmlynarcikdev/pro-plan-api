@@ -8,6 +8,7 @@ class Subscription:
         self._id: UUID = id
         self._email: Email = email
         self._is_active: bool = False
+        self._stripe_customer_id: str | None = None
 
     @property
     def id(self) -> UUID:
@@ -20,6 +21,10 @@ class Subscription:
     @property
     def is_active(self) -> bool:
         return self._is_active
+
+    @property
+    def stripe_customer_id(self) -> str | None:
+        return self._stripe_customer_id
 
     def activate(self) -> None:
         self._is_active = True

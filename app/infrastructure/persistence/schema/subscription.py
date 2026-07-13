@@ -15,6 +15,7 @@ class SubscriptionSchema(SQLModel, table=True):
     id: Annotated[UUID, Field(primary_key=True)]
     email: str
     is_active: bool
+    stripe_customer_id: str | None
 
     @classmethod
     def from_domain(cls, subscription: Subscription) -> SubscriptionSchema:
@@ -22,13 +23,16 @@ class SubscriptionSchema(SQLModel, table=True):
             id=subscription.id,
             email=subscription.email.value,
             is_active=subscription.is_active,
+            stripe_customer_id=subscription.stripe_customer_id,
         )
 
     def to_domain(self) -> Subscription:
         subscription = Subscription(self.id, Email(self.email))
         subscription._is_active = self.is_active
+        subscription._stripe_customer_id = self.stripe_customer_id
 
         return subscription
 
     def update_from_domain(self, subscription: Subscription) -> None:
         self.is_active = subscription.is_active
+        self.stripe_customer_id = subscription.stripe_customer_id
