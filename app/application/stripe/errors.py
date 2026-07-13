@@ -1,9 +1,9 @@
-from app.domain.errors import DomainError
+from app.domain.errors import DomainError, DomainValidationError
 
 
-class StripeCustomerIdIsMissingError(DomainError):
+class StripeCustomerIdIsMissingError(DomainValidationError):
     def __init__(self) -> None:
-        super().__init__("Stripe customer ID is missing")
+        super().__init__("Subscription does not have a Stripe customer ID")
 
 
 class UnableToCreateBillingPortalSessionError(DomainError):

@@ -7,6 +7,9 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
+from app.application.stripe.create_billing_portal_session_use_case import (
+    CreateBillingPortalSessionUseCase as CreateBillingPortalSessionUseCase_,
+)
 from app.application.stripe.create_checkout_session_use_case import (
     CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
 )
@@ -23,6 +26,7 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
+from app.infrastructure.stripe.billing_portal_client import BillingPortalClient
 from app.infrastructure.stripe.checkout_client import CheckoutClient
 
 Config = Annotated[Config_, Depends(get_config)]
@@ -84,6 +88,22 @@ GetSubscriptionUseCase = Annotated[
 @lru_cache
 def get_stripe_client(api_key: str) -> StripeClient:
     return StripeClient(api_key)
+
+
+async def get_create_billing_portal_session_use_case(
+    config: Config,
+    session: Session,
+) -> CreateBillingPortalSessionUseCase_:
+    return CreateBillingPortalSessionUseCase_(
+        BillingPortalClient(get_stripe_client(config.stripe_api_key)),
+        SubscriptionRepository(session),
+    )
+
+
+CreateBillingPortalSessionUseCase = Annotated[
+    CreateBillingPortalSessionUseCase_,
+    Depends(get_create_billing_portal_session_use_case),
+]
 
 
 async def get_stripe_checkout_client(config: Config) -> CheckoutClient:
