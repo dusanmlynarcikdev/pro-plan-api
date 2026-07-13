@@ -43,7 +43,7 @@ class CheckoutClient:
             )
         except StripeError as e:
             logger.error(e.user_message)
-            raise UnableToCreateCheckoutSessionError()
+            raise UnableToCreateCheckoutSessionError
 
         return self._validate_response_url(session)
 
@@ -75,6 +75,6 @@ class CheckoutClient:
 
         if url is None:
             logger.error("Stripe checkout session url is missing")
-            raise UnableToCreateCheckoutSessionError()
+            raise UnableToCreateCheckoutSessionError
 
         return url

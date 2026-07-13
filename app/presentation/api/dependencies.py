@@ -7,11 +7,14 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
+from app.application.stripe.create_billing_portal_session_use_case import (
+    CreateBillingPortalSessionUseCase as CreateBillingPortalSessionUseCase_,
+)
 from app.application.stripe.create_checkout_session_use_case import (
     CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
 )
 from app.application.subscription.get_or_create_subscription_use_case import (
-    GetOrCreateSubscriptionUseCase as GetOrCreateSubscriptionUseCase_,
+    GetOrCreateSubscriptionUseCase,
 )
 from app.application.subscription.get_subscription_use_case import (
     GetSubscriptionUseCase as GetSubscriptionUseCase_,
@@ -23,18 +26,24 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
+from app.infrastructure.stripe.billing_portal_client import BillingPortalClient
 from app.infrastructure.stripe.checkout_client import CheckoutClient
 
 Config = Annotated[Config_, Depends(get_config)]
 
 
 async def get_create_checkout_session_use_case(
-    get_or_create_subscription: GetOrCreateSubscriptionUseCase,
-    checkout_client: StripeCheckoutClient,
+    config: Config,
+    session: Session,
 ) -> CreateCheckoutSessionUseCase_:
     return CreateCheckoutSessionUseCase_(
-        get_or_create_subscription,
-        checkout_client,
+        GetOrCreateSubscriptionUseCase(SubscriptionRepository(session)),
+        CheckoutClient(
+            get_stripe_client(config.stripe_api_key),
+            config.stripe_price_id_monthly,
+            config.stripe_price_id_yearly,
+            str(config.stripe_checkout_success_url),
+        ),
     )
 
 
@@ -50,18 +59,6 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 
 
 Session = Annotated[AsyncSession, Depends(get_session)]
-
-
-async def get_get_or_create_subscription_use_case(
-    session: Session,
-) -> GetOrCreateSubscriptionUseCase_:
-    return GetOrCreateSubscriptionUseCase_(SubscriptionRepository(session))
-
-
-GetOrCreateSubscriptionUseCase = Annotated[
-    GetOrCreateSubscriptionUseCase_,
-    Depends(get_get_or_create_subscription_use_case),
-]
 
 
 async def get_email_sender(
@@ -86,13 +83,17 @@ def get_stripe_client(api_key: str) -> StripeClient:
     return StripeClient(api_key)
 
 
-async def get_stripe_checkout_client(config: Config) -> CheckoutClient:
-    return CheckoutClient(
-        get_stripe_client(config.stripe_api_key),
-        config.stripe_price_id_monthly,
-        config.stripe_price_id_yearly,
-        str(config.stripe_checkout_success_url),
+async def get_create_billing_portal_session_use_case(
+    config: Config,
+    session: Session,
+) -> CreateBillingPortalSessionUseCase_:
+    return CreateBillingPortalSessionUseCase_(
+        BillingPortalClient(get_stripe_client(config.stripe_api_key)),
+        SubscriptionRepository(session),
     )
 
 
-StripeCheckoutClient = Annotated[CheckoutClient, Depends(get_stripe_checkout_client)]
+CreateBillingPortalSessionUseCase = Annotated[
+    CreateBillingPortalSessionUseCase_,
+    Depends(get_create_billing_portal_session_use_case),
+]
