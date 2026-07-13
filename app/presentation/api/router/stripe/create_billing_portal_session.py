@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-from app.domain.subscription.email import Email
 from app.presentation.api.dependencies import CreateBillingPortalSessionUseCase
 from app.presentation.api.router.stripe.requests import (
     CreateBillingPortalSessionRequest,
@@ -16,8 +15,8 @@ async def create_billing_portal_session(
     request: CreateBillingPortalSessionRequest,
 ) -> UrlResponse:
     """
-    :raises StripeCustomerIdIsMissingError:
-    :raises SubscriptionNotFound:
     :raises UnableToCreateBillingPortalSessionError:
     """
-    return UrlResponse(url=await create_billing_portal_session(Email(request.email)))
+    return UrlResponse(
+        url=await create_billing_portal_session(request.stripe_customer_id)
+    )
