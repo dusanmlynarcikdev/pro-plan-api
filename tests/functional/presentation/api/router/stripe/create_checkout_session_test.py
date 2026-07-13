@@ -1,10 +1,8 @@
-from collections.abc import Generator
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
-from pytest import fixture
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeError
@@ -14,16 +12,18 @@ from stripe.params.checkout import (
 )
 
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
-from app.presentation.api.dependencies import get_stripe_client
 from tests.generator.subscription import generate
 
 PATH = "/api/stripe/checkout/sessions"
-SESSION_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
+CHECKOUT_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
 
 
 async def test_create_with_existing_subscription(
     client: TestClient, session: AsyncSession, stripe_client: Mock
 ) -> None:
+    stripe_client.return_value.v1.checkout.sessions.create_async = AsyncMock(
+        return_value=Mock(url=CHECKOUT_URL)
+    )
     session.add(
         SubscriptionSchema.from_domain(generate(stripe_customer_id="customer-1"))
     )
@@ -36,7 +36,7 @@ async def test_create_with_existing_subscription(
     session.expunge_all()
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {"url": SESSION_URL}
+    assert response.json() == {"url": CHECKOUT_URL}
 
     subscription = (await session.exec(select(SubscriptionSchema))).one()
     assert subscription.email == "john@doe.com"
@@ -98,14 +98,3 @@ def test_invalid_request(
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert expected_content in response.content
-
-
-@fixture
-def stripe_client() -> Generator[Mock]:
-    with patch("app.presentation.api.dependencies.StripeClient") as client:
-        client.return_value.v1.checkout.sessions.create_async = AsyncMock(
-            return_value=Mock(url=SESSION_URL)
-        )
-        yield client
-
-    get_stripe_client.cache_clear()
