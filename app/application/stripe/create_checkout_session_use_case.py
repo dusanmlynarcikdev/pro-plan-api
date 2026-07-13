@@ -22,5 +22,5 @@ class CreateCheckoutSessionUseCase:
         subscription = await self._get_or_create_subscription(email)
 
         return await self._checkout_client.create_session(
-            billing_period, str(subscription.id)
+            billing_period, str(subscription.id), subscription.stripe_customer_id
         )
