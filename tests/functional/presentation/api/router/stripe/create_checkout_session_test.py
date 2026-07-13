@@ -15,14 +15,21 @@ from stripe.params.checkout import (
 
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 from app.presentation.api.dependencies import get_stripe_client
+from tests.generator.subscription import generate
 
 PATH = "/api/stripe/checkout/sessions"
 SESSION_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
 
 
-async def test_create(
+async def test_create_with_existing_subscription(
     client: TestClient, session: AsyncSession, stripe_client: Mock
 ) -> None:
+    session.add(
+        SubscriptionSchema.from_domain(generate(stripe_customer_id="customer-1"))
+    )
+    await session.flush()
+    session.expunge_all()
+
     response = client.post(
         PATH, json={"email": "john@doe.com", "billing_period": "monthly"}
     )
@@ -39,6 +46,7 @@ async def test_create(
     stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(
         SessionCreateParams(
             client_reference_id=str(subscription.id),
+            customer="customer-1",
             line_items=[SessionCreateParamsLineItem(price="example-id-1", quantity=1)],
             mode="subscription",
             success_url="https://example.com/success",
