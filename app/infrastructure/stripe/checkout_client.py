@@ -8,7 +8,7 @@ from stripe.params.checkout import (
 )
 
 from app.application.stripe.enums import BillingPeriod
-from app.application.stripe.errors import CheckoutError
+from app.application.stripe.errors import UnableToCreateCheckoutSessionError
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ class CheckoutClient:
             )
         except StripeError as e:
             logger.error(e.user_message)
-            raise CheckoutError()
+            raise UnableToCreateCheckoutSessionError()
 
         return self._validate_response_url(session)
 
@@ -65,6 +65,6 @@ class CheckoutClient:
 
         if url is None:
             logger.error("Stripe checkout session url is missing")
-            raise CheckoutError()
+            raise UnableToCreateCheckoutSessionError()
 
         return url

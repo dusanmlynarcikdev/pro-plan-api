@@ -8,6 +8,6 @@ class CheckoutClient(Protocol):
         self, billing_period: BillingPeriod, client_reference_id: str
     ) -> str:
         """
-        :raises CheckoutError:
+        :raises UnableToCreateCheckoutSessionError:
         """
         ...

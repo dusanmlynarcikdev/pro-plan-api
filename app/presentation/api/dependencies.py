@@ -23,9 +23,7 @@ from app.infrastructure.persistence.connection import session_factory
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
-from app.infrastructure.stripe.checkout_client import (
-    CheckoutClient as CheckoutClient_,
-)
+from app.infrastructure.stripe.checkout_client import CheckoutClient
 
 Config = Annotated[Config_, Depends(get_config)]
 
@@ -88,8 +86,8 @@ def get_stripe_client(api_key: str) -> StripeClient:
     return StripeClient(api_key)
 
 
-async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
-    return CheckoutClient_(
+async def get_stripe_checkout_client(config: Config) -> CheckoutClient:
+    return CheckoutClient(
         get_stripe_client(config.stripe_api_key),
         config.stripe_price_id_monthly,
         config.stripe_price_id_yearly,
@@ -97,4 +95,4 @@ async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
     )
 
 
-StripeCheckoutClient = Annotated[CheckoutClient_, Depends(get_stripe_checkout_client)]
+StripeCheckoutClient = Annotated[CheckoutClient, Depends(get_stripe_checkout_client)]

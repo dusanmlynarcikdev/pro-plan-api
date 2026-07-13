@@ -17,7 +17,7 @@ class CreateCheckoutSessionUseCase:
 
     async def __call__(self, email: Email, billing_period: BillingPeriod) -> str:
         """
-        :raises CheckoutError:
+        :raises UnableToCreateCheckoutSessionError:
         """
         subscription = await self._get_or_create_subscription(email)
 

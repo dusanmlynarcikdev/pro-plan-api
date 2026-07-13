@@ -15,6 +15,9 @@ async def create_checkout_session(
     create_checkout_session: CreateCheckoutSessionUseCase,
     request: CreateCheckoutSessionRequest,
 ) -> UrlResponse:
+    """
+    :raises UnableToCreateCheckoutSessionError:
+    """
     return UrlResponse(
         url=await create_checkout_session(Email(request.email), request.billing_period)
     )
