@@ -13,8 +13,8 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
-- **Create or get subscription** — returns a subscription ID
-- **Get subscription** — retrieves a full subscription
+- **Create Stripe checkout session**
+- **Get subscription** — retrieves detail of a subscription
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**
@@ -54,6 +54,10 @@ DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
 EMAIL_SENDER='...' \
 SMTP_DSN='...' \
+STRIPE_API_KEY='...' \
+STRIPE_CHECKOUT_SUCCESS_URL='...' \
+STRIPE_PRICE_ID_MONTHLY='...' \
+STRIPE_PRICE_ID_YEARLY='...' \
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
