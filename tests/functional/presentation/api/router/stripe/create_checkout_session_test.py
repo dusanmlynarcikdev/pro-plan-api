@@ -14,8 +14,8 @@ from stripe.params.checkout import (
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
 from tests.generator.subscription import generate
 
-PATH = "/api/stripe/checkout/sessions"
 CHECKOUT_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
+PATH = "/api/stripe/checkout/sessions"
 
 
 async def test_create_with_existing_subscription(
@@ -69,7 +69,7 @@ async def test_stripe_error(
     )
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-    assert response.content == b'{"detail":"Unable to create Stripe checkout session"}'
+    assert response.content == b'{"detail":"Unable to create checkout session"}'
 
 
 @pytest.mark.parametrize(
