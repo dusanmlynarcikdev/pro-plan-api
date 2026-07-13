@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+from functools import lru_cache
 from typing import Annotated
 
 from fastapi import BackgroundTasks
@@ -82,9 +83,14 @@ GetSubscriptionUseCase = Annotated[
 ]
 
 
+@lru_cache
+def get_stripe_client(api_key: str) -> StripeClient:
+    return StripeClient(api_key)
+
+
 async def get_stripe_checkout_client(config: Config) -> CheckoutClient_:
     return CheckoutClient_(
-        StripeClient(config.stripe_api_key),
+        get_stripe_client(config.stripe_api_key),
         config.stripe_price_id_monthly,
         config.stripe_price_id_yearly,
         str(config.stripe_checkout_success_url),

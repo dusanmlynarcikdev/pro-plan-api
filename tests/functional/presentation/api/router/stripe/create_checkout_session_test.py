@@ -14,8 +14,9 @@ from stripe.params.checkout import (
 )
 
 from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
+from app.presentation.api.dependencies import get_stripe_client
 
-PATH = "/api/stripe/checkout-sessions"
+PATH = "/api/stripe/checkout/sessions"
 SESSION_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
 
 
@@ -98,3 +99,5 @@ def stripe_client() -> Generator[Mock]:
             return_value=Mock(url=SESSION_URL)
         )
         yield client
+
+    get_stripe_client.cache_clear()

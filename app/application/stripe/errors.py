@@ -2,5 +2,5 @@ from app.domain.errors import DomainError
 
 
 class CheckoutError(DomainError):
-    def __str__(self) -> str:
-        return "Unable to create Stripe checkout session"
+    def __init__(self) -> None:
+        super().__init__("Unable to create Stripe checkout session")

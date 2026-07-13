@@ -10,7 +10,7 @@ from app.presentation.api.router.stripe.responses import UrlResponse
 router = APIRouter()
 
 
-@router.post("/stripe/checkout-sessions")
+@router.post("/stripe/checkout/sessions")
 async def create_checkout_session(
     create_checkout_session: CreateCheckoutSessionUseCase,
     request: CreateCheckoutSessionRequest,

@@ -37,9 +37,8 @@ class CheckoutClient:
                 request_params
             )
         except StripeError as e:
-            message = e.user_message
-            logger.error(message)
-            raise CheckoutError(message)
+            logger.error(e.user_message)
+            raise CheckoutError()
 
         return self._validate_response_url(session)
 
@@ -65,8 +64,7 @@ class CheckoutClient:
         url = session.url
 
         if url is None:
-            message = "Stripe checkout session url is missing"
-            logger.error(message)
-            raise CheckoutError(message)
+            logger.error("Stripe checkout session url is missing")
+            raise CheckoutError()
 
         return url
