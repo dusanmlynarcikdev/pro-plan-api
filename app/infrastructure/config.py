@@ -19,6 +19,7 @@ class Config(BaseSettings):
     stripe_checkout_success_url: HttpUrl
     stripe_price_id_monthly: str
     stripe_price_id_yearly: str
+    stripe_webhook_secret: str
 
 
 @lru_cache
