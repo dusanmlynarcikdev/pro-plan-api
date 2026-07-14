@@ -9,7 +9,7 @@ from app.presentation.api.dependencies import (
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(tags=["Stripe"])
+router = APIRouter()
 
 
 @router.post("/stripe/webhooks", status_code=status.HTTP_204_NO_CONTENT)
