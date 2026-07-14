@@ -1,4 +1,4 @@
-from app.domain.errors import DomainError
+from app.domain.errors import DomainError, DomainValidationError
 
 
 class UnableToCreateBillingPortalSessionError(DomainError):
@@ -11,6 +11,6 @@ class UnableToCreateCheckoutSessionError(DomainError):
         super().__init__("Unable to create checkout session")
 
 
-class WebhookVerificationError(Exception):
+class WebhookVerificationError(DomainValidationError):
     def __init__(self) -> None:
         super().__init__("An error occurred while verifying webhook")

@@ -1,0 +1,31 @@
+import logging
+
+from fastapi import APIRouter, BackgroundTasks, Request, status
+
+from app.presentation.api.dependencies import (
+    ProcessWebhookEventUseCase,
+    VerifyWebhookUseCase,
+)
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(tags=["Stripe"])
+
+
+@router.post("/stripe/webhooks", status_code=status.HTTP_204_NO_CONTENT)
+async def handle_webhook(
+    process_webhook_event: ProcessWebhookEventUseCase,
+    request: Request,
+    verify_webhook: VerifyWebhookUseCase,
+    background_tasks: BackgroundTasks,
+) -> None:
+    """
+    :raises WebhookVerificationError:
+    """
+    payload = await request.body()
+    signature = request.headers.get("stripe-signature", "")
+
+    event = await verify_webhook(payload, signature)
+    background_tasks.add_task(process_webhook_event.__call__, event)
+
+    pass

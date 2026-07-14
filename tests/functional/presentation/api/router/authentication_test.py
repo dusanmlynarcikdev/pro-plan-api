@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from app.presentation.api.main import app
 
-PUBLIC_PATHS = {"/api/"}
+PUBLIC_PATHS = {"/api/", "/api/stripe/webhooks"}
 
 
 request_parameter = pytest.mark.parametrize(

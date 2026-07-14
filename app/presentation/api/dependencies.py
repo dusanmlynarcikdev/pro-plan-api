@@ -13,6 +13,12 @@ from app.application.stripe.create_billing_portal_session_use_case import (
 from app.application.stripe.create_checkout_session_use_case import (
     CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
 )
+from app.application.stripe.process_webhook_event_use_case import (
+    ProcessWebhookEventUseCase as ProcessWebhookEventUseCase_,
+)
+from app.application.stripe.verify_webhook_use_case import (
+    VerifyWebhookUseCase as VerifyWebhookUseCase_,
+)
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -28,6 +34,7 @@ from app.infrastructure.persistence.repository.subscription import (
 )
 from app.infrastructure.stripe.billing_portal_client import BillingPortalClient
 from app.infrastructure.stripe.checkout_client import CheckoutClient
+from app.infrastructure.stripe.webhook_verifier import WebhookVerifier
 
 Config = Annotated[Config_, Depends(get_config)]
 
@@ -96,4 +103,23 @@ async def get_create_billing_portal_session_use_case(
 CreateBillingPortalSessionUseCase = Annotated[
     CreateBillingPortalSessionUseCase_,
     Depends(get_create_billing_portal_session_use_case),
+]
+
+
+async def get_process_webhook_event_use_case() -> ProcessWebhookEventUseCase_:
+    return ProcessWebhookEventUseCase_()
+
+
+ProcessWebhookEventUseCase = Annotated[
+    ProcessWebhookEventUseCase_, Depends(get_process_webhook_event_use_case)
+]
+
+
+async def get_verify_webhook_use_case(config: Config) -> VerifyWebhookUseCase_:
+    return VerifyWebhookUseCase_(WebhookVerifier(config.stripe_webhook_secret))
+
+
+VerifyWebhookUseCase = Annotated[
+    VerifyWebhookUseCase_,
+    Depends(get_verify_webhook_use_case),
 ]
