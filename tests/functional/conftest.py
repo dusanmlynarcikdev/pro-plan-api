@@ -9,6 +9,7 @@ from pytest import fixture
 from sqlalchemy_utils import create_database, database_exists, drop_database
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+load_dotenv(".env.dist", override=True)
 load_dotenv(".env.test", override=True)
 
 from app.infrastructure.config import get_config

@@ -15,6 +15,7 @@ A simple REST API for managing Pro plan subscriptions.
 - **Health check** — service availability
 - **Create Stripe billing portal session**
 - **Create Stripe checkout session**
+- **Handle Stripe webhooks**
 - **Get subscription** — retrieves detail of a subscription
 
 ## 🏗️ Stack & Architecture
@@ -59,6 +60,7 @@ STRIPE_API_KEY='...' \
 STRIPE_CHECKOUT_SUCCESS_URL='...' \
 STRIPE_PRICE_ID_MONTHLY='...' \
 STRIPE_PRICE_ID_YEARLY='...' \
+STRIPE_WEBHOOK_SECRET='...' \
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 

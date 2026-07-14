@@ -6,7 +6,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Config(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env.dist", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(".env.dist", ".env.local"), extra="ignore"
+    )
 
     api_token: str
     database_url: PostgresDsn
@@ -19,6 +21,7 @@ class Config(BaseSettings):
     stripe_checkout_success_url: HttpUrl
     stripe_price_id_monthly: str
     stripe_price_id_yearly: str
+    stripe_webhook_secret: str
 
 
 @lru_cache
