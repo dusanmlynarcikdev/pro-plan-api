@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, FastAPI, status
 
 from app.presentation.api.router.health_check import router as health_check_router
 from app.presentation.api.router.stripe import (
-    public_router as stripe_public_router,
+    router as stripe_router,
 )
 from app.presentation.api.router.stripe import (
-    router as stripe_router,
+    webhook_router as stripe_webhook_router,
 )
 from app.presentation.api.router.subscription import router as subscription_router
 
@@ -35,7 +35,7 @@ register_exception_handlers(app)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(health_check_router)
-api_router.include_router(stripe_public_router)
+api_router.include_router(stripe_webhook_router)
 
 secure_router = APIRouter(
     dependencies=[Depends(check_authentication)],
