@@ -18,7 +18,7 @@ PATH = "/api/stripe/webhooks"
 PAYLOAD = json.dumps(
     {
         "object": "event",
-        "type": "type",
+        "type": "event_type",
         "data": {"object": {"key": "value"}},
     }
 ).encode()
@@ -37,7 +37,7 @@ def test_success(client: TestClient) -> None:
 
     handler, event = add_task.call_args.args
     assert handler.__func__ is HandleWebhookEventUseCase.__call__
-    assert event == WebhookEvent(type="type", data={"key": "value"})
+    assert event == WebhookEvent(type="event_type", data={"key": "value"})
 
 
 @pytest.mark.parametrize(
@@ -55,10 +55,11 @@ def test_invalid_signature(client: TestClient, headers: dict[str, str]) -> None:
 
 
 def _create_signature(payload: bytes) -> str:
-    secret = get_config().stripe_webhook_secret
     timestamp = int(time.time())
     signature = hmac.new(
-        secret.encode(), f"{timestamp}.".encode() + payload, hashlib.sha256
+        get_config().stripe_webhook_secret.encode(),
+        f"{timestamp}.".encode() + payload,
+        hashlib.sha256,
     ).hexdigest()
 
     return f"t={timestamp},v1={signature}"

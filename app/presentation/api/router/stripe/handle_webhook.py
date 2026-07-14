@@ -1,13 +1,9 @@
-import logging
-
 from fastapi import APIRouter, BackgroundTasks, Request, status
 
 from app.presentation.api.dependencies import (
     HandleWebhookEventUseCase,
     VerifyWebhookUseCase,
 )
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter()
 

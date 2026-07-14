@@ -5,15 +5,15 @@ from app.application.stripe.webhook_event import WebhookEvent
 
 
 class WebhookVerifier:
-    def __init__(self, webhook_secret: str) -> None:
-        self._webhook_secret = webhook_secret
+    def __init__(self, secret: str) -> None:
+        self._secret = secret
 
     def verify(self, payload: bytes, signature: str) -> WebhookEvent:
         """
         :raises WebhookVerificationError:
         """
         try:
-            event = Webhook.construct_event(payload, signature, self._webhook_secret)
+            event = Webhook.construct_event(payload, signature, self._secret)
         except (ValueError, SignatureVerificationError) as e:
             raise WebhookVerificationError from e
 
