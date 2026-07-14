@@ -8,8 +8,8 @@ import pytest
 from fastapi import BackgroundTasks, status
 from fastapi.testclient import TestClient
 
-from app.application.stripe.process_webhook_event_use_case import (
-    ProcessWebhookEventUseCase,
+from app.application.stripe.handle_webhook_event_use_case import (
+    HandleWebhookEventUseCase,
 )
 from app.application.stripe.webhook_event import WebhookEvent
 from app.infrastructure.config import get_config
@@ -36,7 +36,7 @@ def test_success(client: TestClient) -> None:
     assert response.content == b""
 
     handler, event = add_task.call_args.args
-    assert handler.__func__ is ProcessWebhookEventUseCase.__call__
+    assert handler.__func__ is HandleWebhookEventUseCase.__call__
     assert event == WebhookEvent(type="type", data={"key": "value"})
 
 

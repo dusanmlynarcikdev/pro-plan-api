@@ -13,8 +13,8 @@ from app.application.stripe.create_billing_portal_session_use_case import (
 from app.application.stripe.create_checkout_session_use_case import (
     CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
 )
-from app.application.stripe.process_webhook_event_use_case import (
-    ProcessWebhookEventUseCase as ProcessWebhookEventUseCase_,
+from app.application.stripe.handle_webhook_event_use_case import (
+    HandleWebhookEventUseCase as HandleWebhookEventUseCase_,
 )
 from app.application.stripe.verify_webhook_use_case import (
     VerifyWebhookUseCase as VerifyWebhookUseCase_,
@@ -106,12 +106,12 @@ CreateBillingPortalSessionUseCase = Annotated[
 ]
 
 
-async def get_process_webhook_event_use_case() -> ProcessWebhookEventUseCase_:
-    return ProcessWebhookEventUseCase_()
+async def get_handle_webhook_event_use_case() -> HandleWebhookEventUseCase_:
+    return HandleWebhookEventUseCase_()
 
 
-ProcessWebhookEventUseCase = Annotated[
-    ProcessWebhookEventUseCase_, Depends(get_process_webhook_event_use_case)
+HandleWebhookEventUseCase = Annotated[
+    HandleWebhookEventUseCase_, Depends(get_handle_webhook_event_use_case)
 ]
 
 
