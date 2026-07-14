@@ -13,4 +13,4 @@ class UnableToCreateCheckoutSessionError(DomainError):
 
 class WebhookVerificationError(DomainValidationError):
     def __init__(self) -> None:
-        super().__init__("An error occurred while verifying webhook")
+        super().__init__("Invalid webhook")
