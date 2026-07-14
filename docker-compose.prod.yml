@@ -8,3 +8,5 @@ services:
       - /docker_data/postgres:/var/lib/postgresql:rw
 
   mailcatcher: !reset null
+
+  stripe-cli: !reset null

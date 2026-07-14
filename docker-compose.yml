@@ -55,3 +55,14 @@ services:
     environment:
       - DATABASE_URL
     restart: on-failure:10
+    volumes:
+      - ./:/code
+
+  stripe-cli:
+    command: listen --forward-to api:80/api/stripe/webhooks
+    container_name: stripe-cli
+    depends_on:
+      - api
+    environment:
+      STRIPE_API_KEY: ${STRIPE_API_KEY?Stripe API key is required}
+    image: stripe/stripe-cli
