@@ -78,6 +78,38 @@ async def test_find_one_by_email_empty_repository(
     assert repository_subscription is None
 
 
+async def test_get(session: AsyncSession) -> None:
+    session.add(SubscriptionSchema.from_domain(generate()))
+    await session.flush()
+    session.expunge_all()
+
+    repository_subscription = await SubscriptionRepository(session).get(
+        UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    )
+
+    assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+
+
+async def test_get_another_subscription_exists(
+    session: AsyncSession,
+) -> None:
+    session.add(SubscriptionSchema.from_domain(generate()))
+    await session.flush()
+    session.expunge_all()
+
+    with raises(SubscriptionNotFoundError, match="Subscription not found"):
+        await SubscriptionRepository(session).get(
+            UUID("019f652b-1a7b-7a4a-8be3-e736be31fede")
+        )
+
+
+async def test_get_empty_repository(session: AsyncSession) -> None:
+    with raises(SubscriptionNotFoundError, match="Subscription not found"):
+        await SubscriptionRepository(session).get(
+            UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+        )
+
+
 async def test_get_one_by_email(session: AsyncSession) -> None:
     session.add(SubscriptionSchema.from_domain(generate()))
     await session.flush()
