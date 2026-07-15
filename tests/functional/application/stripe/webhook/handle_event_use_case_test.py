@@ -44,7 +44,4 @@ async def test_checkout_session_completed(
     assert len(email_sender.sent) == 1
     assert email_sender.sent[0].recipient == Email("john@doe.com")
     assert email_sender.sent[0].subject == "Pro plan activated"
-    assert (
-        email_sender.sent[0].body
-        == "Congratulations! Your Pro plan has been successfully activated."
-    )
+    assert email_sender.sent[0].body == "Welcome to Pro! Your plan is now active."

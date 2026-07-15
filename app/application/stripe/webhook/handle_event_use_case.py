@@ -63,6 +63,6 @@ class HandleEventUseCase:
             Message(
                 subscription.email,
                 "Pro plan activated",
-                "Congratulations! Your Pro plan has been successfully activated.",
+                "Welcome to Pro! Your plan is now active.",
             )
         )
