@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -27,6 +29,20 @@ class SubscriptionRepository:
         subscription = result.one_or_none()
 
         return subscription.to_domain() if subscription else None
+
+    async def get(self, id: UUID) -> Subscription:
+        """
+        :raises SubscriptionNotFound:
+        """
+        query = select(SubscriptionSchema).where(SubscriptionSchema.id == id)
+
+        result = await self._session.exec(query)
+        subscription = result.one_or_none()
+
+        if subscription is None:
+            raise SubscriptionNotFoundError
+
+        return subscription.to_domain()
 
     async def get_one_by_email(self, email: Email) -> Subscription:
         """

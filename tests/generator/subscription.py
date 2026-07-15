@@ -12,6 +12,6 @@ def generate(
     subscription = Subscription(id, email)
 
     if stripe_customer_id is not None:
-        subscription._stripe_customer_id = stripe_customer_id
+        subscription.stripe_customer_id = stripe_customer_id
 
     return subscription

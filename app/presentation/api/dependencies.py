@@ -106,8 +106,10 @@ CreateBillingPortalSessionUseCase = Annotated[
 ]
 
 
-async def get_handle_webhook_event_use_case() -> HandleWebhookEventUseCase_:
-    return HandleWebhookEventUseCase_()
+async def get_handle_webhook_event_use_case(
+    session: Session,
+) -> HandleWebhookEventUseCase_:
+    return HandleWebhookEventUseCase_(SubscriptionRepository(session))
 
 
 HandleWebhookEventUseCase = Annotated[

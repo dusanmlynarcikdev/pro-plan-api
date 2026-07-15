@@ -29,7 +29,7 @@ class SubscriptionSchema(SQLModel, table=True):
     def to_domain(self) -> Subscription:
         subscription = Subscription(self.id, Email(self.email))
         subscription._is_active = self.is_active
-        subscription._stripe_customer_id = self.stripe_customer_id
+        subscription.stripe_customer_id = self.stripe_customer_id
 
         return subscription
 
