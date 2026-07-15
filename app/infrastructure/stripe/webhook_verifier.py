@@ -1,14 +1,14 @@
 from stripe import SignatureVerificationError, Webhook
 
 from app.application.stripe.errors import WebhookVerificationError
-from app.application.stripe.webhook_event import WebhookEvent
+from app.application.stripe.webhook.event import Event
 
 
 class WebhookVerifier:
     def __init__(self, secret: str) -> None:
         self._secret = secret
 
-    def verify(self, payload: bytes, signature: str) -> WebhookEvent:
+    def verify(self, payload: bytes, signature: str) -> Event:
         """
         :raises WebhookVerificationError:
         """
@@ -17,4 +17,4 @@ class WebhookVerifier:
         except (ValueError, SignatureVerificationError) as e:
             raise WebhookVerificationError from e
 
-        return WebhookEvent(type=event.type, data=event.data.object.to_dict())
+        return Event(type=event.type, data=event.data.object.to_dict())

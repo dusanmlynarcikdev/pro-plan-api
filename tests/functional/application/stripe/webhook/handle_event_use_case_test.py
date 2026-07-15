@@ -4,10 +4,8 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.application.stripe.enums import WebhookEventType
-from app.application.stripe.handle_webhook_event_use_case import (
-    HandleWebhookEventUseCase,
-)
-from app.application.stripe.webhook_event import WebhookEvent
+from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
 from app.infrastructure.persistence.repository.subscription import (
     SubscriptionRepository,
 )
@@ -20,10 +18,10 @@ async def test_checkout_session_completed(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    use_case = HandleWebhookEventUseCase(SubscriptionRepository(session))
+    use_case = HandleEventUseCase(SubscriptionRepository(session))
 
     await use_case(
-        WebhookEvent(
+        Event(
             type=WebhookEventType.CHECKOUT_SESSION_COMPLETED,
             data={
                 "client_reference_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",

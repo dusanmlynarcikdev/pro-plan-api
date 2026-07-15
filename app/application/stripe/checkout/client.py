@@ -3,7 +3,7 @@ from typing import Protocol
 from app.application.stripe.enums import CheckoutSessionBillingPeriod
 
 
-class CheckoutClient(Protocol):
+class Client(Protocol):
     async def create_session(
         self,
         billing_period: CheckoutSessionBillingPeriod,

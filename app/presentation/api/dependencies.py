@@ -7,18 +7,14 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
-from app.application.stripe.create_billing_portal_session_use_case import (
-    CreateBillingPortalSessionUseCase as CreateBillingPortalSessionUseCase_,
+from app.application.stripe.billing_portal.create_session_use_case import (
+    CreateSessionUseCase as CreateBillingPortalSessionUseCase_,
 )
-from app.application.stripe.create_checkout_session_use_case import (
-    CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
+from app.application.stripe.checkout.create_session_use_case import (
+    CreateSessionUseCase as CreateCheckoutSessionUseCase_,
 )
-from app.application.stripe.handle_webhook_event_use_case import (
-    HandleWebhookEventUseCase as HandleWebhookEventUseCase_,
-)
-from app.application.stripe.verify_webhook_use_case import (
-    VerifyWebhookUseCase as VerifyWebhookUseCase_,
-)
+from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
+from app.application.stripe.webhook.verify_use_case import VerifyUseCase
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -108,20 +104,20 @@ CreateBillingPortalSessionUseCase = Annotated[
 
 async def get_handle_webhook_event_use_case(
     session: Session,
-) -> HandleWebhookEventUseCase_:
-    return HandleWebhookEventUseCase_(SubscriptionRepository(session))
+) -> HandleEventUseCase:
+    return HandleEventUseCase(SubscriptionRepository(session))
 
 
 HandleWebhookEventUseCase = Annotated[
-    HandleWebhookEventUseCase_, Depends(get_handle_webhook_event_use_case)
+    HandleEventUseCase, Depends(get_handle_webhook_event_use_case)
 ]
 
 
-async def get_verify_webhook_use_case(config: Config) -> VerifyWebhookUseCase_:
-    return VerifyWebhookUseCase_(WebhookVerifier(config.stripe_webhook_secret))
+async def get_verify_webhook_use_case(config: Config) -> VerifyUseCase:
+    return VerifyUseCase(WebhookVerifier(config.stripe_webhook_secret))
 
 
 VerifyWebhookUseCase = Annotated[
-    VerifyWebhookUseCase_,
+    VerifyUseCase,
     Depends(get_verify_webhook_use_case),
 ]

@@ -1,17 +1,17 @@
 import logging
 
 from app.application.stripe.errors import WebhookVerificationError
-from app.application.stripe.webhook_event import WebhookEvent
-from app.application.stripe.webhook_verifier import WebhookVerifier
+from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.verifier import Verifier
 
 logger = logging.getLogger(__name__)
 
 
-class VerifyWebhookUseCase:
-    def __init__(self, verifier: WebhookVerifier) -> None:
+class VerifyUseCase:
+    def __init__(self, verifier: Verifier) -> None:
         self._verifier = verifier
 
-    async def __call__(self, payload: bytes, signature: str) -> WebhookEvent:
+    async def __call__(self, payload: bytes, signature: str) -> Event:
         """
         :raises WebhookVerificationError:
         """

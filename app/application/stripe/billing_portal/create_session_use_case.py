@@ -1,11 +1,9 @@
-from app.application.stripe.billing_portal_client import BillingPortalClient
+from app.application.stripe.billing_portal.client import Client
 from app.domain.subscription.repository import SubscriptionRepository
 
 
-class CreateBillingPortalSessionUseCase:
-    def __init__(
-        self, client: BillingPortalClient, repository: SubscriptionRepository
-    ) -> None:
+class CreateSessionUseCase:
+    def __init__(self, client: Client, repository: SubscriptionRepository) -> None:
         self._client = client
         self._repository = repository
 
