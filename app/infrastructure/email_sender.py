@@ -2,7 +2,6 @@ from email.message import EmailMessage
 
 from aiosmtplib import SMTP
 from aiosmtplib.smtp import SMTP_TLS_PORT
-from fastapi import BackgroundTasks
 from pydantic import AnyUrl, NameEmail
 
 from app.application.email.message import Message
@@ -11,18 +10,16 @@ from app.application.email.message import Message
 class EmailSender:
     def __init__(
         self,
-        background_tasks: BackgroundTasks,
         email_sender: NameEmail,
         smtp_dsn: AnyUrl,
     ) -> None:
-        self._background_tasks = background_tasks
         self._email_sender = email_sender
         self._smtp_dsn = smtp_dsn
 
-    def send(self, message: Message) -> None:
+    async def send(self, message: Message) -> None:
         _message = self._create_message(message)
 
-        self._background_tasks.add_task(self._send_email, _message)
+        await self._send_email(_message)
 
     def _create_message(self, message: Message) -> EmailMessage:
         _message = EmailMessage()

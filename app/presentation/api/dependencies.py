@@ -2,7 +2,6 @@ from collections.abc import AsyncGenerator
 from functools import lru_cache
 from typing import Annotated
 
-from fastapi import BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
@@ -64,10 +63,8 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_email_sender(
-    background_tasks: BackgroundTasks, config: Config
-) -> EmailSender:
-    return EmailSender(background_tasks, config.email_sender, config.smtp_dsn)
+async def get_email_sender(config: Config) -> EmailSender:
+    return EmailSender(config.email_sender, config.smtp_dsn)
 
 
 async def get_get_subscription_use_case(
@@ -103,9 +100,10 @@ CreateStripeBillingPortalSessionUseCase = Annotated[
 
 
 async def get_handle_webhook_event_use_case(
+    email_sender: Annotated[EmailSender, Depends(get_email_sender)],
     session: Session,
 ) -> HandleEventUseCase:
-    return HandleEventUseCase(SubscriptionRepository(session))
+    return HandleEventUseCase(email_sender, SubscriptionRepository(session))
 
 
 HandleStripeWebhookEventUseCase = Annotated[

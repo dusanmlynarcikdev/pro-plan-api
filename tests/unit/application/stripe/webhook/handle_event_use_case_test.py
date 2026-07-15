@@ -3,6 +3,7 @@ from uuid import UUID
 
 import pytest
 
+from app.application.email.sender import Sender
 from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook import (
     handle_event_use_case as handle_event_use_case_module,
@@ -20,7 +21,7 @@ from app.domain.subscription.repository import SubscriptionRepository
 async def test_checkout_session_completed_invalid_client_reference_id(
     client_reference_id: str | None,
 ) -> None:
-    use_case = HandleEventUseCase(Mock(SubscriptionRepository))
+    use_case = HandleEventUseCase(Mock(Sender), Mock(SubscriptionRepository))
 
     with patch.object(handle_event_use_case_module, "logger") as logger:
         await use_case(
@@ -40,7 +41,7 @@ async def test_checkout_session_completed_subscription_not_found() -> None:
     repository = Mock(SubscriptionRepository)
     repository.get = AsyncMock(side_effect=SubscriptionNotFoundError)
 
-    use_case = HandleEventUseCase(repository)
+    use_case = HandleEventUseCase(Mock(Sender), repository)
 
     with patch.object(handle_event_use_case_module, "logger") as logger:
         await use_case(

@@ -2,7 +2,6 @@ from email.message import EmailMessage
 from unittest.mock import MagicMock, patch
 
 from aiosmtplib import SMTP
-from fastapi import BackgroundTasks
 from pydantic import AnyUrl, NameEmail
 
 from app.application.email.message import Message
@@ -12,10 +11,7 @@ from app.infrastructure.email_sender import EmailSender
 
 
 async def test_send() -> None:
-    background_tasks = BackgroundTasks()
-
     email_sender = EmailSender(
-        background_tasks,
         NameEmail("Acme", "noreply@acme.test"),
         AnyUrl("smtp://john:secret@example.com:465"),
     )
@@ -24,9 +20,7 @@ async def test_send() -> None:
     smtp_client = smtp.return_value.__aenter__.return_value
 
     with patch.object(email_sender_module, "SMTP", smtp):
-        email_sender.send(Message(Email("john@doe.com"), "subject", "body"))
-
-        await background_tasks()
+        await email_sender.send(Message(Email("john@doe.com"), "subject", "body"))
 
     smtp.assert_called_once_with(hostname="example.com", port=465, use_tls=True)
 

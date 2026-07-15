@@ -1,6 +1,8 @@
 import logging
 from uuid import UUID
 
+from app.application.email.message import Message
+from app.application.email.sender import Sender
 from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook.event import Event
 from app.domain.subscription.errors import SubscriptionNotFoundError
@@ -11,7 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 class HandleEventUseCase:
-    def __init__(self, repository: SubscriptionRepository) -> None:
+    def __init__(
+        self, email_sender: Sender, repository: SubscriptionRepository
+    ) -> None:
+        self._email_sender = email_sender
         self._repository = repository
 
     async def __call__(self, event: Event) -> None:
@@ -53,3 +58,11 @@ class HandleEventUseCase:
 
         await self._repository.update(subscription)
         await self._repository.commit()
+
+        await self._email_sender.send(
+            Message(
+                subscription.email,
+                "Pro plan activated",
+                "Congratulations! Your Pro plan has been successfully activated.",
+            )
+        )
