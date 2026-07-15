@@ -8,10 +8,8 @@ import pytest
 from fastapi import BackgroundTasks, status
 from fastapi.testclient import TestClient
 
-from app.application.stripe.handle_webhook_event_use_case import (
-    HandleWebhookEventUseCase,
-)
-from app.application.stripe.webhook_event import WebhookEvent
+from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
 from app.infrastructure.config import get_config
 
 PATH = "/api/stripe/webhooks"
@@ -36,8 +34,8 @@ def test_success(client: TestClient) -> None:
     assert response.content == b""
 
     handler, event = add_task.call_args.args
-    assert handler.__func__ is HandleWebhookEventUseCase.__call__
-    assert event == WebhookEvent(type="event_type", data={"key": "value"})
+    assert handler.__func__ is HandleEventUseCase.__call__
+    assert event == Event(type="event_type", data={"key": "value"})
 
 
 @pytest.mark.parametrize(

@@ -2,23 +2,18 @@ from collections.abc import AsyncGenerator
 from functools import lru_cache
 from typing import Annotated
 
-from fastapi import BackgroundTasks
 from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
-from app.application.stripe.create_billing_portal_session_use_case import (
-    CreateBillingPortalSessionUseCase as CreateBillingPortalSessionUseCase_,
+from app.application.stripe.billing_portal.create_session_use_case import (
+    CreateSessionUseCase as CreateBillingPortalSessionUseCase_,
 )
-from app.application.stripe.create_checkout_session_use_case import (
-    CreateCheckoutSessionUseCase as CreateCheckoutSessionUseCase_,
+from app.application.stripe.checkout.create_session_use_case import (
+    CreateSessionUseCase as CreateCheckoutSessionUseCase_,
 )
-from app.application.stripe.handle_webhook_event_use_case import (
-    HandleWebhookEventUseCase as HandleWebhookEventUseCase_,
-)
-from app.application.stripe.verify_webhook_use_case import (
-    VerifyWebhookUseCase as VerifyWebhookUseCase_,
-)
+from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
+from app.application.stripe.webhook.verify_use_case import VerifyUseCase
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -54,7 +49,7 @@ async def get_create_checkout_session_use_case(
     )
 
 
-CreateCheckoutSessionUseCase = Annotated[
+CreateStripeCheckoutSessionUseCase = Annotated[
     CreateCheckoutSessionUseCase_,
     Depends(get_create_checkout_session_use_case),
 ]
@@ -68,10 +63,8 @@ async def get_session() -> AsyncGenerator[AsyncSession]:
 Session = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_email_sender(
-    background_tasks: BackgroundTasks, config: Config
-) -> EmailSender:
-    return EmailSender(background_tasks, config.email_sender, config.smtp_dsn)
+async def get_email_sender(config: Config) -> EmailSender:
+    return EmailSender(config.email_sender, config.smtp_dsn)
 
 
 async def get_get_subscription_use_case(
@@ -100,26 +93,29 @@ async def get_create_billing_portal_session_use_case(
     )
 
 
-CreateBillingPortalSessionUseCase = Annotated[
+CreateStripeBillingPortalSessionUseCase = Annotated[
     CreateBillingPortalSessionUseCase_,
     Depends(get_create_billing_portal_session_use_case),
 ]
 
 
-async def get_handle_webhook_event_use_case() -> HandleWebhookEventUseCase_:
-    return HandleWebhookEventUseCase_()
+async def get_handle_webhook_event_use_case(
+    email_sender: Annotated[EmailSender, Depends(get_email_sender)],
+    session: Session,
+) -> HandleEventUseCase:
+    return HandleEventUseCase(email_sender, SubscriptionRepository(session))
 
 
-HandleWebhookEventUseCase = Annotated[
-    HandleWebhookEventUseCase_, Depends(get_handle_webhook_event_use_case)
+HandleStripeWebhookEventUseCase = Annotated[
+    HandleEventUseCase, Depends(get_handle_webhook_event_use_case)
 ]
 
 
-async def get_verify_webhook_use_case(config: Config) -> VerifyWebhookUseCase_:
-    return VerifyWebhookUseCase_(WebhookVerifier(config.stripe_webhook_secret))
+async def get_verify_webhook_use_case(config: Config) -> VerifyUseCase:
+    return VerifyUseCase(WebhookVerifier(config.stripe_webhook_secret))
 
 
-VerifyWebhookUseCase = Annotated[
-    VerifyWebhookUseCase_,
+VerifyStripeWebhookUseCase = Annotated[
+    VerifyUseCase,
     Depends(get_verify_webhook_use_case),
 ]

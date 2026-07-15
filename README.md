@@ -11,12 +11,16 @@ A simple REST API for managing Pro plan subscriptions.
 - **Identified by email** — no external identifiers required
 - **Simple management** — no states, just an active flag
 
+## 📬 Notifications
+- **Email notification on Pro plan activation**
+
 ## 🔌 API Endpoints
 - **Health check** — service availability
-- **Create Stripe billing portal session**
-- **Create Stripe checkout session**
-- **Handle Stripe webhooks**
-- **Get subscription** — retrieves detail of a subscription
+- **Stripe**
+  - **Create checkout session**
+  - **Handle webhooks** — `checkout.session.completed`
+  - **Create billing portal session**
+- **Get subscription** — retrieves subscription details
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**
