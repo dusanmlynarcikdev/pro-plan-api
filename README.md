@@ -13,9 +13,9 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
-- **Create Stripe billing portal session**
 - **Create Stripe checkout session**
-- **Handle Stripe webhooks**
+- **Handle Stripe webhooks** — `checkout.session.completed`
+- **Create Stripe billing portal session**
 - **Get subscription** — retrieves detail of a subscription
 
 ## 🏗️ Stack & Architecture
