@@ -11,6 +11,9 @@ A simple REST API for managing Pro plan subscriptions.
 - **Identified by email** — no external identifiers required
 - **Simple management** — no states, just an active flag
 
+## 📬 Notifications
+- **Email notification on Pro plan activation**
+
 ## 🔌 API Endpoints
 - **Health check** — service availability
 - **Stripe**
