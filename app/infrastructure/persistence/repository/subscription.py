@@ -34,10 +34,7 @@ class SubscriptionRepository:
         """
         :raises SubscriptionNotFound:
         """
-        query = select(SubscriptionSchema).where(SubscriptionSchema.id == id)
-
-        result = await self._session.exec(query)
-        subscription = result.one_or_none()
+        subscription = await self._session.get(SubscriptionSchema, id)
 
         if subscription is None:
             raise SubscriptionNotFoundError
