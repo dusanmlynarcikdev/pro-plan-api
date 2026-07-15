@@ -11,4 +11,4 @@ class GetSubscriptionUseCase:
         """
         :raises SubscriptionNotFound:
         """
-        return await self._repository.get_one_by_email(email)
+        return await self._repository.get_by_email(email)

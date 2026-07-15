@@ -18,7 +18,7 @@ class SubscriptionRepository(Protocol):
         """
         ...
 
-    async def get_one_by_email(self, email: Email) -> Subscription:
+    async def get_by_email(self, email: Email) -> Subscription:
         """
         :raises SubscriptionNotFound:
         """
