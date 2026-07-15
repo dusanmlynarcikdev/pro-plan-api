@@ -1,5 +1,5 @@
 from collections.abc import AsyncGenerator
-from functools import lru_cache
+from functools import cache
 from typing import Annotated
 
 from fastapi.params import Depends
@@ -78,18 +78,16 @@ GetSubscriptionUseCase = Annotated[
 ]
 
 
-@lru_cache
+@cache
 def get_stripe_client(api_key: str) -> StripeClient:
     return StripeClient(api_key)
 
 
 async def get_create_billing_portal_session_use_case(
     config: Config,
-    session: Session,
 ) -> CreateBillingPortalSessionUseCase_:
     return CreateBillingPortalSessionUseCase_(
         BillingPortalClient(get_stripe_client(config.stripe_api_key)),
-        SubscriptionRepository(session),
     )
 
 
