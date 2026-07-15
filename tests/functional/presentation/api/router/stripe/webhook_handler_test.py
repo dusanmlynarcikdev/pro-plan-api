@@ -34,7 +34,7 @@ def test_success(client: TestClient) -> None:
     assert response.content == b""
 
     handler, event = add_task.call_args.args
-    assert handler.__func__ is HandleEventUseCase.__call__
+    assert isinstance(handler, HandleEventUseCase)
     assert event == Event(type="event_type", data={"key": "value"})
 
 

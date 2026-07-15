@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cache
 from typing import Annotated
 
 from pydantic import AnyUrl, HttpUrl, NameEmail, PostgresDsn, UrlConstraints
@@ -24,6 +24,6 @@ class Config(BaseSettings):
     stripe_webhook_secret: str
 
 
-@lru_cache
+@cache
 def get_config() -> Config:
     return Config()  # ty: ignore[missing-argument]
