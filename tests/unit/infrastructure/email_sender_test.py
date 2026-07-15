@@ -7,6 +7,7 @@ from pydantic import AnyUrl, NameEmail
 
 from app.application.email.message import Message
 from app.domain.subscription.email import Email
+from app.infrastructure import email_sender as email_sender_module
 from app.infrastructure.email_sender import EmailSender
 
 
@@ -22,7 +23,7 @@ async def test_send() -> None:
     smtp = MagicMock(SMTP)
     smtp_client = smtp.return_value.__aenter__.return_value
 
-    with patch("app.infrastructure.email_sender.SMTP", smtp):
+    with patch.object(email_sender_module, "SMTP", smtp):
         email_sender.send(Message(Email("john@doe.com"), "subject", "body"))
 
         await background_tasks()

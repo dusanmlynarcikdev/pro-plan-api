@@ -3,6 +3,7 @@ from unittest.mock import Mock, patch
 
 from pytest import fixture
 
+from app.presentation.api import dependencies as dependencies_module
 from app.presentation.api.dependencies import get_stripe_client
 
 
@@ -14,5 +15,5 @@ def _clear_stripe_client_cache() -> Generator[None]:
 
 @fixture
 def stripe_client() -> Generator[Mock]:
-    with patch("app.presentation.api.dependencies.StripeClient") as client:
+    with patch.object(dependencies_module, "StripeClient") as client:
         yield client
