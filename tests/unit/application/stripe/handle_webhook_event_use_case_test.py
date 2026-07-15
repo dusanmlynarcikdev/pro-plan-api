@@ -32,7 +32,8 @@ async def test_checkout_session_completed_invalid_client_reference_id(
         )
 
     logger.error.assert_called_once_with(
-        "Invalid client_reference_id: %s", client_reference_id
+        "Checkout session completed: Invalid client_reference_id: %s",
+        client_reference_id,
     )
 
 
@@ -51,6 +52,7 @@ async def test_checkout_session_completed_subscription_not_found() -> None:
         )
 
     logger.error.assert_called_once_with(
+        "Checkout session completed: "
         "Subscription not found for client_reference_id: %s",
         "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
     )

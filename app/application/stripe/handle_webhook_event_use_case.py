@@ -25,12 +25,16 @@ class HandleWebhookEventUseCase:
             subscription = await self._repository.get(UUID(client_reference_id))
         except SubscriptionNotFoundError:
             logger.error(
+                "Checkout session completed: "
                 "Subscription not found for client_reference_id: %s",
                 client_reference_id,
             )
             return
         except TypeError, ValueError:
-            logger.error("Invalid client_reference_id: %s", client_reference_id)
+            logger.error(
+                "Checkout session completed: Invalid client_reference_id: %s",
+                client_reference_id,
+            )
             return
 
         subscription.stripe_customer_id = event.data.get("customer")
