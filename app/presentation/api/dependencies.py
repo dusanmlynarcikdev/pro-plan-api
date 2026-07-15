@@ -50,7 +50,7 @@ async def get_create_checkout_session_use_case(
     )
 
 
-CreateCheckoutSessionUseCase = Annotated[
+CreateStripeCheckoutSessionUseCase = Annotated[
     CreateCheckoutSessionUseCase_,
     Depends(get_create_checkout_session_use_case),
 ]
@@ -96,7 +96,7 @@ async def get_create_billing_portal_session_use_case(
     )
 
 
-CreateBillingPortalSessionUseCase = Annotated[
+CreateStripeBillingPortalSessionUseCase = Annotated[
     CreateBillingPortalSessionUseCase_,
     Depends(get_create_billing_portal_session_use_case),
 ]
@@ -108,7 +108,7 @@ async def get_handle_webhook_event_use_case(
     return HandleEventUseCase(SubscriptionRepository(session))
 
 
-HandleWebhookEventUseCase = Annotated[
+HandleStripeWebhookEventUseCase = Annotated[
     HandleEventUseCase, Depends(get_handle_webhook_event_use_case)
 ]
 
@@ -117,7 +117,7 @@ async def get_verify_webhook_use_case(config: Config) -> VerifyUseCase:
     return VerifyUseCase(WebhookVerifier(config.stripe_webhook_secret))
 
 
-VerifyWebhookUseCase = Annotated[
+VerifyStripeWebhookUseCase = Annotated[
     VerifyUseCase,
     Depends(get_verify_webhook_use_case),
 ]

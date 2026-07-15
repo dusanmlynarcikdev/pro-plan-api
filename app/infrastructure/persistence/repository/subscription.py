@@ -32,7 +32,7 @@ class SubscriptionRepository:
 
     async def get(self, id: UUID) -> Subscription:
         """
-        :raises SubscriptionNotFound:
+        :raises SubscriptionNotFoundError:
         """
         subscription = await self._session.get(SubscriptionSchema, id)
 
@@ -43,7 +43,7 @@ class SubscriptionRepository:
 
     async def get_by_email(self, email: Email) -> Subscription:
         """
-        :raises SubscriptionNotFound:
+        :raises SubscriptionNotFoundError:
         """
         subscription = await self.find_one_by_email(email)
 

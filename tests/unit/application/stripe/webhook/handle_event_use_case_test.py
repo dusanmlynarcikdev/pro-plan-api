@@ -1,4 +1,5 @@
 from unittest.mock import AsyncMock, Mock, patch
+from uuid import UUID
 
 import pytest
 
@@ -50,7 +51,6 @@ async def test_checkout_session_completed_subscription_not_found() -> None:
         )
 
     logger.error.assert_called_once_with(
-        "Checkout session completed: "
-        "Subscription not found for client_reference_id: %s",
-        "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
+        "Checkout session completed: Subscription not found for id: %s",
+        UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
     )
