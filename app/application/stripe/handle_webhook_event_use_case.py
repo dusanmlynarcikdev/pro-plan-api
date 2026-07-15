@@ -19,18 +19,18 @@ class HandleWebhookEventUseCase:
                 await self._handle_checkout_session_completed(event)
 
     async def _handle_checkout_session_completed(self, event: WebhookEvent) -> None:
-        try:
-            subscription_id = UUID(event.data.get("client_reference_id"))
-        except ValueError as e:
-            logger.error("Invalid client_reference_id: %s", e)
-            return
+        client_reference_id = event.data.get("client_reference_id")
 
         try:
-            subscription = await self._repository.get(subscription_id)
+            subscription = await self._repository.get(UUID(client_reference_id))
         except SubscriptionNotFoundError:
             logger.error(
-                "Subscription not found for client_reference_id: %s", subscription_id
+                "Subscription not found for client_reference_id: %s",
+                client_reference_id,
             )
+            return
+        except TypeError, ValueError:
+            logger.error("Invalid client_reference_id: %s", client_reference_id)
             return
 
         subscription.stripe_customer_id = event.data.get("customer")
