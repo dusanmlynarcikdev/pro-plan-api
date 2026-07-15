@@ -7,7 +7,7 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
-from app.application.stripe.enums import BillingPeriod
+from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.stripe.errors import UnableToCreateCheckoutSessionError
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class CheckoutClient:
 
     async def create_session(
         self,
-        billing_period: BillingPeriod,
+        billing_period: CheckoutSessionBillingPeriod,
         client_reference_id: str,
         customer_id: str | None,
     ) -> str:
@@ -62,11 +62,11 @@ class CheckoutClient:
 
         return params
 
-    def _resolve_price_id(self, billing_period: BillingPeriod) -> str:
+    def _resolve_price_id(self, billing_period: CheckoutSessionBillingPeriod) -> str:
         match billing_period:
-            case BillingPeriod.MONTHLY:
+            case CheckoutSessionBillingPeriod.MONTHLY:
                 return self._price_id_monthly
-            case BillingPeriod.YEARLY:
+            case CheckoutSessionBillingPeriod.YEARLY:
                 return self._price_id_yearly
 
     @staticmethod

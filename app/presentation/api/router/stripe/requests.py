@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.application.stripe.enums import BillingPeriod
+from app.application.stripe.enums import CheckoutSessionBillingPeriod
 
 
 class CreateBillingPortalSessionRequest(BaseModel):
@@ -9,4 +9,4 @@ class CreateBillingPortalSessionRequest(BaseModel):
 
 class CreateCheckoutSessionRequest(BaseModel):
     email: str
-    billing_period: BillingPeriod
+    billing_period: CheckoutSessionBillingPeriod

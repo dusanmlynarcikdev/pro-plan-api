@@ -1,5 +1,5 @@
 from app.application.stripe.checkout_client import CheckoutClient
-from app.application.stripe.enums import BillingPeriod
+from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -15,7 +15,9 @@ class CreateCheckoutSessionUseCase:
         self._get_or_create_subscription = get_or_create_subscription
         self._checkout_client = checkout_client
 
-    async def __call__(self, email: Email, billing_period: BillingPeriod) -> str:
+    async def __call__(
+        self, email: Email, billing_period: CheckoutSessionBillingPeriod
+    ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:
         """

@@ -3,19 +3,19 @@ from unittest.mock import Mock
 import pytest
 from stripe import StripeClient
 
-from app.application.stripe.enums import BillingPeriod
+from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.infrastructure.stripe.checkout_client import CheckoutClient
 
 
 @pytest.mark.parametrize(
     ("billing_period", "expected_price_id"),
     (
-        (BillingPeriod.MONTHLY, "price-id-monthly"),
-        (BillingPeriod.YEARLY, "price-id-yearly"),
+        (CheckoutSessionBillingPeriod.MONTHLY, "price-id-monthly"),
+        (CheckoutSessionBillingPeriod.YEARLY, "price-id-yearly"),
     ),
 )
 def test_resolve_price_id(
-    billing_period: BillingPeriod, expected_price_id: str
+    billing_period: CheckoutSessionBillingPeriod, expected_price_id: str
 ) -> None:
     checkout_client = CheckoutClient(
         Mock(StripeClient),
