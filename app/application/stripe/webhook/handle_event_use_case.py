@@ -1,4 +1,5 @@
 import logging
+from typing import cast
 from uuid import UUID
 
 from app.application.email.message import Message
@@ -21,6 +22,8 @@ class HandleEventUseCase:
 
     async def __call__(self, event: Event) -> None:
         match event.type:
+            case WebhookEventType.CUSTOMER_SUBSCRIPTION_DELETED:
+                await self._handle_customer_subscription_deleted(event)
             case WebhookEventType.CHECKOUT_SESSION_COMPLETED:
                 await self._handle_checkout_session_completed(event)
 
@@ -44,6 +47,25 @@ class HandleEventUseCase:
                 subscription_id,
             )
             return None
+
+    async def _handle_customer_subscription_deleted(self, event: Event) -> None:
+        stripe_customer_id = cast(str, event.data.get("customer"))
+        subscription = await self._repository.find_one_by_stripe_customer_id(
+            stripe_customer_id
+        )
+
+        if subscription is None:
+            logger.error(
+                "Customer subscription deleted: "
+                "Subscription not found for stripe_customer_id: %s",
+                stripe_customer_id,
+            )
+            return
+
+        subscription.deactivate()
+
+        await self._repository.update(subscription)
+        await self._repository.commit()
 
     async def _handle_checkout_session_completed(self, event: Event) -> None:
         subscription = await self._get_subscription(

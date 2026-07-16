@@ -6,6 +6,7 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
+from app.application.email.sender import Sender
 from app.application.stripe.billing_portal.create_session_use_case import (
     CreateSessionUseCase as CreateBillingPortalSessionUseCase_,
 )
@@ -98,7 +99,7 @@ CreateStripeBillingPortalSessionUseCase = Annotated[
 
 
 async def get_handle_webhook_event_use_case(
-    email_sender: Annotated[EmailSender, Depends(get_email_sender)],
+    email_sender: Annotated[Sender, Depends(get_email_sender)],
     session: Session,
 ) -> HandleEventUseCase:
     return HandleEventUseCase(email_sender, SubscriptionRepository(session))

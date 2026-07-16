@@ -12,6 +12,10 @@ class SubscriptionRepository(Protocol):
 
     async def find_one_by_email(self, email: Email) -> Subscription | None: ...
 
+    async def find_one_by_stripe_customer_id(
+        self, stripe_customer_id: str
+    ) -> Subscription | None: ...
+
     async def get(self, id: UUID) -> Subscription:
         """
         :raises SubscriptionNotFound:

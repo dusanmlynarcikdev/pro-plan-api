@@ -25,6 +25,7 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
     assert not repository_subscription.is_active
+    assert repository_subscription.stripe_customer_id is None
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
@@ -52,6 +53,7 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email.value == "john@doe.com"
     assert not repository_subscription.is_active
+    assert repository_subscription.stripe_customer_id is None
 
 
 async def test_find_one_by_email_another_subscription_exists(
@@ -78,6 +80,46 @@ async def test_find_one_by_email_empty_repository(
     assert repository_subscription is None
 
 
+async def test_find_one_by_stripe_customer_id(session: AsyncSession) -> None:
+    session.add(SubscriptionSchema.from_domain(generate(stripe_customer_id="cus_123")))
+    await session.flush()
+    session.expunge_all()
+
+    repository_subscription = await SubscriptionRepository(
+        session
+    ).find_one_by_stripe_customer_id("cus_123")
+
+    assert repository_subscription is not None
+    assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert repository_subscription.email.value == "john@doe.com"
+    assert not repository_subscription.is_active
+    assert repository_subscription.stripe_customer_id == "cus_123"
+
+
+async def test_find_one_by_stripe_customer_id_another_subscription_exists(
+    session: AsyncSession,
+) -> None:
+    session.add(SubscriptionSchema.from_domain(generate(stripe_customer_id="cus_123")))
+    await session.flush()
+    session.expunge_all()
+
+    repository_subscription = await SubscriptionRepository(
+        session
+    ).find_one_by_stripe_customer_id("cus_456")
+
+    assert repository_subscription is None
+
+
+async def test_find_one_by_stripe_customer_id_empty_repository(
+    session: AsyncSession,
+) -> None:
+    repository_subscription = await SubscriptionRepository(
+        session
+    ).find_one_by_stripe_customer_id("cus_456")
+
+    assert repository_subscription is None
+
+
 async def test_get(session: AsyncSession) -> None:
     session.add(SubscriptionSchema.from_domain(generate()))
     await session.flush()
@@ -88,6 +130,9 @@ async def test_get(session: AsyncSession) -> None:
     )
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert repository_subscription.email.value == "john@doe.com"
+    assert not repository_subscription.is_active
+    assert repository_subscription.stripe_customer_id is None
 
 
 async def test_get_another_subscription_exists(
@@ -120,6 +165,9 @@ async def test_get_by_email(session: AsyncSession) -> None:
     )
 
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert repository_subscription.email.value == "john@doe.com"
+    assert not repository_subscription.is_active
+    assert repository_subscription.stripe_customer_id is None
 
 
 async def test_get_by_email_another_subscription_exists(
@@ -154,6 +202,7 @@ async def test_update(session: AsyncSession) -> None:
     assert repository_subscription.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_subscription.email == "john@doe.com"
     assert repository_subscription.is_active
+    assert repository_subscription.stripe_customer_id is None
 
 
 async def test_update_unknown(session: AsyncSession) -> None:

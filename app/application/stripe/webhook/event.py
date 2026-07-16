@@ -1,6 +1,6 @@
-from typing import Any, NamedTuple
+from typing import NamedTuple
 
 
 class Event(NamedTuple):
     type: str
-    data: dict[str, Any]
+    data: dict[str, str | None]
