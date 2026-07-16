@@ -25,8 +25,7 @@ class SubscriptionRepository:
             SubscriptionSchema.email == email.value
         )
 
-        result = await self._session.exec(query)
-        subscription = result.one_or_none()
+        subscription = (await self._session.exec(query)).one_or_none()
 
         return subscription.to_domain() if subscription else None
 
@@ -37,8 +36,7 @@ class SubscriptionRepository:
             SubscriptionSchema.stripe_customer_id == stripe_customer_id
         )
 
-        result = await self._session.exec(query)
-        subscription = result.one_or_none()
+        subscription = (await self._session.exec(query)).one_or_none()
 
         return subscription.to_domain() if subscription else None
 

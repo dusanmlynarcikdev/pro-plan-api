@@ -1,4 +1,4 @@
-"""add unique constraint
+"""add unique constraint for stripe customer id
 
 Revision ID: e9edfee3741b
 Revises: 5284f16dd71d

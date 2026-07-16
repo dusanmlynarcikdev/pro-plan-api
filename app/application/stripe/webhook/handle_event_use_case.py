@@ -50,10 +50,10 @@ class HandleEventUseCase:
 
     async def _handle_customer_subscription_deleted(self, event: Event) -> None:
         stripe_customer_id = cast(str, event.data.get("customer"))
-
         subscription = await self._repository.find_one_by_stripe_customer_id(
             stripe_customer_id
         )
+
         if subscription is None:
             logger.error(
                 "Customer subscription deleted: "
