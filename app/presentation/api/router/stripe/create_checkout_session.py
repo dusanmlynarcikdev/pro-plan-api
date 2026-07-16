@@ -15,7 +15,7 @@ router = APIRouter()
     "/stripe/checkout/sessions",
     responses={
         status.HTTP_409_CONFLICT: {
-            "description": "Subscription is active in Stripe",
+            "description": "Subscription is already active in Stripe",
             "model": ErrorResponse,
         }
     },
