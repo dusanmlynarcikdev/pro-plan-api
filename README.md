@@ -18,7 +18,7 @@ A simple REST API for managing Pro plan subscriptions.
 - **Health check** — service availability
 - **Stripe**
   - **Create checkout session**
-  - **Handle webhooks** — `checkout.session.completed`
+  - **Handle webhooks** — `checkout.session.completed`, `customer.subscription.deleted`
   - **Create billing portal session**
 - **Get subscription** — retrieves subscription details
 
