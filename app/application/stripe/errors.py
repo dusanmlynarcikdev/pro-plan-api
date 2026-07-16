@@ -1,4 +1,9 @@
-from app.domain.errors import DomainError, DomainValidationError
+from app.domain.errors import ConflictDomainError, DomainError, DomainValidationError
+
+
+class SubscriptionActiveInStripeError(ConflictDomainError):
+    def __init__(self) -> None:
+        super().__init__("Subscription is already active in Stripe")
 
 
 class UnableToCreateBillingPortalSessionError(DomainError):

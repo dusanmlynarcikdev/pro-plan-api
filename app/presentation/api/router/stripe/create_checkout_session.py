@@ -16,6 +16,7 @@ async def create_checkout_session(
     request: CreateCheckoutSessionRequest,
 ) -> UrlResponse:
     """
+    :raises SubscriptionActiveInStripeError:
     :raises UnableToCreateCheckoutSessionError:
     """
     return UrlResponse(
