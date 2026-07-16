@@ -14,9 +14,8 @@ load_dotenv(".env.test", override=True)
 
 from app.infrastructure.config import get_config
 from app.infrastructure.persistence.connection import engine
-from app.presentation.api.dependencies import get_email_sender, get_session
+from app.presentation.api.dependencies import get_session
 from app.presentation.api.main import app
-from tests.functional.fake_email_sender import FakeEmailSender
 
 
 @fixture
@@ -24,15 +23,6 @@ def client() -> Generator[TestClient]:
     with TestClient(app) as client:
         client.headers["Authorization"] = f"Bearer {get_config().api_token}"
         yield client
-
-
-@fixture
-def email_sender() -> Generator[FakeEmailSender]:
-    email_sender = FakeEmailSender()
-
-    app.dependency_overrides[get_email_sender] = lambda: email_sender
-    yield email_sender
-    app.dependency_overrides.pop(get_email_sender, None)
 
 
 @fixture
