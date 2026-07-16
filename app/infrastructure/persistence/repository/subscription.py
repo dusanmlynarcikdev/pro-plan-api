@@ -30,6 +30,18 @@ class SubscriptionRepository:
 
         return subscription.to_domain() if subscription else None
 
+    async def find_one_by_stripe_customer_id(
+        self, stripe_customer_id: str
+    ) -> Subscription | None:
+        query = select(SubscriptionSchema).where(
+            SubscriptionSchema.stripe_customer_id == stripe_customer_id
+        )
+
+        result = await self._session.exec(query)
+        subscription = result.one_or_none()
+
+        return subscription.to_domain() if subscription else None
+
     async def get(self, id: UUID) -> Subscription:
         """
         :raises SubscriptionNotFoundError:
