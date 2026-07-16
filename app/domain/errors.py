@@ -6,9 +6,9 @@ class ConflictDomainError(DomainError):
     pass
 
 
-class DomainNotFoundError(DomainError):
+class NotFoundDomainError(DomainError):
     pass
 
 
-class DomainValidationError(DomainError):
+class ValidationDomainError(DomainError):
     pass

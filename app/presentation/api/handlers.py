@@ -6,8 +6,8 @@ from fastapi.responses import JSONResponse
 from app.domain.errors import (
     ConflictDomainError,
     DomainError,
-    DomainNotFoundError,
-    DomainValidationError,
+    NotFoundDomainError,
+    ValidationDomainError,
 )
 from app.presentation.api.responses import ErrorResponse
 
@@ -16,9 +16,9 @@ def _get_domain_error_status(error: DomainError) -> int:
     match error:
         case ConflictDomainError():
             return status.HTTP_409_CONFLICT
-        case DomainNotFoundError():
+        case NotFoundDomainError():
             return status.HTTP_404_NOT_FOUND
-        case DomainValidationError():
+        case ValidationDomainError():
             return status.HTTP_422_UNPROCESSABLE_CONTENT
         case _:
             return status.HTTP_500_INTERNAL_SERVER_ERROR
