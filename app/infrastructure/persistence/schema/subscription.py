@@ -10,7 +10,10 @@ from app.domain.subscription.subscription import Subscription
 
 class SubscriptionSchema(SQLModel, table=True):
     __tablename__ = "subscription"
-    __table_args__ = (UniqueConstraint("email", name="uq_subscription_email"),)
+    __table_args__ = (
+        UniqueConstraint("email", name="uq_subscription_email"),
+        UniqueConstraint("stripe_customer_id", name="uq_stripe_customer_id"),
+    )
 
     id: Annotated[UUID, Field(primary_key=True)]
     email: str
