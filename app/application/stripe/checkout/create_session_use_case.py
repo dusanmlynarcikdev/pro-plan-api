@@ -1,5 +1,6 @@
 from app.application.stripe.checkout.client import Client
 from app.application.stripe.enums import CheckoutSessionBillingPeriod
+from app.application.stripe.errors import SubscriptionActiveInStripeError
 from app.application.subscription.get_or_create_subscription_use_case import (
     GetOrCreateSubscriptionUseCase,
 )
@@ -19,9 +20,13 @@ class CreateSessionUseCase:
         self, email: Email, billing_period: CheckoutSessionBillingPeriod
     ) -> str:
         """
+        :raises SubscriptionActiveInStripeError:
         :raises UnableToCreateCheckoutSessionError:
         """
         subscription = await self._get_or_create_subscription(email)
+
+        if subscription.is_active_in_stripe():
+            raise SubscriptionActiveInStripeError
 
         return await self._client.create_session(
             billing_period, str(subscription.id), subscription.stripe_customer_id

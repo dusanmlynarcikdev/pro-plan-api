@@ -2,9 +2,13 @@ class DomainError(Exception):
     pass
 
 
-class DomainNotFoundError(DomainError):
+class ConflictDomainError(DomainError):
     pass
 
 
-class DomainValidationError(DomainError):
+class NotFoundDomainError(DomainError):
+    pass
+
+
+class ValidationDomainError(DomainError):
     pass

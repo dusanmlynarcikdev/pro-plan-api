@@ -22,6 +22,9 @@ class Subscription:
     def is_active(self) -> bool:
         return self._is_active
 
+    def is_active_in_stripe(self) -> bool:
+        return self.is_active and self.stripe_customer_id is not None
+
     def activate(self) -> None:
         self._is_active = True
 
