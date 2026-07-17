@@ -4,7 +4,6 @@ from app.application.customer.get_or_create_customer_use_case import (
 from app.application.stripe.checkout.client import Client
 from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.stripe.errors import CustomerAlreadyHasStripeSubscriptionError
-from app.domain.customer.email import Email
 
 
 class CreateSessionUseCase:
@@ -17,13 +16,13 @@ class CreateSessionUseCase:
         self._client = client
 
     async def __call__(
-        self, email: Email, billing_period: CheckoutSessionBillingPeriod
+        self, customer_external_id: str, billing_period: CheckoutSessionBillingPeriod
     ) -> str:
         """
         :raises CustomerAlreadyHasStripeSubscriptionError:
         :raises UnableToCreateCheckoutSessionError:
         """
-        customer = await self._get_or_create_customer(email)
+        customer = await self._get_or_create_customer(customer_external_id)
 
         if customer.has_stripe_subscription():
             raise CustomerAlreadyHasStripeSubscriptionError

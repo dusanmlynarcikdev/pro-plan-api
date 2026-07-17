@@ -1,9 +1,4 @@
-from app.domain.errors import NotFoundDomainError, ValidationDomainError
-
-
-class InvalidEmailError(ValidationDomainError):
-    def __init__(self) -> None:
-        super().__init__("Invalid email")
+from app.domain.errors import NotFoundDomainError
 
 
 class CustomerNotFoundError(NotFoundDomainError):

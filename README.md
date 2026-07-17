@@ -6,13 +6,12 @@ A simple REST API for managing Pro plan subscriptions.
 - **Ready to run** — out of the box with Docker
 - **Unit and functional tests** — covering domain logic and API behavior
 
-## 📦 Customer
+## 🙎‍♂️ Customers
 - **One Pro plan per customer**
-- **Identified by email** — no external identifiers required
+- **Identified by external ID** — a unique identifier provided by your app
 - **Simple management** — no states, just an active Pro plan flag
 
-## 📬 Notifications
-- **Email notification on Pro plan activation**
+> 💡 **Tip:** If you manage users for multiple apps at once, add a prefix to the customer external ID, e.g. `myapp:user-1`.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
@@ -47,7 +46,6 @@ API Base URL: http://localhost/api
 
 ##### Tools
 - API Docs: http://localhost/docs
-- Mailcatcher: http://localhost:81
 
 #### Commands
 Useful commands are available in the [Makefile](./Makefile).
@@ -58,8 +56,6 @@ Run the project with the environment variables from [.env.dist](./.env.dist) set
 API_TOKEN='...' \
 DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
-EMAIL_SENDER='...' \
-SMTP_DSN='...' \
 STRIPE_API_KEY='...' \
 STRIPE_CHECKOUT_SUCCESS_URL='...' \
 STRIPE_PRICE_ID_MONTHLY='...' \
@@ -71,7 +67,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ## 🎯 About the Project
 An example project demonstrating backend system design.
 
-## 🧑‍💼 Author
+## 🧑‍💻 Author
 **Dušan Mlynarčík** — Senior Backend Engineer & App Builder
 
 - LinkedIn: https://www.linkedin.com/in/dusanmlynarcik/

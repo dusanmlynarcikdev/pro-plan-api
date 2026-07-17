@@ -3,18 +3,17 @@ from uuid import UUID
 import pytest
 
 from app.domain.customer.customer import Customer
-from app.domain.customer.email import Email
 from tests.generator.customer import generate
 
 
 def test_create() -> None:
     result = Customer(
         UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
-        Email("john@doe.com"),
+        "user-1",
     )
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert result.email == Email("john@doe.com")
+    assert result.external_id == "user-1"
     assert not result.has_pro
     assert result.stripe_id is None
 

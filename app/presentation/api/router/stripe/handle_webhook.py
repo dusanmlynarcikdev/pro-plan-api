@@ -4,11 +4,18 @@ from app.presentation.api.dependencies import (
     HandleStripeWebhookEventUseCase,
     VerifyStripeWebhookUseCase,
 )
+from app.presentation.api.responses import (
+    create_error_response_doc,
+)
 
 router = APIRouter()
 
 
-@router.post("/stripe/webhooks", status_code=status.HTTP_204_NO_CONTENT)
+@router.post(
+    "/stripe/webhooks",
+    responses={status.HTTP_400_BAD_REQUEST: create_error_response_doc()},
+    status_code=status.HTTP_202_ACCEPTED,
+)
 async def handle_webhook(
     handle_webhook_event: HandleStripeWebhookEventUseCase,
     request: Request,

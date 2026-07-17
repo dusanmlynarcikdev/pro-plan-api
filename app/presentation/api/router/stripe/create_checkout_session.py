@@ -1,8 +1,7 @@
 from fastapi import APIRouter, status
 
-from app.domain.customer.email import Email
 from app.presentation.api.dependencies import CreateStripeCheckoutSessionUseCase
-from app.presentation.api.responses import ErrorResponse
+from app.presentation.api.responses import create_error_response_doc
 from app.presentation.api.router.stripe.requests import (
     CreateCheckoutSessionRequest,
 )
@@ -14,10 +13,9 @@ router = APIRouter()
 @router.post(
     "/stripe/checkout/sessions",
     responses={
-        status.HTTP_409_CONFLICT: {
-            "description": "Customer already has a Stripe subscription",
-            "model": ErrorResponse,
-        }
+        status.HTTP_409_CONFLICT: create_error_response_doc(
+            "Customer already has a Stripe subscription"
+        )
     },
 )
 async def create_checkout_session(
@@ -29,5 +27,5 @@ async def create_checkout_session(
     :raises UnableToCreateCheckoutSessionError:
     """
     return UrlResponse(
-        url=await create_session(Email(request.email), request.billing_period)
+        url=await create_session(request.customer_external_id, request.billing_period)
     )

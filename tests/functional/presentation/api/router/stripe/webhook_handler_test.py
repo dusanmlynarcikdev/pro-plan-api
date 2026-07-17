@@ -30,8 +30,8 @@ def test_success(client: TestClient) -> None:
             headers={"stripe-signature": _create_signature(PAYLOAD)},
         )
 
-    assert response.status_code == status.HTTP_204_NO_CONTENT
-    assert response.content == b""
+    assert response.status_code == status.HTTP_202_ACCEPTED
+    assert response.content == b"null"
 
     handler, event = add_task.call_args.args
     assert isinstance(handler, HandleEventUseCase)
@@ -48,7 +48,7 @@ def test_success(client: TestClient) -> None:
 def test_invalid_signature(client: TestClient, headers: dict[str, str]) -> None:
     response = client.post(PATH, content=PAYLOAD, headers=headers)
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.content == b'{"detail":"Invalid webhook"}'
 
 

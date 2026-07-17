@@ -5,18 +5,17 @@ from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, SQLModel
 
 from app.domain.customer.customer import Customer
-from app.domain.customer.email import Email
 
 
 class CustomerSchema(SQLModel, table=True):
     __tablename__ = "customer"
     __table_args__ = (
-        UniqueConstraint("email", name="c_ui_email"),
+        UniqueConstraint("external_id", name="c_ui_external_id"),
         UniqueConstraint("stripe_id", name="c_ui_stripe_id"),
     )
 
     id: Annotated[UUID, Field(primary_key=True)]
-    email: str
+    external_id: str
     has_pro: bool
     stripe_id: str | None
 
@@ -24,13 +23,13 @@ class CustomerSchema(SQLModel, table=True):
     def from_domain(cls, customer: Customer) -> CustomerSchema:
         return cls(
             id=customer.id,
-            email=customer.email.value,
+            external_id=customer.external_id,
             has_pro=customer.has_pro,
             stripe_id=customer.stripe_id,
         )
 
     def to_domain(self) -> Customer:
-        customer = Customer(self.id, Email(self.email))
+        customer = Customer(self.id, self.external_id)
         customer._has_pro = self.has_pro
         customer._stripe_id = self.stripe_id
 

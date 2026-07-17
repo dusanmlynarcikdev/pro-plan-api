@@ -5,7 +5,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.domain.customer.email import Email
 from app.domain.customer.errors import CustomerNotFoundError
 from app.infrastructure.persistence.repository.customer import (
     CustomerRepository,
@@ -24,7 +23,7 @@ async def test_add(session: AsyncSession) -> None:
     repository_customer = await get_customer(session)
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.email == "john@doe.com"
+    assert repository_customer.external_id == "user-1"
     assert repository_customer.has_pro
     assert repository_customer.stripe_id == "cus_123"
 
@@ -34,45 +33,45 @@ async def test_add_duplicity(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    with raises(IntegrityError, match="c_ui_email"):
+    with raises(IntegrityError, match="c_ui_external_id"):
         async with session.begin_nested():
             await CustomerRepository(session).add(
                 generate(UUID("019d2fc4-e06a-7dce-a23c-b8ce364f46a2"))
             )
 
 
-async def test_find_one_by_email(session: AsyncSession) -> None:
+async def test_find_one_by_external_id(session: AsyncSession) -> None:
     session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
-    repository_customer = await CustomerRepository(session).find_one_by_email(
-        Email("john@doe.com")
+    repository_customer = await CustomerRepository(session).find_one_by_external_id(
+        "user-1"
     )
 
     assert repository_customer is not None
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
 
 
-async def test_find_one_by_email_another_customer_exists(
+async def test_find_one_by_external_id_another_customer_exists(
     session: AsyncSession,
 ) -> None:
     session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
-    repository_customer = await CustomerRepository(session).find_one_by_email(
-        Email("john2@doe.com")
+    repository_customer = await CustomerRepository(session).find_one_by_external_id(
+        "user-2"
     )
 
     assert repository_customer is None
 
 
-async def test_find_one_by_email_empty_repository(
+async def test_find_one_by_external_id_empty_repository(
     session: AsyncSession,
 ) -> None:
-    repository_customer = await CustomerRepository(session).find_one_by_email(
-        Email("john@doe.com")
+    repository_customer = await CustomerRepository(session).find_one_by_external_id(
+        "user-1"
     )
 
     assert repository_customer is None
@@ -150,19 +149,17 @@ async def test_get_empty_repository(session: AsyncSession) -> None:
         )
 
 
-async def test_get_by_email(session: AsyncSession) -> None:
+async def test_get_by_external_id(session: AsyncSession) -> None:
     session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
-    repository_customer = await CustomerRepository(session).get_by_email(
-        Email("john@doe.com")
-    )
+    repository_customer = await CustomerRepository(session).get_by_external_id("user-1")
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
 
 
-async def test_get_by_email_another_customer_exists(
+async def test_get_by_external_id_another_customer_exists(
     session: AsyncSession,
 ) -> None:
     session.add(CustomerSchema.from_domain(generate()))
@@ -170,12 +167,12 @@ async def test_get_by_email_another_customer_exists(
     session.expunge_all()
 
     with raises(CustomerNotFoundError):
-        await CustomerRepository(session).get_by_email(Email("john2@doe.com"))
+        await CustomerRepository(session).get_by_external_id("user-2")
 
 
-async def test_get_by_email_empty_repository(session: AsyncSession) -> None:
+async def test_get_by_external_id_empty_repository(session: AsyncSession) -> None:
     with raises(CustomerNotFoundError):
-        await CustomerRepository(session).get_by_email(Email("john@doe.com"))
+        await CustomerRepository(session).get_by_external_id("user-1")
 
 
 async def test_update(session: AsyncSession) -> None:

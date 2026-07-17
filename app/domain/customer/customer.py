@@ -1,12 +1,10 @@
 from uuid import UUID
 
-from app.domain.customer.email import Email
-
 
 class Customer:
-    def __init__(self, id: UUID, email: Email) -> None:
-        self._id: UUID = id
-        self._email: Email = email
+    def __init__(self, id: UUID, external_id: str) -> None:
+        self._id = id
+        self._external_id = external_id
         self._has_pro: bool = False
         self._stripe_id: str | None = None
 
@@ -15,8 +13,8 @@ class Customer:
         return self._id
 
     @property
-    def email(self) -> Email:
-        return self._email
+    def external_id(self) -> str:
+        return self._external_id
 
     @property
     def has_pro(self) -> bool:
