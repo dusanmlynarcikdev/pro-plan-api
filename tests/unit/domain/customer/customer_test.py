@@ -25,7 +25,7 @@ def test_link_stripe_subscription() -> None:
     assert customer.stripe_id == "cus_123"
 
 
-def test_deactivate() -> None:
+def test_deactivate_pro() -> None:
     customer = generate()
     customer._has_pro = True
 
