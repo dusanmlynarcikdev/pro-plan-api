@@ -14,7 +14,7 @@ async def test_create(client: TestClient, stripe_client: Mock) -> None:
         return_value=Mock(url=BILLING_PORTAL_URL)
     )
 
-    response = client.post(PATH, json={"customer_stripe_id": "customer-1"})
+    response = client.post(PATH, json={"stripe_customer_id": "customer-1"})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"url": BILLING_PORTAL_URL}
@@ -30,7 +30,7 @@ async def test_stripe_error(client: TestClient, stripe_client: Mock) -> None:
         StripeError("Something went wrong")
     )
 
-    response = client.post(PATH, json={"customer_stripe_id": "customer-1"})
+    response = client.post(PATH, json={"stripe_customer_id": "customer-1"})
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.content == b'{"detail":"Unable to create billing portal session"}'
@@ -40,4 +40,4 @@ def test_invalid_request(client: TestClient) -> None:
     response = client.post(PATH, json={})
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert b"customer_stripe_id" in response.content
+    assert b"stripe_customer_id" in response.content

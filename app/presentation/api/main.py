@@ -28,7 +28,7 @@ app = FastAPI(
     servers=[
         {"url": "http://localhost", "description": "Local"},
     ],
-    swagger_ui_parameters={"operationsSorter": "alpha"},
+    swagger_ui_parameters={"operationsSorter": "alpha", "tagsSorter": "alpha"},
 )
 
 register_exception_handlers(app)
@@ -41,8 +41,8 @@ secure_router = APIRouter(
     dependencies=[Depends(check_authentication)],
     responses={status.HTTP_401_UNAUTHORIZED: ERROR_RESPONSE_MODEL},
 )
-secure_router.include_router(stripe_router)
 secure_router.include_router(customer_router)
+secure_router.include_router(stripe_router)
 api_router.include_router(secure_router)
 
 app.include_router(api_router)

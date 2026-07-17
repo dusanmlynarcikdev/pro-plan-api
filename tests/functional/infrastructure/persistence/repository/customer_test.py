@@ -81,7 +81,10 @@ async def test_find_one_by_email_empty_repository(
 
 
 async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
-    session.add(CustomerSchema.from_domain(generate(stripe_id="cus_123")))
+    customer = generate()
+    customer.link_stripe_subscription("cus_123")
+
+    session.add(CustomerSchema.from_domain(customer))
     await session.flush()
     session.expunge_all()
 
@@ -92,14 +95,14 @@ async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
     assert repository_customer is not None
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.email.value == "john@doe.com"
-    assert not repository_customer.has_pro
+    assert repository_customer.has_pro
     assert repository_customer.stripe_id == "cus_123"
 
 
 async def test_find_one_by_stripe_id_another_customer_exists(
     session: AsyncSession,
 ) -> None:
-    session.add(CustomerSchema.from_domain(generate(stripe_id="cus_123")))
+    session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 

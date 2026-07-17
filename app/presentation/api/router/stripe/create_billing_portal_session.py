@@ -17,4 +17,4 @@ async def create_billing_portal_session(
     """
     :raises UnableToCreateBillingPortalSessionError:
     """
-    return UrlResponse(url=await create_session(request.customer_stripe_id))
+    return UrlResponse(url=await create_session(request.stripe_customer_id))

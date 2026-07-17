@@ -24,7 +24,10 @@ async def test_create_with_existing_customer(
     stripe_client.return_value.v1.checkout.sessions.create_async = AsyncMock(
         return_value=Mock(url=CHECKOUT_URL)
     )
-    session.add(CustomerSchema.from_domain(generate(stripe_id="customer-1")))
+
+    customer = generate()
+    customer._stripe_id = "customer-1"
+    session.add(CustomerSchema.from_domain(customer))
     await session.flush()
     session.expunge_all()
 

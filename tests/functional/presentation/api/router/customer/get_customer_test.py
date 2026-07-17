@@ -9,14 +9,17 @@ PATH = "/api/customers/{email}"
 
 
 async def test_get(client: TestClient, session: AsyncSession) -> None:
-    session.add(CustomerSchema.from_domain(generate(stripe_id="customer-1")))
+    customer = generate()
+    customer.link_stripe_subscription("cus_123")
+
+    session.add(CustomerSchema.from_domain(customer))
     await session.flush()
     session.expunge_all()
 
     response = client.get(PATH.format(email="john@doe.com"))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.content == b'{"has_pro":false,"stripe_id":"customer-1"}'
+    assert response.content == b'{"has_pro":true,"stripe_id":"cus_123"}'
 
 
 async def test_get_customer_does_not_exist(client: TestClient) -> None:

@@ -40,8 +40,9 @@ def test_link_stripe_subscription() -> None:
 def test_has_stripe_subscription(
     has_pro: bool, stripe_id: str | None, expected_result: bool
 ) -> None:
-    customer = generate(stripe_id=stripe_id)
+    customer = generate()
     customer._has_pro = has_pro
+    customer._stripe_id = stripe_id
 
     assert customer.has_stripe_subscription() == expected_result
 

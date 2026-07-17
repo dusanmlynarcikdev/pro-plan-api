@@ -52,7 +52,7 @@ class CustomerRepository:
         customer = await self.find_one_by_email(email)
 
         if customer is None:
-            raise CustomerNotFoundError()
+            raise CustomerNotFoundError
 
         return customer
 
