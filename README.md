@@ -21,6 +21,8 @@ A simple REST API for managing Pro plan subscriptions.
   - **Create billing portal session**
 - **Get customer** — retrieves customer details
 
+> 💡 **Tip:** Use `success_url` parameter when creating a checkout session to perform additional post-payment actions, such as sending a Pro plan welcome email.
+
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**
 - **Clean Architecture**
