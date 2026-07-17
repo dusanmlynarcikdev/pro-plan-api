@@ -36,7 +36,6 @@ def test_to_domain() -> None:
 def test_update_from_domain() -> None:
     customer = generate()
     customer.link_stripe_subscription("cus_123")
-
     schema = CustomerSchema.from_domain(generate())
 
     schema.update_from_domain(customer)

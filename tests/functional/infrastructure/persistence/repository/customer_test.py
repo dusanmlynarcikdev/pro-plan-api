@@ -179,11 +179,11 @@ async def test_get_by_email_empty_repository(session: AsyncSession) -> None:
 
 
 async def test_update(session: AsyncSession) -> None:
-    customer = generate()
-    session.add(CustomerSchema.from_domain(customer))
+    session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
     session.expunge_all()
 
+    customer = generate()
     customer.link_stripe_subscription("cus_123")
 
     await CustomerRepository(session).update(customer)
