@@ -9,6 +9,7 @@ class Client(Protocol):
         billing_period: CheckoutSessionBillingPeriod,
         client_reference_id: str,
         customer_id: str | None,
+        success_url: str,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:

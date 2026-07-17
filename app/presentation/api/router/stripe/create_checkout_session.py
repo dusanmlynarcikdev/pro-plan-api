@@ -27,5 +27,9 @@ async def create_checkout_session(
     :raises UnableToCreateCheckoutSessionError:
     """
     return UrlResponse(
-        url=await create_session(request.customer_external_id, request.billing_period)
+        url=await create_session(
+            request.customer_external_id,
+            request.billing_period,
+            str(request.success_url),
+        )
     )

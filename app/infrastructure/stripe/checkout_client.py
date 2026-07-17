@@ -19,22 +19,21 @@ class CheckoutClient:
         client: StripeClient,
         price_id_monthly: str,
         price_id_yearly: str,
-        success_url: str,
     ) -> None:
         self._client = client
         self._price_id_monthly = price_id_monthly
         self._price_id_yearly = price_id_yearly
-        self._success_url = success_url
 
     async def create_session(
         self,
         billing_period: CheckoutSessionBillingPeriod,
         client_reference_id: str,
         customer_id: str | None,
+        success_url: str,
     ) -> str:
         price_id = self._resolve_price_id(billing_period)
         request_params = self._create_request_params(
-            price_id, client_reference_id, customer_id
+            price_id, client_reference_id, customer_id, success_url
         )
 
         try:
@@ -47,14 +46,18 @@ class CheckoutClient:
 
         return self._validate_response_url(session)
 
+    @staticmethod
     def _create_request_params(
-        self, price_id: str, client_reference_id: str, customer_id: str | None
+        price_id: str,
+        client_reference_id: str,
+        customer_id: str | None,
+        success_url: str,
     ) -> SessionCreateParams:
         params = SessionCreateParams(
             client_reference_id=client_reference_id,
             line_items=[SessionCreateParamsLineItem(price=price_id, quantity=1)],
             mode="subscription",
-            success_url=self._success_url,
+            success_url=success_url,
         )
 
         if customer_id is not None:

@@ -21,7 +21,6 @@ def test_resolve_price_id(
         Mock(StripeClient),
         "price-id-monthly",
         "price-id-yearly",
-        "https://example.com/success",
     )
 
     assert checkout_client._resolve_price_id(billing_period) == expected_price_id

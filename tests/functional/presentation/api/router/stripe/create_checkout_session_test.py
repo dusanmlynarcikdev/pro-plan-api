@@ -31,7 +31,12 @@ async def test_create_with_existing_customer(
     session.expunge_all()
 
     response = client.post(
-        PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
+        PATH,
+        json={
+            "billing_period": "monthly",
+            "customer_external_id": "user-1",
+            "success_url": "https://example.com/success",
+        },
     )
     session.expunge_all()
 
@@ -65,7 +70,12 @@ async def test_stripe_error(
     )
 
     response = client.post(
-        PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
+        PATH,
+        json={
+            "billing_period": "monthly",
+            "customer_external_id": "user-1",
+            "success_url": "https://example.com/success",
+        },
     )
 
     assert response.status_code == status.HTTP_502_BAD_GATEWAY
