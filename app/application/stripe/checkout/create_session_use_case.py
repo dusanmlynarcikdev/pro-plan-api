@@ -16,7 +16,10 @@ class CreateSessionUseCase:
         self._client = client
 
     async def __call__(
-        self, customer_external_id: str, billing_period: CheckoutSessionBillingPeriod
+        self,
+        billing_period: CheckoutSessionBillingPeriod,
+        customer_external_id: str,
+        success_url: str,
     ) -> str:
         """
         :raises CustomerAlreadyHasStripeSubscriptionError:
@@ -28,5 +31,5 @@ class CreateSessionUseCase:
             raise CustomerAlreadyHasStripeSubscriptionError
 
         return await self._client.create_session(
-            billing_period, str(customer.id), customer.stripe_id
+            billing_period, str(customer.id), customer.stripe_id, success_url
         )

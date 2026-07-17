@@ -1,5 +1,6 @@
 from unittest.mock import AsyncMock, Mock
 
+import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel import select
@@ -31,7 +32,12 @@ async def test_create_with_existing_customer(
     session.expunge_all()
 
     response = client.post(
-        PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
+        PATH,
+        json={
+            "billing_period": "monthly",
+            "customer_external_id": "user-1",
+            "success_url": "https://example.com/success",
+        },
     )
     session.expunge_all()
 
@@ -65,21 +71,46 @@ async def test_stripe_error(
     )
 
     response = client.post(
-        PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
+        PATH,
+        json={
+            "billing_period": "monthly",
+            "customer_external_id": "user-1",
+            "success_url": "https://example.com/success",
+        },
     )
 
     assert response.status_code == status.HTTP_502_BAD_GATEWAY
     assert response.content == b'{"detail":"Unable to create checkout session"}'
 
 
-def test_invalid_billing_period(client: TestClient) -> None:
+@pytest.mark.parametrize(
+    ("request_body", "expected_response"),
+    (
+        (
+            {
+                "billing_period": "weekly",
+                "customer_external_id": "user-1",
+                "success_url": "https://example.com/success",
+            },
+            b"billing_period",
+        ),
+        (
+            {
+                "billing_period": "monthly",
+                "customer_external_id": "user-1",
+                "success_url": "invalid-url",
+            },
+            b"success_url",
+        ),
+    ),
+)
+def test_invalid_request(
+    client: TestClient, request_body: dict[str, str], expected_response: bytes
+) -> None:
     response = client.post(
         PATH,
-        json={
-            "billing_period": "weekly",
-            "customer_external_id": "user-1",
-        },
+        json=request_body,
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert b"billing_period" in response.content
+    assert expected_response in response.content

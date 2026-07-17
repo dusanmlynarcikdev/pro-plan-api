@@ -1,6 +1,6 @@
 from functools import cache
 
-from pydantic import HttpUrl, PostgresDsn
+from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,7 +12,6 @@ class Config(BaseSettings):
     api_token: str
     database_url: PostgresDsn
     stripe_api_key: str
-    stripe_checkout_success_url: HttpUrl
     stripe_price_id_monthly: str
     stripe_price_id_yearly: str
     stripe_webhook_secret: str

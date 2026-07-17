@@ -43,7 +43,6 @@ async def get_create_checkout_session_use_case(
             get_stripe_client(config.stripe_api_key),
             config.stripe_price_id_monthly,
             config.stripe_price_id_yearly,
-            str(config.stripe_checkout_success_url),
         ),
     )
 
