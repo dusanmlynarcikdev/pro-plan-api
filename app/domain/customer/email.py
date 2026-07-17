@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from email_validator import EmailNotValidError, validate_email
 
-from app.domain.subscription.errors import InvalidEmailError
+from app.domain.customer.errors import InvalidEmailError
 
 
 @dataclass(frozen=True, slots=True)

@@ -6,10 +6,10 @@ A simple REST API for managing Pro plan subscriptions.
 - **Ready to run** — out of the box with Docker
 - **Unit and functional tests** — covering domain logic and API behavior
 
-## 📦 Subscription
-- **Single subscription model**
+## 📦 Customer
+- **One Pro plan per customer**
 - **Identified by email** — no external identifiers required
-- **Simple management** — no states, just an active flag
+- **Simple management** — no states, just an active Pro plan flag
 
 ## 📬 Notifications
 - **Email notification on Pro plan activation**
@@ -20,7 +20,7 @@ A simple REST API for managing Pro plan subscriptions.
   - **Create checkout session**
   - **Handle webhooks** — `checkout.session.completed`, `customer.subscription.deleted`
   - **Create billing portal session**
-- **Get subscription** — retrieves subscription details
+- **Get customer** — retrieves customer details
 
 ## 🏗️ Stack & Architecture
 - **Python + FastAPI**

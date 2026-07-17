@@ -2,30 +2,31 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.infrastructure.persistence.schema.subscription import SubscriptionSchema
-from tests.generator.subscription import generate
+from app.infrastructure.persistence.schema.customer import CustomerSchema
+from tests.generator.customer import generate
 
-PATH = "/api/subscriptions/{email}"
+PATH = "/api/customers/{email}"
 
 
 async def test_get(client: TestClient, session: AsyncSession) -> None:
-    session.add(
-        SubscriptionSchema.from_domain(generate(stripe_customer_id="customer-1"))
-    )
+    customer = generate()
+    customer.link_stripe_subscription("customer-1")
+
+    session.add(CustomerSchema.from_domain(customer))
     await session.flush()
     session.expunge_all()
 
     response = client.get(PATH.format(email="john@doe.com"))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.content == b'{"is_active":false,"stripe_customer_id":"customer-1"}'
+    assert response.content == b'{"has_pro":true,"stripe_id":"customer-1"}'
 
 
-async def test_get_subscription_does_not_exist(client: TestClient) -> None:
+async def test_get_customer_does_not_exist(client: TestClient) -> None:
     response = client.get(PATH.format(email="john@doe.com"))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.content == b'{"detail":"Subscription not found"}'
+    assert response.content == b'{"detail":"Customer not found"}'
 
 
 def test_get_invalid_email(client: TestClient) -> None:

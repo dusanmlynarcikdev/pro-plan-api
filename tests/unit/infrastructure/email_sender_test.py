@@ -5,7 +5,7 @@ from aiosmtplib import SMTP
 from pydantic import AnyUrl, NameEmail
 
 from app.application.email.message import Message
-from app.domain.subscription.email import Email
+from app.domain.customer.email import Email
 from app.infrastructure import email_sender as email_sender_module
 from app.infrastructure.email_sender import EmailSender
 
