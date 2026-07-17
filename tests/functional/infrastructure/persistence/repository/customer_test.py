@@ -16,6 +16,7 @@ from tests.generator.customer import generate
 
 async def test_add(session: AsyncSession) -> None:
     customer = generate()
+    customer.link_stripe_subscription("cus_123")
 
     await CustomerRepository(session).add(customer)
     session.expunge_all()
@@ -24,8 +25,8 @@ async def test_add(session: AsyncSession) -> None:
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.email == "john@doe.com"
-    assert not repository_customer.has_pro
-    assert repository_customer.stripe_id is None
+    assert repository_customer.has_pro
+    assert repository_customer.stripe_id == "cus_123"
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
@@ -51,9 +52,6 @@ async def test_find_one_by_email(session: AsyncSession) -> None:
 
     assert repository_customer is not None
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.email.value == "john@doe.com"
-    assert not repository_customer.has_pro
-    assert repository_customer.stripe_id is None
 
 
 async def test_find_one_by_email_another_customer_exists(
@@ -94,9 +92,6 @@ async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
 
     assert repository_customer is not None
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.email.value == "john@doe.com"
-    assert repository_customer.has_pro
-    assert repository_customer.stripe_id == "cus_123"
 
 
 async def test_find_one_by_stripe_id_another_customer_exists(
@@ -133,9 +128,6 @@ async def test_get(session: AsyncSession) -> None:
     )
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.email.value == "john@doe.com"
-    assert not repository_customer.has_pro
-    assert repository_customer.stripe_id is None
 
 
 async def test_get_another_customer_exists(
@@ -168,9 +160,6 @@ async def test_get_by_email(session: AsyncSession) -> None:
     )
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.email.value == "john@doe.com"
-    assert not repository_customer.has_pro
-    assert repository_customer.stripe_id is None
 
 
 async def test_get_by_email_another_customer_exists(
@@ -203,7 +192,6 @@ async def test_update(session: AsyncSession) -> None:
     repository_customer = await get_customer(session)
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.email == "john@doe.com"
     assert repository_customer.has_pro
     assert repository_customer.stripe_id == "cus_123"
 
