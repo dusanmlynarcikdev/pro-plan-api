@@ -26,7 +26,7 @@ async def test_subscription_active_in_stripe() -> None:
 
     with raises(CustomerAlreadyHasStripeSubscriptionError):
         await use_case(
-            "user-1",
             CheckoutSessionBillingPeriod.MONTHLY,
+            "user-1",
             "https://example.com/success",
         )

@@ -28,8 +28,8 @@ async def create_checkout_session(
     """
     return UrlResponse(
         url=await create_session(
-            request.customer_external_id,
             request.billing_period,
+            request.customer_external_id,
             str(request.success_url),
         )
     )

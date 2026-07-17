@@ -17,8 +17,8 @@ class CreateSessionUseCase:
 
     async def __call__(
         self,
-        customer_external_id: str,
         billing_period: CheckoutSessionBillingPeriod,
+        customer_external_id: str,
         success_url: str,
     ) -> str:
         """
