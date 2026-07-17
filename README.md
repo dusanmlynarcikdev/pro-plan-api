@@ -8,10 +8,10 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## 📦 Customer
 - **One Pro plan per customer**
-- **Identified by external ID** — a unique identifier provided by your application
+- **Identified by external ID** — a unique identifier provided by your app
 - **Simple management** — no states, just an active Pro plan flag
 
-> 💡 **Tip:** If you manage users for multiple applications at once, add an application prefix to the external ID, e.g. `myapp:user-1`.
+> 💡 **Tip:** If you manage users for multiple apps at once, add a prefix to the customer external ID, e.g. `myapp:user-1`.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
