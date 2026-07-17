@@ -11,8 +11,8 @@ from app.presentation.api.router.stripe import (
     webhook_router as stripe_webhook_router,
 )
 
-from .handlers import register_exception_handlers
-from .responses import ERROR_RESPONSE_MODEL
+from .handlers import register_domain_exception_handler
+from .responses import create_error_response_doc
 from .security import check_authentication
 
 handler = logging.StreamHandler()
@@ -31,7 +31,7 @@ app = FastAPI(
     swagger_ui_parameters={"operationsSorter": "alpha", "tagsSorter": "alpha"},
 )
 
-register_exception_handlers(app)
+register_domain_exception_handler(app)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(health_check_router)
@@ -39,7 +39,7 @@ api_router.include_router(stripe_webhook_router)
 
 secure_router = APIRouter(
     dependencies=[Depends(check_authentication)],
-    responses={status.HTTP_401_UNAUTHORIZED: ERROR_RESPONSE_MODEL},
+    responses={status.HTTP_401_UNAUTHORIZED: create_error_response_doc()},
 )
 secure_router.include_router(customer_router)
 secure_router.include_router(stripe_router)

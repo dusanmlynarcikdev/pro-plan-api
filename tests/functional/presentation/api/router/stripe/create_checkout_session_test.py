@@ -68,7 +68,7 @@ async def test_stripe_error(
         PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
     )
 
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    assert response.status_code == status.HTTP_502_BAD_GATEWAY
     assert response.content == b'{"detail":"Unable to create checkout session"}'
 
 

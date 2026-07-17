@@ -32,7 +32,7 @@ async def test_stripe_error(client: TestClient, stripe_client: Mock) -> None:
 
     response = client.post(PATH, json={"stripe_customer_id": "customer-1"})
 
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    assert response.status_code == status.HTTP_502_BAD_GATEWAY
     assert response.content == b'{"detail":"Unable to create billing portal session"}'
 
 

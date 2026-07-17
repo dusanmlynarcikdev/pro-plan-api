@@ -48,7 +48,7 @@ def test_success(client: TestClient) -> None:
 def test_invalid_signature(client: TestClient, headers: dict[str, str]) -> None:
     response = client.post(PATH, content=PAYLOAD, headers=headers)
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.content == b'{"detail":"Invalid webhook"}'
 
 
