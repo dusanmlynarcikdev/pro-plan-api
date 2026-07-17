@@ -1,5 +1,7 @@
 from uuid import UUID
 
+import pytest
+
 from app.domain.customer.customer import Customer
 from app.domain.customer.email import Email
 from tests.generator.customer import generate
@@ -24,6 +26,24 @@ def test_link_stripe_subscription() -> None:
 
     assert customer.has_pro
     assert customer.stripe_id == "cus_123"
+
+
+@pytest.mark.parametrize(
+    ("has_pro", "stripe_id", "expected_result"),
+    (
+        (False, None, False),
+        (False, "cus_123", False),
+        (True, None, False),
+        (True, "cus_123", True),
+    ),
+)
+def test_has_stripe_subscription(
+    has_pro: bool, stripe_id: str | None, expected_result: bool
+) -> None:
+    customer = generate(stripe_id=stripe_id)
+    customer._has_pro = has_pro
+
+    assert customer.has_stripe_subscription() == expected_result
 
 
 def test_deactivate_pro() -> None:
