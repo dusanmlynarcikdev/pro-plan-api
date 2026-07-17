@@ -14,8 +14,8 @@ from tests.generator.customer import generate
 
 
 async def test_subscription_active_in_stripe() -> None:
-    customer = generate(stripe_id="cus_123")
-    customer.activate_pro()
+    customer = generate()
+    customer.link_stripe_subscription("cus_123")
 
     use_case = CreateSessionUseCase(
         AsyncMock(

@@ -12,6 +12,6 @@ def generate(
     customer = Customer(id, email)
 
     if stripe_id is not None:
-        customer.stripe_id = stripe_id
+        customer._stripe_id = stripe_id
 
     return customer

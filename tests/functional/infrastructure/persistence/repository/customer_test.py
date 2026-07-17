@@ -192,7 +192,7 @@ async def test_update(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    customer.activate_pro()
+    customer.link_stripe_subscription("cus_123")
 
     await CustomerRepository(session).update(customer)
     session.expunge_all()
@@ -202,7 +202,7 @@ async def test_update(session: AsyncSession) -> None:
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.email == "john@doe.com"
     assert repository_customer.has_pro
-    assert repository_customer.stripe_id is None
+    assert repository_customer.stripe_id == "cus_123"
 
 
 async def test_update_unknown(session: AsyncSession) -> None:

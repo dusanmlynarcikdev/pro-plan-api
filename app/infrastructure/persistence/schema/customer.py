@@ -32,7 +32,7 @@ class CustomerSchema(SQLModel, table=True):
     def to_domain(self) -> Customer:
         customer = Customer(self.id, Email(self.email))
         customer._has_pro = self.has_pro
-        customer.stripe_id = self.stripe_id
+        customer._stripe_id = self.stripe_id
 
         return customer
 

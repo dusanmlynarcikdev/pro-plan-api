@@ -66,8 +66,7 @@ class HandleEventUseCase:
         if customer is None:
             return
 
-        customer.stripe_id = event.data.get("customer")
-        customer.activate_pro()
+        customer.link_stripe_subscription(cast(str, event.data.get("customer")))
 
         await self._repository.update(customer)
         await self._repository.commit()

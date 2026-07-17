@@ -16,12 +16,13 @@ def test_create() -> None:
     assert not result.has_pro
 
 
-def test_activate() -> None:
+def test_link_stripe_subscription() -> None:
     customer = generate()
 
-    customer.activate_pro()
+    customer.link_stripe_subscription("cus_123")
 
     assert customer.has_pro
+    assert customer.stripe_id == "cus_123"
 
 
 def test_deactivate() -> None:

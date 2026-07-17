@@ -13,8 +13,8 @@ from tests.generator.customer import generate
 
 
 async def test_customer_subscription_deleted(session: AsyncSession) -> None:
-    customer = generate(stripe_id="cus_123")
-    customer.activate_pro()
+    customer = generate()
+    customer.link_stripe_subscription("cus_123")
 
     session.add(CustomerSchema.from_domain(customer))
     await session.flush()
