@@ -22,4 +22,5 @@ async def handle_webhook(
     signature = request.headers.get("stripe-signature", "")
 
     event = await verify_webhook(payload, signature)
+
     background_tasks.add_task(handle_webhook_event, event)

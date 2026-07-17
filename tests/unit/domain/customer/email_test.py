@@ -1,7 +1,7 @@
 from pytest import mark, raises
 
-from app.domain.subscription.email import Email
-from app.domain.subscription.errors import InvalidEmailError
+from app.domain.customer.email import Email
+from app.domain.customer.errors import InvalidEmailError
 
 
 def test_create() -> None:

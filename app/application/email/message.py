@@ -1,6 +1,6 @@
 from typing import NamedTuple
 
-from app.domain.subscription.email import Email
+from app.domain.customer.email import Email
 
 
 class Message(NamedTuple):

@@ -6,6 +6,6 @@ class InvalidEmailError(ValidationDomainError):
         super().__init__("Invalid email")
 
 
-class SubscriptionNotFoundError(NotFoundDomainError):
+class CustomerNotFoundError(NotFoundDomainError):
     def __init__(self) -> None:
-        super().__init__("Subscription not found")
+        super().__init__("Customer not found")

@@ -4,7 +4,7 @@ from app.application.stripe.enums import CheckoutSessionBillingPeriod
 
 
 class CreateBillingPortalSessionRequest(BaseModel):
-    stripe_customer_id: str
+    customer_stripe_id: str
 
 
 class CreateCheckoutSessionRequest(BaseModel):

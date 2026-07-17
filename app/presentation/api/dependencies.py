@@ -6,6 +6,12 @@ from fastapi.params import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeClient
 
+from app.application.customer.get_customer_use_case import (
+    GetCustomerUseCase as GetCustomerUseCase_,
+)
+from app.application.customer.get_or_create_customer_use_case import (
+    GetOrCreateCustomerUseCase,
+)
 from app.application.email.sender import Sender
 from app.application.stripe.billing_portal.create_session_use_case import (
     CreateSessionUseCase as CreateBillingPortalSessionUseCase_,
@@ -15,18 +21,12 @@ from app.application.stripe.checkout.create_session_use_case import (
 )
 from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
 from app.application.stripe.webhook.verify_use_case import VerifyUseCase
-from app.application.subscription.get_or_create_subscription_use_case import (
-    GetOrCreateSubscriptionUseCase,
-)
-from app.application.subscription.get_subscription_use_case import (
-    GetSubscriptionUseCase as GetSubscriptionUseCase_,
-)
 from app.infrastructure.config import Config as Config_
 from app.infrastructure.config import get_config
 from app.infrastructure.email_sender import EmailSender
 from app.infrastructure.persistence.connection import session_factory
-from app.infrastructure.persistence.repository.subscription import (
-    SubscriptionRepository,
+from app.infrastructure.persistence.repository.customer import (
+    CustomerRepository,
 )
 from app.infrastructure.stripe.billing_portal_client import BillingPortalClient
 from app.infrastructure.stripe.checkout_client import CheckoutClient
@@ -40,7 +40,7 @@ async def get_create_checkout_session_use_case(
     session: Session,
 ) -> CreateCheckoutSessionUseCase_:
     return CreateCheckoutSessionUseCase_(
-        GetOrCreateSubscriptionUseCase(SubscriptionRepository(session)),
+        GetOrCreateCustomerUseCase(CustomerRepository(session)),
         CheckoutClient(
             get_stripe_client(config.stripe_api_key),
             config.stripe_price_id_monthly,
@@ -68,15 +68,13 @@ async def get_email_sender(config: Config) -> EmailSender:
     return EmailSender(config.email_sender, config.smtp_dsn)
 
 
-async def get_get_subscription_use_case(
+async def get_get_customer_use_case(
     session: Session,
-) -> GetSubscriptionUseCase_:
-    return GetSubscriptionUseCase_(SubscriptionRepository(session))
+) -> GetCustomerUseCase_:
+    return GetCustomerUseCase_(CustomerRepository(session))
 
 
-GetSubscriptionUseCase = Annotated[
-    GetSubscriptionUseCase_, Depends(get_get_subscription_use_case)
-]
+GetCustomerUseCase = Annotated[GetCustomerUseCase_, Depends(get_get_customer_use_case)]
 
 
 @cache
@@ -102,7 +100,7 @@ async def get_handle_webhook_event_use_case(
     email_sender: Annotated[Sender, Depends(get_email_sender)],
     session: Session,
 ) -> HandleEventUseCase:
-    return HandleEventUseCase(email_sender, SubscriptionRepository(session))
+    return HandleEventUseCase(email_sender, CustomerRepository(session))
 
 
 HandleStripeWebhookEventUseCase = Annotated[
