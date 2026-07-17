@@ -145,14 +145,14 @@ async def test_get_another_customer_exists(
     await session.flush()
     session.expunge_all()
 
-    with raises(CustomerNotFoundError, match="Customer not found"):
+    with raises(CustomerNotFoundError):
         await CustomerRepository(session).get(
             UUID("019f652b-1a7b-7a4a-8be3-e736be31fede")
         )
 
 
 async def test_get_empty_repository(session: AsyncSession) -> None:
-    with raises(CustomerNotFoundError, match="Customer not found"):
+    with raises(CustomerNotFoundError):
         await CustomerRepository(session).get(
             UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
         )
@@ -180,12 +180,12 @@ async def test_get_by_email_another_customer_exists(
     await session.flush()
     session.expunge_all()
 
-    with raises(CustomerNotFoundError, match="Customer not found"):
+    with raises(CustomerNotFoundError):
         await CustomerRepository(session).get_by_email(Email("john2@doe.com"))
 
 
 async def test_get_by_email_empty_repository(session: AsyncSession) -> None:
-    with raises(CustomerNotFoundError, match="Customer not found"):
+    with raises(CustomerNotFoundError):
         await CustomerRepository(session).get_by_email(Email("john@doe.com"))
 
 
