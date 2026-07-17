@@ -14,6 +14,7 @@ def test_create() -> None:
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.email == Email("john@doe.com")
     assert not result.has_pro
+    assert result.stripe_id is None
 
 
 def test_link_stripe_subscription() -> None:
