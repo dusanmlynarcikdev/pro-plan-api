@@ -30,8 +30,8 @@ def test_success(client: TestClient) -> None:
             headers={"stripe-signature": _create_signature(PAYLOAD)},
         )
 
-    assert response.status_code == status.HTTP_204_NO_CONTENT
-    assert response.content == b""
+    assert response.status_code == status.HTTP_202_ACCEPTED
+    assert response.content == b"null"
 
     handler, event = add_task.call_args.args
     assert isinstance(handler, HandleEventUseCase)
