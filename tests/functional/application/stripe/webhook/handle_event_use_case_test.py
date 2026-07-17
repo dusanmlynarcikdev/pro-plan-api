@@ -5,10 +5,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook.event import Event
-from app.domain.customer.email import Email
 from app.infrastructure.persistence.schema.customer import CustomerSchema
 from app.presentation.api.dependencies import get_handle_webhook_event_use_case
-from tests.functional.fake_email_sender import FakeEmailSender
 from tests.generator.customer import generate
 
 
@@ -20,7 +18,7 @@ async def test_customer_subscription_deleted(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    use_case = await get_handle_webhook_event_use_case(FakeEmailSender(), session)
+    use_case = await get_handle_webhook_event_use_case(session)
 
     await use_case(
         Event(
@@ -42,9 +40,7 @@ async def test_checkout_session_completed(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    email_sender = FakeEmailSender()
-
-    use_case = await get_handle_webhook_event_use_case(email_sender, session)
+    use_case = await get_handle_webhook_event_use_case(session)
 
     await use_case(
         Event(
@@ -62,8 +58,3 @@ async def test_checkout_session_completed(session: AsyncSession) -> None:
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert customer.has_pro
     assert customer.stripe_id == "cus_123"
-
-    assert len(email_sender.sent) == 1
-    assert email_sender.sent[0].recipient == Email("john@doe.com")
-    assert email_sender.sent[0].subject == "Pro plan activated"
-    assert email_sender.sent[0].body == "Welcome to Pro! Your plan is now active."

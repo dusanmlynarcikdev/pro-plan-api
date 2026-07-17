@@ -1,6 +1,5 @@
 from unittest.mock import AsyncMock, Mock
 
-import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel import select
@@ -32,7 +31,7 @@ async def test_create_with_existing_customer(
     session.expunge_all()
 
     response = client.post(
-        PATH, json={"email": "john@doe.com", "billing_period": "monthly"}
+        PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
     )
     session.expunge_all()
 
@@ -40,7 +39,7 @@ async def test_create_with_existing_customer(
     assert response.json() == {"url": CHECKOUT_URL}
 
     customer = (await session.exec(select(CustomerSchema))).one()
-    assert customer.email == "john@doe.com"
+    assert customer.external_id == "user-1"
     assert not customer.has_pro
 
     stripe_client.assert_called_once_with("example-api-key")
@@ -66,36 +65,21 @@ async def test_stripe_error(
     )
 
     response = client.post(
-        PATH, json={"email": "john@doe.com", "billing_period": "monthly"}
+        PATH, json={"billing_period": "monthly", "customer_external_id": "user-1"}
     )
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.content == b'{"detail":"Unable to create checkout session"}'
 
 
-@pytest.mark.parametrize(
-    "request_body, expected_content",
-    (
-        (
-            {
-                "email": "john",
-                "billing_period": "monthly",
-            },
-            b"email",
-        ),
-        (
-            {
-                "email": "john@doe.com",
-                "billing_period": "weekly",
-            },
-            b"billing_period",
-        ),
-    ),
-)
-def test_invalid_request(
-    client: TestClient, request_body: dict[str, str], expected_content: bytes
-) -> None:
-    response = client.post(PATH, json=request_body)
+def test_invalid_billing_period(client: TestClient) -> None:
+    response = client.post(
+        PATH,
+        json={
+            "billing_period": "weekly",
+            "customer_external_id": "user-1",
+        },
+    )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert expected_content in response.content
+    assert b"billing_period" in response.content

@@ -5,7 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.infrastructure.persistence.schema.customer import CustomerSchema
 from tests.generator.customer import generate
 
-PATH = "/api/customers/{email}"
+PATH = "/api/customers/{external_id}"
 
 
 async def test_get(client: TestClient, session: AsyncSession) -> None:
@@ -16,21 +16,14 @@ async def test_get(client: TestClient, session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    response = client.get(PATH.format(email="john@doe.com"))
+    response = client.get(PATH.format(external_id="user-1"))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.content == b'{"has_pro":true,"stripe_id":"customer-1"}'
 
 
 async def test_get_customer_does_not_exist(client: TestClient) -> None:
-    response = client.get(PATH.format(email="john@doe.com"))
+    response = client.get(PATH.format(external_id="user-1"))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.content == b'{"detail":"Customer not found"}'
-
-
-def test_get_invalid_email(client: TestClient) -> None:
-    response = client.get(PATH.format(email="johndoe.com"))
-
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert response.content == b'{"detail":"Invalid email"}'

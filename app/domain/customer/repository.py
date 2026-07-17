@@ -2,7 +2,6 @@ from typing import Protocol
 from uuid import UUID
 
 from app.domain.customer.customer import Customer
-from app.domain.customer.email import Email
 
 
 class CustomerRepository(Protocol):
@@ -10,7 +9,7 @@ class CustomerRepository(Protocol):
 
     async def commit(self) -> None: ...
 
-    async def find_one_by_email(self, email: Email) -> Customer | None: ...
+    async def find_one_by_external_id(self, external_id: str) -> Customer | None: ...
 
     async def find_one_by_stripe_id(self, stripe_id: str) -> Customer | None: ...
 
@@ -20,7 +19,7 @@ class CustomerRepository(Protocol):
         """
         ...
 
-    async def get_by_email(self, email: Email) -> Customer:
+    async def get_by_external_id(self, external_id: str) -> Customer:
         """
         :raises CustomerNotFound:
         """

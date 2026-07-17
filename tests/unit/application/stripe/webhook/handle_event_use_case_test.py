@@ -3,7 +3,6 @@ from uuid import UUID
 
 import pytest
 
-from app.application.email.sender import Sender
 from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook import (
     handle_event_use_case as handle_event_use_case_module,
@@ -18,7 +17,7 @@ async def test_customer_subscription_deleted_customer_does_not_exist() -> None:
     repository = Mock(CustomerRepository)
     repository.find_one_by_stripe_id = AsyncMock(return_value=None)
 
-    use_case = HandleEventUseCase(Mock(Sender), repository)
+    use_case = HandleEventUseCase(repository)
 
     with patch.object(handle_event_use_case_module, "logger") as logger:
         await use_case(
@@ -41,7 +40,7 @@ async def test_customer_subscription_deleted_customer_does_not_exist() -> None:
 async def test_checkout_session_completed_invalid_client_reference_id(
     client_reference_id: str | None,
 ) -> None:
-    use_case = HandleEventUseCase(Mock(Sender), Mock(CustomerRepository))
+    use_case = HandleEventUseCase(Mock(CustomerRepository))
 
     with patch.object(handle_event_use_case_module, "logger") as logger:
         await use_case(
@@ -61,7 +60,7 @@ async def test_checkout_session_completed_customer_not_found() -> None:
     repository = Mock(CustomerRepository)
     repository.get = AsyncMock(side_effect=CustomerNotFoundError)
 
-    use_case = HandleEventUseCase(Mock(Sender), repository)
+    use_case = HandleEventUseCase(repository)
 
     with patch.object(handle_event_use_case_module, "logger") as logger:
         await use_case(

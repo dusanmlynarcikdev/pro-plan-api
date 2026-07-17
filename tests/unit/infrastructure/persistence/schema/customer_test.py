@@ -1,6 +1,5 @@
 from uuid import UUID
 
-from app.domain.customer.email import Email
 from app.infrastructure.persistence.schema.customer import CustomerSchema
 from tests.generator.customer import generate
 
@@ -12,7 +11,7 @@ def test_from_domain() -> None:
     result = CustomerSchema.from_domain(customer)
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert result.email == "john@doe.com"
+    assert result.external_id == "user-1"
     assert result.has_pro
     assert result.stripe_id == "cus_123"
 
@@ -20,7 +19,7 @@ def test_from_domain() -> None:
 def test_to_domain() -> None:
     schema = CustomerSchema(
         id=UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
-        email="john@doe.com",
+        external_id="user-1",
         has_pro=True,
         stripe_id="cus_123",
     )
@@ -28,7 +27,7 @@ def test_to_domain() -> None:
     result = schema.to_domain()
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert result.email == Email("john@doe.com")
+    assert result.external_id == "user-1"
     assert result.has_pro
     assert result.stripe_id == "cus_123"
 

@@ -4,7 +4,6 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.customer.customer import Customer
-from app.domain.customer.email import Email
 from app.domain.customer.errors import CustomerNotFoundError
 from app.infrastructure.persistence.schema.customer import CustomerSchema
 
@@ -20,8 +19,8 @@ class CustomerRepository:
     async def commit(self) -> None:
         await self._session.commit()
 
-    async def find_one_by_email(self, email: Email) -> Customer | None:
-        query = select(CustomerSchema).where(CustomerSchema.email == email.value)
+    async def find_one_by_external_id(self, external_id: str) -> Customer | None:
+        query = select(CustomerSchema).where(CustomerSchema.external_id == external_id)
 
         customer = (await self._session.exec(query)).one_or_none()
 
@@ -45,11 +44,11 @@ class CustomerRepository:
 
         return customer.to_domain()
 
-    async def get_by_email(self, email: Email) -> Customer:
+    async def get_by_external_id(self, external_id: str) -> Customer:
         """
         :raises CustomerNotFoundError:
         """
-        customer = await self.find_one_by_email(email)
+        customer = await self.find_one_by_external_id(external_id)
 
         if customer is None:
             raise CustomerNotFoundError

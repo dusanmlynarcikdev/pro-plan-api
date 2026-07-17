@@ -8,11 +8,10 @@ A simple REST API for managing Pro plan subscriptions.
 
 ## 📦 Customer
 - **One Pro plan per customer**
-- **Identified by email** — no external identifiers required
+- **Identified by external ID** — a unique identifier provided by your application
 - **Simple management** — no states, just an active Pro plan flag
 
-## 📬 Notifications
-- **Email notification on Pro plan activation**
+> 💡 **Tip:** If you manage users for multiple applications at once, add an application prefix to the external ID, e.g. `myapp:user-1`.
 
 ## 🔌 API Endpoints
 - **Health check** — service availability
@@ -47,7 +46,6 @@ API Base URL: http://localhost/api
 
 ##### Tools
 - API Docs: http://localhost/docs
-- Mailcatcher: http://localhost:81
 
 #### Commands
 Useful commands are available in the [Makefile](./Makefile).
@@ -58,8 +56,6 @@ Run the project with the environment variables from [.env.dist](./.env.dist) set
 API_TOKEN='...' \
 DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
-EMAIL_SENDER='...' \
-SMTP_DSN='...' \
 STRIPE_API_KEY='...' \
 STRIPE_CHECKOUT_SUCCESS_URL='...' \
 STRIPE_PRICE_ID_MONTHLY='...' \

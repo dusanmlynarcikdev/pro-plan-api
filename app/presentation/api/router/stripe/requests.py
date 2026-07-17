@@ -8,5 +8,5 @@ class CreateBillingPortalSessionRequest(BaseModel):
 
 
 class CreateCheckoutSessionRequest(BaseModel):
-    email: str
     billing_period: CheckoutSessionBillingPeriod
+    customer_external_id: str

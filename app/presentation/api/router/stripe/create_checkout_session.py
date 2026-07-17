@@ -1,6 +1,5 @@
 from fastapi import APIRouter, status
 
-from app.domain.customer.email import Email
 from app.presentation.api.dependencies import CreateStripeCheckoutSessionUseCase
 from app.presentation.api.responses import ErrorResponse
 from app.presentation.api.router.stripe.requests import (
@@ -29,5 +28,5 @@ async def create_checkout_session(
     :raises UnableToCreateCheckoutSessionError:
     """
     return UrlResponse(
-        url=await create_session(Email(request.email), request.billing_period)
+        url=await create_session(request.customer_external_id, request.billing_period)
     )

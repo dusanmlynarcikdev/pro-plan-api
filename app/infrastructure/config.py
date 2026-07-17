@@ -1,7 +1,6 @@
 from functools import cache
-from typing import Annotated
 
-from pydantic import AnyUrl, HttpUrl, NameEmail, PostgresDsn, UrlConstraints
+from pydantic import HttpUrl, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,11 +11,6 @@ class Config(BaseSettings):
 
     api_token: str
     database_url: PostgresDsn
-    email_sender: NameEmail
-    smtp_dsn: Annotated[
-        AnyUrl,
-        UrlConstraints(allowed_schemes=["smtp"], host_required=True),
-    ]
     stripe_api_key: str
     stripe_checkout_success_url: HttpUrl
     stripe_price_id_monthly: str
