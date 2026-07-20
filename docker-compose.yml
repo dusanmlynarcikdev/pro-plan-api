@@ -23,6 +23,7 @@ services:
     restart: always
     volumes:
       - ./:/code
+      - api-data:/data
 
   database:
     container_name: database
@@ -56,3 +57,6 @@ services:
     environment:
       STRIPE_API_KEY: ${STRIPE_API_KEY?Stripe API key is required}
     image: stripe/stripe-cli
+
+volumes:
+  api-data:
