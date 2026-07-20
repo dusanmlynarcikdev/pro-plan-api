@@ -12,13 +12,17 @@ router = APIRouter()
 
 @router.post(
     "/stripe/billing-portal/sessions",
-    responses={status.HTTP_404_NOT_FOUND: create_error_response_doc()},
+    responses={
+        status.HTTP_404_NOT_FOUND: create_error_response_doc(),
+        status.HTTP_409_CONFLICT: create_error_response_doc("Customer is not linked to Stripe")
+    },
 )
 async def create_billing_portal_session(
     create_session: CreateStripeBillingPortalSessionUseCase,
     request: CustomerRequest,
 ) -> UrlResponse:
     """
+    :raises CustomerIsNotLinkedToStripeError:
     :raises CustomerNotFound:
     :raises UnableToCreateBillingPortalSessionError:
     """
