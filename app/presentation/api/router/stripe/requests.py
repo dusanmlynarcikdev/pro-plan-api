@@ -3,11 +3,10 @@ from pydantic import BaseModel, HttpUrl
 from app.application.stripe.enums import CheckoutSessionBillingPeriod
 
 
-class CreateBillingPortalSessionRequest(BaseModel):
-    stripe_customer_id: str
-
-
-class CreateCheckoutSessionRequest(BaseModel):
-    billing_period: CheckoutSessionBillingPeriod
+class CustomerRequest(BaseModel):
     customer_external_id: str
+
+
+class CreateCheckoutSessionRequest(CustomerRequest):
+    billing_period: CheckoutSessionBillingPeriod
     success_url: HttpUrl
