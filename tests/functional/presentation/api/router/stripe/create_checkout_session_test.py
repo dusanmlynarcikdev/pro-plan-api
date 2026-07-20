@@ -15,7 +15,7 @@ from app.infrastructure.persistence.schema.customer import CustomerSchema
 from tests.generator.customer import generate
 
 CHECKOUT_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
-PATH = "/api/stripe/checkout/sessions"
+PATH = "/api/customers/stripe/checkout/sessions"
 
 
 async def test_create_with_existing_customer(

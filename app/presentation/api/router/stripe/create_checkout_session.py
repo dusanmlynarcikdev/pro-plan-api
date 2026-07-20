@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/stripe/checkout/sessions",
+    "/customers/stripe/checkout/sessions",
     responses={
         status.HTTP_409_CONFLICT: create_error_response_doc(
             "Customer already has a Stripe subscription"
