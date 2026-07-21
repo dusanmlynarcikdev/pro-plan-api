@@ -64,6 +64,18 @@ STRIPE_WEBHOOK_SECRET='...' \
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
+### API token
+
+Access to the API requires an API token, which is sent as a Bearer token. 
+
+An API token is generated automatically on the first application startup. Display it with:
+
+```bash
+docker compose logs api
+```
+
+The token is stored in the Docker volume, so it remains the same even after the container is restarted. Delete the volume and restart the container to generate a new one.
+
 ## 🎯 About the Project
 An example project demonstrating backend system design.
 
