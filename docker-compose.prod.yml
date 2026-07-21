@@ -1,6 +1,6 @@
 name: pro-plan-api
 
-x-api-image: &api-image ghcr.io/dusanmlynarcikdev/pro-plan-api:latest
+x-api-image: &api-image ghcr.io/dusanmlynarcikdev/pro-plan-api
 
 services:
   api:
