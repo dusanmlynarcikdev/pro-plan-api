@@ -1,8 +1,10 @@
 name: pro-plan-api
 
+x-api-image: &api-image ghcr.io/dusanmlynarcikdev/pro-plan-api:latest
+
 services:
   api:
-    image: ghcr.io/dusanmlynarcikdev/pro-plan-api:latest
+    image: *api-image
     command: fastapi run app/presentation/api/main.py --host 0.0.0.0 --port 80
     container_name: api
     depends_on:
@@ -21,7 +23,7 @@ services:
       - pro-plan-api:/data
 
   migrations:
-    image: ghcr.io/dusanmlynarcikdev/pro-plan-api:latest
+    image: *api-image
     command: make m
     container_name: migrations
     environment:
