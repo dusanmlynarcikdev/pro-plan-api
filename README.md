@@ -61,7 +61,7 @@ STRIPE_API_KEY='...' \
 STRIPE_PRICE_ID_MONTHLY='...' \
 STRIPE_PRICE_ID_YEARLY='...' \
 STRIPE_WEBHOOK_SECRET='...' \
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 ### API token
