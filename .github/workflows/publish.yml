@@ -2,6 +2,10 @@ name: Publish Docker image
 
 on: pull_request
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
