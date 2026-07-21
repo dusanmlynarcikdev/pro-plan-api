@@ -36,8 +36,6 @@ services:
     container_name: migrations
     depends_on:
       - database
-    environment:
-      - DATABASE_URL
     restart: on-failure:3
     volumes:
       - ./:/code
