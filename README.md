@@ -64,7 +64,7 @@ STRIPE_WEBHOOK_SECRET='...' \
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-> 💡 **Tip:** The API container listens on port **8081** by default. To use a different port, set `API_PORT` when starting the container.
+> 💡 **Tip:** The API container listens on port **8081** by default. To use a different port, set `API_PORT` environment variable when starting the container.
 
 ### API token
 
