@@ -2,10 +2,13 @@ services:
   api:
     command: fastapi run app/presentation/api/main.py --host 0.0.0.0 --port 80
     volumes: !override
-      - api-data:/data
+      - pro-plan-api:/data
 
   database:
     volumes: !override
       - /docker_data/postgres:/var/lib/postgresql:rw
 
   stripe-cli: !reset null
+
+volumes:
+  pro-plan-api:
