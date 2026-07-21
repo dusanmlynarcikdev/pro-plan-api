@@ -74,7 +74,16 @@ An API token is generated automatically on the first application startup. Displa
 docker compose logs api
 ```
 
-The token is stored in the Docker volume, so it remains the same even after the container is restarted. Delete the volume and restart the container to generate a new one.
+The token is stored in the Docker volume, so it remains the same even after the container is restarted. 
+
+To generate a new token, delete the existing token file and restart the container:
+
+```bash
+docker exec api rm /data/api-token
+docker compose restart api
+```
+
+A new API token will be generated automatically during startup.
 
 ## 🎯 About the Project
 An example project demonstrating backend system design.

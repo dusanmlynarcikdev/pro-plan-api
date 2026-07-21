@@ -11,6 +11,6 @@ uvicorn_logger = logging.getLogger("uvicorn")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    app.state.api_token = api_token = get_or_create_api_token()
-    uvicorn_logger.info("API token: %s", api_token)
+    app.state.api_token = get_or_create_api_token()
+    uvicorn_logger.info("API token: %s", app.state.api_token)
     yield
