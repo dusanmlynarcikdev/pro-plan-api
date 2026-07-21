@@ -53,7 +53,7 @@ API Base URL: http://localhost:8180/api
 Useful commands are available in the [Makefile](./Makefile).
 
 ### Production
-Run the project with the environment variables from [.env.dist](./.env.dist) set to production values. Also set `DATABASE_PASSWORD` for the `database` container to match the password in `DATABASE_URL`:
+Run the project with the environment variables from [.env.dist](./.env.dist) set to production values:
 ```shell
 DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
@@ -63,6 +63,8 @@ STRIPE_PRICE_ID_YEARLY='...' \
 STRIPE_WEBHOOK_SECRET='...' \
 docker compose -f docker-compose.prod.yml up -d
 ```
+
+> 💡 **Tip:** The API container listens on port **8180** by default. To use a different port, set `API_PORT` when starting the container.
 
 ### API token
 
