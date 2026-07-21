@@ -81,8 +81,8 @@ The token is stored in the Docker volume, so it remains the same even after the 
 To generate a new token, delete the existing token file and restart the container:
 
 ```bash
-docker exec api rm /data/api-token
-docker compose restart api
+docker exec pro-plan-api rm /data/api-token
+docker compose restart pro-plan-api
 ```
 
 A new API token will be generated automatically during startup.
