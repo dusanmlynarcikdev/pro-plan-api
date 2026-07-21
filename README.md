@@ -44,10 +44,10 @@ docker compose up -d
 This starts the whole project, including database migrations, which run automatically before the API starts.
 
 #### URLs
-API Base URL: http://localhost:8180/api
+API Base URL: http://localhost:8081/api
 
 ##### Tools
-- API Docs: http://localhost:8180/docs
+- API Docs: http://localhost:8081/docs
 
 #### Commands
 Useful commands are available in the [Makefile](./Makefile).
@@ -64,7 +64,7 @@ STRIPE_WEBHOOK_SECRET='...' \
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-> 💡 **Tip:** The API container listens on port **8180** by default. To use a different port, set `API_PORT` when starting the container.
+> 💡 **Tip:** The API container listens on port **8081** by default. To use a different port, set `API_PORT` when starting the container.
 
 ### API token
 

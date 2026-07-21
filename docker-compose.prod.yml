@@ -17,7 +17,7 @@ services:
       STRIPE_PRICE_ID_YEARLY: ${STRIPE_PRICE_ID_YEARLY?required}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET?required}
     ports:
-      - "${API_PORT:-8180}:80"
+      - "${API_PORT:-8081}:80"
     restart: always
     volumes:
       - pro-plan-api:/data
