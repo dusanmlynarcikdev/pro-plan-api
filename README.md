@@ -55,7 +55,6 @@ Useful commands are available in the [Makefile](./Makefile).
 ### Production
 Run the project with the environment variables from [.env.dist](./.env.dist) set to production values. Also set `DATABASE_PASSWORD` for the `database` container to match the password in `DATABASE_URL`:
 ```shell
-API_TOKEN='...' \
 DATABASE_PASSWORD='...' \
 DATABASE_URL='...' \
 STRIPE_API_KEY='...' \
@@ -64,6 +63,27 @@ STRIPE_PRICE_ID_YEARLY='...' \
 STRIPE_WEBHOOK_SECRET='...' \
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
+
+### API token
+
+Access to the API requires an API token, which is sent as a Bearer token. 
+
+An API token is generated automatically on the first application startup. Display it with:
+
+```bash
+docker compose logs api
+```
+
+The token is stored in the Docker volume, so it remains the same even after the container is restarted. 
+
+To generate a new token, delete the existing token file and restart the container:
+
+```bash
+docker exec api rm /data/api-token
+docker compose restart api
+```
+
+A new API token will be generated automatically during startup.
 
 ## 🎯 About the Project
 An example project demonstrating backend system design.

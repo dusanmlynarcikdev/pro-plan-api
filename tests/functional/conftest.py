@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator, Generator
+from unittest.mock import patch
 
 from alembic import command
 from alembic.config import Config
@@ -12,6 +13,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 load_dotenv(".env.dist", override=True)
 load_dotenv(".env.test", override=True)
 
+import app.presentation.api.lifespan as lifespan_module
 from app.infrastructure.config import get_config
 from app.infrastructure.persistence.connection import engine
 from app.presentation.api.dependencies import get_session
@@ -20,8 +22,15 @@ from app.presentation.api.main import app
 
 @fixture
 def client() -> Generator[TestClient]:
-    with TestClient(app) as client:
-        client.headers["Authorization"] = f"Bearer {get_config().api_token}"
+    api_token = "test"
+
+    with (
+        patch.object(
+            lifespan_module, "get_or_create_api_token", return_value=api_token
+        ),
+        TestClient(app) as client,
+    ):
+        client.headers["Authorization"] = f"Bearer {api_token}"
         yield client
 
 

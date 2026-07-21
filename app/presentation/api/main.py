@@ -12,6 +12,7 @@ from app.presentation.api.router.stripe import (
 )
 
 from .handlers import register_domain_exception_handler
+from .lifespan import lifespan
 from .responses import create_error_response_doc
 from .security import check_authentication
 
@@ -23,7 +24,9 @@ handler.setFormatter(
 app_logger = logging.getLogger("app")
 app_logger.addHandler(handler)
 
+
 app = FastAPI(
+    lifespan=lifespan,
     title="Pro Plan API",
     servers=[
         {"url": "http://localhost", "description": "Local"},
