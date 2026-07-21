@@ -38,7 +38,7 @@ services:
       - database
     environment:
       - DATABASE_URL
-    restart: on-failure:10
+    restart: on-failure:3
     volumes:
       - ./:/code
 
