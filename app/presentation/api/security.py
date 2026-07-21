@@ -22,10 +22,10 @@ def get_or_create_api_token() -> str:
 
 
 def check_authentication(
-    bearer: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
     request: Request,
+    token: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
 ) -> None:
-    if compare_digest(request.app.state.api_token, bearer.credentials):
+    if compare_digest(request.app.state.api_token, token.credentials):
         return
 
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
