@@ -9,7 +9,6 @@ class Config(BaseSettings):
         env_file=(".env.dist", ".env.local"), extra="ignore"
     )
 
-    api_token: str
     database_url: PostgresDsn
     stripe_api_key: str
     stripe_price_id_monthly: str
