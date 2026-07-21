@@ -44,10 +44,10 @@ docker compose up -d
 This starts the whole project, including database migrations, which run automatically before the API starts.
 
 #### URLs
-API Base URL: http://localhost/api
+API Base URL: http://localhost:8180/api
 
 ##### Tools
-- API Docs: http://localhost/docs
+- API Docs: http://localhost:8180/docs
 
 #### Commands
 Useful commands are available in the [Makefile](./Makefile).
