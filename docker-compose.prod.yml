@@ -28,7 +28,7 @@ services:
     container_name: migrations
     environment:
       DATABASE_URL: ${DATABASE_URL?required}
-    restart: on-failure:10
+    restart: on-failure:3
 
 volumes:
   pro-plan-api:
