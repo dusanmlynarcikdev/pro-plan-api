@@ -1,3 +1,5 @@
+from typing import cast
+
 from app.application.stripe.billing_portal.client import Client
 from app.application.stripe.errors import CustomerIsNotLinkedToStripeError
 from app.domain.customer.repository import CustomerRepository
@@ -16,7 +18,7 @@ class CreateSessionUseCase:
         """
         customer = await self._repository.get_by_external_id(external_customer_id)
 
-        if customer.stripe_id is None:
+        if not customer.can_access_stripe_billing_portal:
             raise CustomerIsNotLinkedToStripeError
 
-        return await self._client.create_session(customer.stripe_id)
+        return await self._client.create_session(cast(str, customer.stripe_id))
