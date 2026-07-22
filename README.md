@@ -44,25 +44,30 @@ docker compose up -d
 This starts the whole project, including database migrations, which run automatically before the API starts.
 
 #### URLs
-API Base URL: http://localhost/api
-
-##### Tools
-- API Docs: http://localhost/docs
+- API base URL: http://localhost:8081/api
+- Swagger UI: http://localhost:8081/docs
+- OpenAPI: http://localhost:8081/openapi.json
 
 #### Commands
 Useful commands are available in the [Makefile](./Makefile).
 
 ### Production
-Run the project with the environment variables from [.env.dist](./.env.dist) set to production values. Also set `DATABASE_PASSWORD` for the `database` container to match the password in `DATABASE_URL`:
+1) Download the production Docker Compose file:
 ```shell
-DATABASE_PASSWORD='...' \
+curl -O https://raw.githubusercontent.com/dusanmlynarcikdev/pro-plan-api/main/docker-compose.prod.yml
+```
+
+2) Run the project with the environment variables from [.env.dist](./.env.dist) set to production values:
+```shell
 DATABASE_URL='...' \
 STRIPE_API_KEY='...' \
 STRIPE_PRICE_ID_MONTHLY='...' \
 STRIPE_PRICE_ID_YEARLY='...' \
 STRIPE_WEBHOOK_SECRET='...' \
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
+
+> 💡 **Tip:** The API container listens on port **8081** by default. To use a different port, set `API_PORT` environment variable when starting the container.
 
 ### API token
 
@@ -79,8 +84,8 @@ The token is stored in the Docker volume, so it remains the same even after the 
 To generate a new token, delete the existing token file and restart the container:
 
 ```bash
-docker exec api rm /data/api-token
-docker compose restart api
+docker exec pro-plan-api rm /data/api-token
+docker compose restart pro-plan-api
 ```
 
 A new API token will be generated automatically during startup.

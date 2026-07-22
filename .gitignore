@@ -1,4 +1,4 @@
-.docker/postgres/*
+.docker/*
 !.docker/.gitkeep
 .env.local
 **/__pycache__
