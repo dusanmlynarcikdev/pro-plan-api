@@ -76,7 +76,7 @@ Access to the API requires an API token, which is sent as a Bearer token.
 An API token is generated automatically on the first application startup. Display it with:
 
 ```bash
-docker compose logs api
+docker exec pro-plan-api cat /data/api-token
 ```
 
 The token is stored in the Docker volume, so it remains the same even after the container is restarted. 
@@ -85,7 +85,7 @@ To generate a new token, delete the existing token file and restart the containe
 
 ```bash
 docker exec pro-plan-api rm /data/api-token
-docker compose restart pro-plan-api
+docker restart pro-plan-api
 ```
 
 A new API token will be generated automatically during startup.
