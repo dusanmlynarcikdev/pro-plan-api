@@ -34,9 +34,9 @@ async def test_create_with_existing_customer(
     response = client.post(
         PATH,
         json={
-            "billing_period": "monthly",
-            "customer_external_id": "user-1",
-            "success_url": "https://example.com/success",
+            "billingPeriod": "monthly",
+            "customerExternalId": "user-1",
+            "successUrl": "https://example.com/success",
         },
     )
     session.expunge_all()
@@ -73,9 +73,9 @@ async def test_stripe_error(
     response = client.post(
         PATH,
         json={
-            "billing_period": "monthly",
-            "customer_external_id": "user-1",
-            "success_url": "https://example.com/success",
+            "billingPeriod": "monthly",
+            "customerExternalId": "user-1",
+            "successUrl": "https://example.com/success",
         },
     )
 
@@ -88,19 +88,19 @@ async def test_stripe_error(
     (
         (
             {
-                "billing_period": "weekly",
-                "customer_external_id": "user-1",
-                "success_url": "https://example.com/success",
+                "billingPeriod": "weekly",
+                "customerExternalId": "user-1",
+                "successUrl": "https://example.com/success",
             },
-            b"billing_period",
+            b"billingPeriod",
         ),
         (
             {
-                "billing_period": "monthly",
-                "customer_external_id": "user-1",
-                "success_url": "invalid-url",
+                "billingPeriod": "monthly",
+                "customerExternalId": "user-1",
+                "successUrl": "invalid-url",
             },
-            b"success_url",
+            b"successUrl",
         ),
     ),
 )

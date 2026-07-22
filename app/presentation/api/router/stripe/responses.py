@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from app.presentation.api.responses import BaseResponse
 
 
-class UrlResponse(BaseModel):
+class UrlResponse(BaseResponse):
     url: str

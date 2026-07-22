@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from app.presentation.api.responses import BaseResponse
 
 
-class CustomerResponse(BaseModel):
+class CustomerResponse(BaseResponse):
     has_pro: bool
     stripe_id: str | None
