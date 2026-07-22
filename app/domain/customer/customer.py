@@ -24,6 +24,10 @@ class Customer:
     def stripe_id(self) -> str | None:
         return self._stripe_id
 
+    @property
+    def can_access_stripe_billing_portal(self) -> bool:
+        return self.stripe_id is not None
+
     def link_stripe_subscription(self, stripe_customer_id: str) -> None:
         self._has_pro = True
         self._stripe_id = stripe_customer_id

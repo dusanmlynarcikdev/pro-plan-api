@@ -19,7 +19,7 @@ async def test_get(client: TestClient, session: AsyncSession) -> None:
     response = client.get(PATH.format(external_id="user-1"))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.content == b'{"hasPro":true,"stripeId":"customer-1"}'
+    assert response.content == b'{"canAccessStripeBillingPortal":true,"hasPro":true}'
 
 
 async def test_get_customer_does_not_exist(client: TestClient) -> None:

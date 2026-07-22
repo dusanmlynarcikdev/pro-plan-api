@@ -18,6 +18,22 @@ def test_create() -> None:
     assert result.stripe_id is None
 
 
+@pytest.mark.parametrize(
+    ("stripe_id", "expected_result"),
+    (
+        (None, False),
+        ("cus_123", True),
+    ),
+)
+def test_can_access_stripe_billing_portal(
+    stripe_id: str | None, expected_result: bool
+) -> None:
+    customer = generate()
+    customer._stripe_id = stripe_id
+
+    assert customer.can_access_stripe_billing_portal == expected_result
+
+
 def test_link_stripe_subscription() -> None:
     customer = generate()
 
