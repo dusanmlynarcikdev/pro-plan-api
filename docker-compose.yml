@@ -5,7 +5,7 @@ services:
     build:
       context: .
     command: fastapi dev app/presentation/api/main.py --host 0.0.0.0 --port 80
-    container_name: api
+    container_name: pro-plan-api
     depends_on:
       database:
         condition: service_started
@@ -19,12 +19,11 @@ services:
       - ./.docker/api:/data
 
   database:
-    container_name: database
     environment:
       POSTGRES_PASSWORD: postgres
     image: postgres:18.3
     ports:
-      - '5432:5432'
+      - '54321:5432'
     restart: always
     volumes:
       - ./.docker/postgres:/var/lib/postgresql
@@ -33,7 +32,6 @@ services:
     build:
       context: .
     command: make m
-    container_name: migrations
     depends_on:
       - database
     restart: on-failure:3
@@ -42,7 +40,6 @@ services:
 
   stripe-cli:
     command: listen --forward-to api:80/api/stripe/webhooks
-    container_name: stripe-cli
     depends_on:
       - api
     environment:
