@@ -1,6 +1,14 @@
 # all checks & fixes
 cf: lf ty s t
 
+# show api token
+at:
+	@cat /data/api-token && echo
+
+# enter docker container
+dc:
+	docker exec -it pro-plan-api /bin/bash
+
 # lint check
 l:
 	ruff check && ruff format --check
