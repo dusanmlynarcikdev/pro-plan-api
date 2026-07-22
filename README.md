@@ -44,18 +44,21 @@ docker compose up -d
 This starts the whole project, including database migrations, which run automatically before the API starts.
 
 #### URLs
-API Base URL: http://localhost:8081/api
-
-##### Tools
-- API Docs: http://localhost:8081/docs
+- API base URL: http://localhost:8081/api
+- Swagger UI: http://localhost:8081/docs
+- OpenAPI: http://localhost:8081/openapi.json
 
 #### Commands
 Useful commands are available in the [Makefile](./Makefile).
 
 ### Production
-Run the project with the environment variables from [.env.dist](./.env.dist) set to production values:
+1) Download the production Docker Compose file:
 ```shell
-DATABASE_PASSWORD='...' \
+curl -O https://raw.githubusercontent.com/dusanmlynarcikdev/pro-plan-api/main/docker-compose.prod.yml
+```
+
+2) Run the project with the environment variables from [.env.dist](./.env.dist) set to production values:
+```shell
 DATABASE_URL='...' \
 STRIPE_API_KEY='...' \
 STRIPE_PRICE_ID_MONTHLY='...' \
