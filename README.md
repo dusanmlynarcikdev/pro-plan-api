@@ -69,6 +69,9 @@ docker compose -f docker-compose.prod.yml up -d
 
 > 💡 **Tip:** The API container listens on port **8081** by default. To use a different port, set `API_PORT` environment variable when starting the container.
 
+> 💡 **Tip:** The **latest** release is used by default. To pin a specific release, set `API_VERSION` environment variable when starting the container. 
+> See the [GitHub Releases](https://github.com/dusanmlynarcikdev/pro-plan-api/releases) page for all available versions.
+
 ### API token
 
 Access to the API requires an API token, which is sent as a Bearer token. 
