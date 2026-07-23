@@ -1,7 +1,7 @@
 name: pro-plan-api
 
 x-api-defaults: &api-defaults
-  image: ghcr.io/dusanmlynarcikdev/pro-plan-api
+  image: ghcr.io/dusanmlynarcikdev/pro-plan-api:${API_VERSION:-latest}
   pull_policy: always
 
 services:
