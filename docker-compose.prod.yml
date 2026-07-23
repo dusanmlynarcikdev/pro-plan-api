@@ -24,7 +24,6 @@ services:
 
   migrations:
     command: make m
-    container_name: migrations
     environment:
       DATABASE_URL: ${DATABASE_URL?required}
     image: *api-image
