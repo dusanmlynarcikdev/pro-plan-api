@@ -18,5 +18,5 @@ class VerifyUseCase:
         try:
             return self._verifier.verify(payload, signature)
         except WebhookVerificationError as e:
-            logger.error("Webhook verification failed: %s", e.__cause__)
+            logger.error(e.__cause__)
             raise

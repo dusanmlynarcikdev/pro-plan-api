@@ -90,6 +90,19 @@ docker restart pro-plan-api
 
 A new API token will be generated automatically during startup.
 
+## 🩺 Troubleshooting
+
+The API logs:
+- All incoming requests
+- Invalid requests with validation details
+- Stripe communication errors
+
+Display the logs with:
+
+```bash
+docker logs pro-plan-api
+```
+
 ## 🎯 About the Project
 An example project demonstrating backend system design.
 

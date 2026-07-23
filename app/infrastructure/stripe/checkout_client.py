@@ -1,5 +1,3 @@
-import logging
-
 from stripe import StripeClient, StripeError
 from stripe.checkout import Session
 from stripe.params.checkout import (
@@ -9,8 +7,6 @@ from stripe.params.checkout import (
 
 from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.stripe.errors import UnableToCreateCheckoutSessionError
-
-logger = logging.getLogger(__name__)
 
 
 class CheckoutClient:
@@ -31,6 +27,9 @@ class CheckoutClient:
         customer_id: str | None,
         success_url: str,
     ) -> str:
+        """
+        :raises UnableToCreateCheckoutSessionError:
+        """
         price_id = self._resolve_price_id(billing_period)
         request_params = self._create_request_params(
             price_id, client_reference_id, customer_id, success_url
@@ -41,8 +40,7 @@ class CheckoutClient:
                 request_params
             )
         except StripeError as e:
-            logger.error(e.user_message)
-            raise UnableToCreateCheckoutSessionError
+            raise UnableToCreateCheckoutSessionError from e
 
         return self._validate_response_url(session)
 
@@ -74,10 +72,14 @@ class CheckoutClient:
 
     @staticmethod
     def _validate_response_url(session: Session) -> str:
+        """
+        :raises UnableToCreateCheckoutSessionError:
+        """
         url = session.url
 
         if url is None:
-            logger.error("Stripe checkout session url is missing")
-            raise UnableToCreateCheckoutSessionError
+            raise UnableToCreateCheckoutSessionError from ValueError(
+                "Checkout session url is missing"
+            )
 
         return url

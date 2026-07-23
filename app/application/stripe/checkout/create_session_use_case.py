@@ -1,9 +1,16 @@
+import logging
+
 from app.application.customer.get_or_create_customer_use_case import (
     GetOrCreateCustomerUseCase,
 )
 from app.application.stripe.checkout.client import Client
 from app.application.stripe.enums import CheckoutSessionBillingPeriod
-from app.application.stripe.errors import CustomerAlreadyHasStripeSubscriptionError
+from app.application.stripe.errors import (
+    CustomerAlreadyHasStripeSubscriptionError,
+    UnableToCreateCheckoutSessionError,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class CreateSessionUseCase:
@@ -30,6 +37,10 @@ class CreateSessionUseCase:
         if customer.has_stripe_subscription():
             raise CustomerAlreadyHasStripeSubscriptionError
 
-        return await self._client.create_session(
-            billing_period, str(customer.id), customer.stripe_id, success_url
-        )
+        try:
+            return await self._client.create_session(
+                billing_period, str(customer.id), customer.stripe_id, success_url
+            )
+        except UnableToCreateCheckoutSessionError as e:
+            logger.error(e.__cause__)
+            raise

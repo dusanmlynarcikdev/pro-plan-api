@@ -49,7 +49,7 @@ def test_invalid_signature(client: TestClient, headers: dict[str, str]) -> None:
     response = client.post(PATH, content=PAYLOAD, headers=headers)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.content == b'{"detail":"Invalid webhook"}'
+    assert response.content == b'{"detail":"Invalid webhook signature"}'
 
 
 def _create_signature(payload: bytes) -> str:

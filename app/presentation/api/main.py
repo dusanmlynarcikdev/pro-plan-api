@@ -11,7 +11,10 @@ from app.presentation.api.router.stripe import (
     webhook_router as stripe_webhook_router,
 )
 
-from .handlers import register_domain_exception_handler
+from .handlers import (
+    register_domain_error_handler,
+    register_request_validation_error_handler,
+)
 from .lifespan import lifespan
 from .responses import create_error_response_doc
 from .security import check_authentication
@@ -20,21 +23,20 @@ handler = logging.StreamHandler()
 handler.setFormatter(
     logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s")
 )
-
 app_logger = logging.getLogger("app")
 app_logger.addHandler(handler)
-
 
 app = FastAPI(
     lifespan=lifespan,
     title="Pro Plan API",
     servers=[
-        {"url": "http://localhost", "description": "Local"},
+        {"url": "http://localhost:8081", "description": "Local"},
     ],
     swagger_ui_parameters={"operationsSorter": "alpha", "tagsSorter": "alpha"},
 )
 
-register_domain_exception_handler(app)
+register_domain_error_handler(app)
+register_request_validation_error_handler(app)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(health_check_router)
