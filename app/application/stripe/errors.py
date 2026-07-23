@@ -1,4 +1,4 @@
-from app.domain.errors import ConflictDomainError, DomainError, ValidationDomainError
+from app.domain.errors import ConflictDomainError, DomainError
 
 
 class CustomerAlreadyHasStripeSubscriptionError(ConflictDomainError):
@@ -25,6 +25,6 @@ class UnableToCreateCheckoutSessionError(StripeError):
         super().__init__("Unable to create checkout session")
 
 
-class WebhookVerificationError(ValidationDomainError):
+class WebhookVerificationError(DomainError):
     def __init__(self) -> None:
-        super().__init__("Invalid webhook")
+        super().__init__("Invalid webhook signature")

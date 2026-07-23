@@ -14,7 +14,7 @@ class WebhookVerifier:
         """
         try:
             event = Webhook.construct_event(payload, signature, self._secret)
-        except (ValueError, SignatureVerificationError) as e:
+        except SignatureVerificationError as e:
             raise WebhookVerificationError from e
 
         return Event(type=event.type, data=event.data.object.to_dict())
