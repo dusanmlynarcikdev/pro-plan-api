@@ -1,5 +1,4 @@
 from unittest.mock import AsyncMock, Mock, patch
-from uuid import UUID
 
 import pytest
 
@@ -51,8 +50,8 @@ async def test_checkout_session_completed_invalid_client_reference_id(
         )
 
     logger.error.assert_called_once_with(
-        "Checkout session completed: Invalid client_reference_id: %s",
-        client_reference_id,
+        "Checkout session completed: Invalid client_reference_id: "
+        f"{client_reference_id}"
     )
 
 
@@ -71,6 +70,6 @@ async def test_checkout_session_completed_customer_not_found() -> None:
         )
 
     logger.error.assert_called_once_with(
-        "Checkout session completed: Customer not found for id: %s",
-        UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
+        "Checkout session completed: Customer not found for id: "
+        "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
     )
