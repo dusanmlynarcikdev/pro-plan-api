@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from stripe import StripeError
 from stripe.params.billing_portal import SessionCreateParams
 
-from app.infrastructure.persistence.schema.customer import CustomerSchema
+from app.infrastructure.database.schema.customer import CustomerSchema
 from tests.generator.customer import generate
 
 BILLING_PORTAL_URL = "https://billing.stripe.com/p/session/bps_test_123"

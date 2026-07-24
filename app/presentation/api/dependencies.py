@@ -22,8 +22,8 @@ from app.application.stripe.webhook.handle_event_use_case import HandleEventUseC
 from app.application.stripe.webhook.verify_use_case import VerifyUseCase
 from app.infrastructure.config import Config as Config_
 from app.infrastructure.config import get_config
-from app.infrastructure.persistence.connection import session_factory
-from app.infrastructure.persistence.repository.customer import (
+from app.infrastructure.database.connection import session_factory
+from app.infrastructure.database.repository.customer import (
     CustomerRepository,
 )
 from app.infrastructure.stripe.billing_portal_client import BillingPortalClient

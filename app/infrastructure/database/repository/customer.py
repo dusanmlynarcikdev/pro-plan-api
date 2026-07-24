@@ -5,7 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.customer.customer import Customer
 from app.domain.customer.errors import CustomerNotFoundError
-from app.infrastructure.persistence.schema.customer import CustomerSchema
+from app.infrastructure.database.schema.customer import CustomerSchema
 
 
 class CustomerRepository:

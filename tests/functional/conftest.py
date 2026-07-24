@@ -15,7 +15,7 @@ load_dotenv(".env.test", override=True)
 
 import app.presentation.api.lifespan as lifespan_module
 from app.infrastructure.config import get_config
-from app.infrastructure.persistence.connection import engine
+from app.infrastructure.database.connection import engine
 from app.presentation.api.dependencies import get_session
 from app.presentation.api.main import app
 
