@@ -1,22 +1,19 @@
 import pytest
 from fastapi import status
-from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
 
 from app.presentation.api.main import app
 
-PUBLIC_PATHS = {"/api/", "/api/stripe/webhooks"}
+PUBLIC_PATHS = {"/api/", "/api/webhooks/stripe"}
 
 
 request_parameter = pytest.mark.parametrize(
     "method, url",
     [
-        (method, route.path)
-        for route in app.routes
-        if isinstance(route, APIRoute)
-        and route.path not in PUBLIC_PATHS
-        and route.methods is not None
-        for method in route.methods
+        (method, path)
+        for path, operations in app.openapi()["paths"].items()
+        if path not in PUBLIC_PATHS
+        for method in operations
     ],
 )
 

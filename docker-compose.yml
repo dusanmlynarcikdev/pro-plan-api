@@ -39,7 +39,7 @@ services:
       - ./:/code
 
   stripe-cli:
-    command: listen --forward-to api:80/api/stripe/webhooks
+    command: listen --forward-to api:80/api/webhooks/stripe
     depends_on:
       - api
     environment:
