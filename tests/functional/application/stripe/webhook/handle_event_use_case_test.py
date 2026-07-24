@@ -5,7 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook.event import Event
-from app.infrastructure.persistence.schema.customer import CustomerSchema
+from app.infrastructure.database.schema.customer import CustomerSchema
 from app.presentation.api.dependencies import get_handle_webhook_event_use_case
 from tests.generator.customer import generate
 

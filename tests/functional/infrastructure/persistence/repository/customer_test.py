@@ -6,10 +6,10 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.domain.customer.errors import CustomerNotFoundError
-from app.infrastructure.persistence.repository.customer import (
+from app.infrastructure.database.repository.customer import (
     CustomerRepository,
 )
-from app.infrastructure.persistence.schema.customer import CustomerSchema
+from app.infrastructure.database.schema.customer import CustomerSchema
 from tests.generator.customer import generate
 
 

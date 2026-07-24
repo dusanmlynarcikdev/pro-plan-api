@@ -11,7 +11,7 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
-from app.infrastructure.persistence.schema.customer import CustomerSchema
+from app.infrastructure.database.schema.customer import CustomerSchema
 from tests.generator.customer import generate
 
 CHECKOUT_URL = "https://checkout.stripe.com/c/pay/cs_test_123"
