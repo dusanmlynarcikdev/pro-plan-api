@@ -15,7 +15,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
+    "httpx2>=2.9.1",
     "pytest>=9.1.1",
     "ruff>=0.16.0",
     "sqlalchemy-utils>=0.42.1",
