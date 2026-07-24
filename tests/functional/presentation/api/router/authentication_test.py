@@ -13,7 +13,9 @@ request_parameter = pytest.mark.parametrize(
     [
         (method, route.path)
         for route in app.routes
-        if isinstance(route, APIRoute) and route.path not in PUBLIC_PATHS
+        if isinstance(route, APIRoute)
+        and route.path not in PUBLIC_PATHS
+        and route.methods is not None
         for method in route.methods
     ],
 )

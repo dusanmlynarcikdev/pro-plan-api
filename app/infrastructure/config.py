@@ -18,4 +18,4 @@ class Config(BaseSettings):
 
 @cache
 def get_config() -> Config:
-    return Config()  # ty: ignore[missing-argument]
+    return Config()
