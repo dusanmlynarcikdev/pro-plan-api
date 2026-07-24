@@ -18,7 +18,7 @@ router = APIRouter(
 router.include_router(create_billing_portal_session_route)
 router.include_router(create_checkout_session_route)
 
-webhook_router = APIRouter(tags=["Stripe"])
+webhook_router = APIRouter(tags=["Webhooks"])
 webhook_router.include_router(handle_webhook)
 
 __all__ = ["router", "webhook_router"]

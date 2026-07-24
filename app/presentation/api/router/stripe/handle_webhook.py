@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/stripe/webhooks",
+    "/webhooks/stripe",
     responses={status.HTTP_400_BAD_REQUEST: create_error_response_doc()},
     status_code=status.HTTP_202_ACCEPTED,
 )
