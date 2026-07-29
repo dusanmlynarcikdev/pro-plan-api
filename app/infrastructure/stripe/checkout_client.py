@@ -12,12 +12,8 @@ class CheckoutClient:
     def __init__(
         self,
         client: StripeClient,
-        price_id_monthly: str,
-        price_id_yearly: str,
     ) -> None:
         self._client = client
-        self._price_id_monthly = price_id_monthly
-        self._price_id_yearly = price_id_yearly
 
     async def create_session(
         self,

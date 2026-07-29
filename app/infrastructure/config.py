@@ -11,8 +11,6 @@ class Config(BaseSettings):
 
     database_url: PostgresDsn
     stripe_api_key: str
-    stripe_price_id_monthly: str
-    stripe_price_id_yearly: str
     stripe_webhook_secret: str
 
 
