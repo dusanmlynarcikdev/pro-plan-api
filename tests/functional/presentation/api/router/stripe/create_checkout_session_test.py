@@ -34,7 +34,7 @@ async def test_create_with_existing_customer(
         PATH,
         json={
             "customerExternalId": "user-1",
-            "stripePriceId": "price-id-1",
+            "stripePriceId": "price-1",
             "successUrl": "https://example.com/success",
         },
     )
@@ -52,7 +52,7 @@ async def test_create_with_existing_customer(
         SessionCreateParams(
             client_reference_id=str(customer.id),
             customer="customer-1",
-            line_items=[SessionCreateParamsLineItem(price="price-id-1", quantity=1)],
+            line_items=[SessionCreateParamsLineItem(price="price-1", quantity=1)],
             mode="subscription",
             success_url="https://example.com/success",
         )
@@ -73,7 +73,7 @@ async def test_stripe_error(
         PATH,
         json={
             "customerExternalId": "user-1",
-            "stripePriceId": "price-id-1",
+            "stripePriceId": "price-1",
             "successUrl": "https://example.com/success",
         },
     )
@@ -87,7 +87,7 @@ def test_invalid_success_url(client: TestClient) -> None:
         PATH,
         json={
             "customerExternalId": "user-1",
-            "stripePriceId": "price-id-1",
+            "stripePriceId": "price-1",
             "successUrl": "invalid-url",
         },
     )
