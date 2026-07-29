@@ -4,7 +4,6 @@ from app.application.customer.get_or_create_customer_use_case import (
     GetOrCreateCustomerUseCase,
 )
 from app.application.stripe.checkout.client import Client
-from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.stripe.errors import (
     CustomerAlreadyHasStripeSubscriptionError,
     UnableToCreateCheckoutSessionError,
@@ -24,8 +23,8 @@ class CreateSessionUseCase:
 
     async def __call__(
         self,
-        billing_period: CheckoutSessionBillingPeriod,
         customer_external_id: str,
+        stripe_price_id: str,
         success_url: str,
     ) -> str:
         """
@@ -39,7 +38,7 @@ class CreateSessionUseCase:
 
         try:
             return await self._client.create_session(
-                billing_period, str(customer.id), customer.stripe_id, success_url
+                str(customer.id), customer.stripe_id, stripe_price_id, success_url
             )
         except UnableToCreateCheckoutSessionError as e:
             logger.error(e.__cause__)

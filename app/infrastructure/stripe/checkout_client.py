@@ -5,7 +5,6 @@ from stripe.params.checkout import (
     SessionCreateParamsLineItem,
 )
 
-from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.stripe.errors import UnableToCreateCheckoutSessionError
 
 
@@ -13,24 +12,19 @@ class CheckoutClient:
     def __init__(
         self,
         client: StripeClient,
-        price_id_monthly: str,
-        price_id_yearly: str,
     ) -> None:
         self._client = client
-        self._price_id_monthly = price_id_monthly
-        self._price_id_yearly = price_id_yearly
 
     async def create_session(
         self,
-        billing_period: CheckoutSessionBillingPeriod,
         client_reference_id: str,
         customer_id: str | None,
+        price_id: str,
         success_url: str,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:
         """
-        price_id = self._resolve_price_id(billing_period)
         request_params = self._create_request_params(
             price_id, client_reference_id, customer_id, success_url
         )
@@ -62,13 +56,6 @@ class CheckoutClient:
             params.update(customer=customer_id)
 
         return params
-
-    def _resolve_price_id(self, billing_period: CheckoutSessionBillingPeriod) -> str:
-        match billing_period:
-            case CheckoutSessionBillingPeriod.MONTHLY:
-                return self._price_id_monthly
-            case CheckoutSessionBillingPeriod.YEARLY:
-                return self._price_id_yearly
 
     @staticmethod
     def _validate_response_url(session: Session) -> str:
