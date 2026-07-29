@@ -1,116 +1,41 @@
-# ⭐️ Pro Plan API
-A simple REST API for managing Pro plan subscriptions.
+# Pro Plan API
 
-## ⚡ Highlights
-- **Minimalist domain design**
-- **Ready to run** — out of the box with Docker
-- **Unit and functional tests** — covering domain logic and API behavior
+**An API that integrates with Stripe and handles paid plan subscriptions.**
 
-## 🙎‍♂️ Customers
-- **One Pro plan per customer**
-- **Identified by external ID** — a unique identifier provided by your app
-- **Simple management** — no states, just an active Pro plan flag
+## How it works
 
-> 💡 **Tip:** If you manage users for multiple apps at once, add a prefix to the customer external ID, e.g. `myapp:user-1`.
-
-## 🔌 API Endpoints
-- **Health check** — service availability
-- **Stripe**
-  - **Create checkout session**
-  - **Handle webhooks** — `checkout.session.completed`, `customer.subscription.deleted`
-  - **Create billing portal session**
-- **Get customer** — retrieves customer details
-
-> 💡 **Tip:** Use `successUrl` request parameter when creating a checkout session to perform additional post-payment actions, such as sending a Pro plan welcome email.
-
-## 🏗️ Stack & Architecture
-- **Python + FastAPI**
-- **Clean Architecture**
-- **Use-case driven design**
-- **Rich domain models** — organized into domain modules
-- **Value objects**
-- **UUIDs** — primary identifiers
-
-## ⚙️ Getting Started
-### Requirements
-- Docker
-- Docker Compose
-
-### Development
-Run the project:
-```shell
-docker compose up -d
-```
-This starts the whole project, including database migrations, which run automatically before the API starts.
-
-#### URLs
-- API base URL: http://localhost:8081/api
-- Swagger UI: http://localhost:8081/docs
-- OpenAPI: http://localhost:8081/openapi.json
-
-#### Commands
-Useful commands are available in the [Makefile](./Makefile).
-
-### Production
-1) Download the production Docker Compose file:
-```shell
-curl -O https://raw.githubusercontent.com/dusanmlynarcikdev/pro-plan-api/main/docker-compose.prod.yml
+```text
+┌──────────────┐      ┌──────────────┐       ┌────────┐
+│ Your Backend │ ───▶ │ Pro Plan API │ ◀───▶ │ Stripe │
+└──────────────┘      └──────────────┘       └────────┘
 ```
 
-2) Run the project with the environment variables from [.env.dist](./.env.dist) set to production values:
-```shell
-DATABASE_URL='...' \
-STRIPE_API_KEY='...' \
-STRIPE_PRICE_ID_MONTHLY='...' \
-STRIPE_PRICE_ID_YEARLY='...' \
-STRIPE_WEBHOOK_SECRET='...' \
-docker compose -f docker-compose.prod.yml up -d
-```
+## Main highlights
 
-> 💡 **Tip:** The API container listens on port **8081** by default. To use a different port, set `API_PORT` environment variable when starting the container.
+✔️ **Built with modern technologies (Python, FastAPI)**  
+✔️ **Simple integration and use**  
+✔️ **Production-ready Docker image for amd64 and arm64**  
+✔️ **Deployable in minutes**
 
-> 💡 **Tip:** The **latest** release is used by default. To pin a specific release, set `API_VERSION` environment variable when starting the container. 
-> See the [GitHub Releases](https://github.com/dusanmlynarcikdev/pro-plan-api/releases) page for all available versions.
+## Why use Pro Plan API?
 
-### API token
+- Skip the Stripe integration complexity
+- Save development time and effort
+- Focus on your core product
+- Ship your product faster
 
-Access to the API requires an API token, which is sent as a Bearer token. 
+## Features
 
-An API token is generated automatically on the first application startup. Display it with:
+- Creates Stripe Checkout and Billing Portal sessions
+- Synchronizes subscription states via Stripe webhooks
+- Manages customers using your own external IDs
+- Does not store any customer data
 
-```bash
-docker exec pro-plan-api make at
-```
+---
 
-The token is stored in the Docker volume, so it remains the same even after the container is restarted. 
+## 👤 Author
 
-To generate a new token, delete the existing token file and restart the container:
-
-```bash
-docker exec pro-plan-api rm /data/api-token
-docker restart pro-plan-api
-```
-
-A new API token will be generated automatically during startup.
-
-## 🩺 Troubleshooting
-
-The API logs:
-- All incoming requests
-- Invalid requests with validation details
-- Stripe communication errors
-
-Display the logs with:
-
-```bash
-docker logs pro-plan-api
-```
-
-## 🎯 About the Project
-An example project demonstrating backend system design.
-
-## 🧑‍💻 Author
-**Dušan Mlynarčík** — Senior Backend Engineer & App Builder
+**Dušan Mlynarčík** — Senior Backend Engineer
 
 - LinkedIn: https://www.linkedin.com/in/dusanmlynarcik/
 - GitHub: https://github.com/dusanmlynarcikdev
