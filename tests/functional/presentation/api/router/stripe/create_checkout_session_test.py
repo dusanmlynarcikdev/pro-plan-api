@@ -1,6 +1,5 @@
 from unittest.mock import AsyncMock, Mock
 
-import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel import select
@@ -34,8 +33,8 @@ async def test_create_with_existing_customer(
     response = client.post(
         PATH,
         json={
-            "billingPeriod": "monthly",
             "customerExternalId": "user-1",
+            "stripePriceId": "price-id-1",
             "successUrl": "https://example.com/success",
         },
     )
@@ -53,7 +52,7 @@ async def test_create_with_existing_customer(
         SessionCreateParams(
             client_reference_id=str(customer.id),
             customer="customer-1",
-            line_items=[SessionCreateParamsLineItem(price="example-id-1", quantity=1)],
+            line_items=[SessionCreateParamsLineItem(price="price-id-1", quantity=1)],
             mode="subscription",
             success_url="https://example.com/success",
         )
@@ -73,8 +72,8 @@ async def test_stripe_error(
     response = client.post(
         PATH,
         json={
-            "billingPeriod": "monthly",
             "customerExternalId": "user-1",
+            "stripePriceId": "price-id-1",
             "successUrl": "https://example.com/success",
         },
     )
@@ -83,34 +82,15 @@ async def test_stripe_error(
     assert response.content == b'{"detail":"Unable to create checkout session"}'
 
 
-@pytest.mark.parametrize(
-    ("request_body", "expected_response"),
-    (
-        (
-            {
-                "billingPeriod": "weekly",
-                "customerExternalId": "user-1",
-                "successUrl": "https://example.com/success",
-            },
-            b"billingPeriod",
-        ),
-        (
-            {
-                "billingPeriod": "monthly",
-                "customerExternalId": "user-1",
-                "successUrl": "invalid-url",
-            },
-            b"successUrl",
-        ),
-    ),
-)
-def test_invalid_request(
-    client: TestClient, request_body: dict[str, str], expected_response: bytes
-) -> None:
+def test_invalid_success_url(client: TestClient) -> None:
     response = client.post(
         PATH,
-        json=request_body,
+        json={
+            "customerExternalId": "user-1",
+            "stripePriceId": "price-id-1",
+            "successUrl": "invalid-url",
+        },
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert expected_response in response.content
+    assert b"successUrl" in response.content

@@ -7,7 +7,6 @@ from app.application.customer.get_or_create_customer_use_case import (
 )
 from app.application.stripe.checkout.client import Client
 from app.application.stripe.checkout.create_session_use_case import CreateSessionUseCase
-from app.application.stripe.enums import CheckoutSessionBillingPeriod
 from app.application.stripe.errors import CustomerAlreadyHasStripeSubscriptionError
 from tests.generator.customer import generate
 
@@ -26,7 +25,7 @@ async def test_subscription_active_in_stripe() -> None:
 
     with raises(CustomerAlreadyHasStripeSubscriptionError):
         await use_case(
-            CheckoutSessionBillingPeriod.MONTHLY,
             "user-1",
+            "price-1",
             "https://example.com/success",
         )
