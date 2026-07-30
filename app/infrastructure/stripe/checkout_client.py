@@ -3,8 +3,10 @@ from stripe.checkout import Session
 from stripe.params.checkout import (
     SessionCreateParams,
     SessionCreateParamsLineItem,
+    SessionCreateParamsSubscriptionData,
 )
 
+from app.application.stripe.enums import SubscriptionMetadataKey
 from app.application.stripe.errors import UnableToCreateCheckoutSessionError
 
 
@@ -17,8 +19,8 @@ class CheckoutClient:
 
     async def create_session(
         self,
-        client_reference_id: str,
-        customer_id: str | None,
+        customer_id: str,
+        stripe_customer_id: str | None,
         price_id: str,
         success_url: str,
     ) -> str:
@@ -26,7 +28,7 @@ class CheckoutClient:
         :raises UnableToCreateCheckoutSessionError:
         """
         request_params = self._create_request_params(
-            price_id, client_reference_id, customer_id, success_url
+            customer_id, stripe_customer_id, price_id, success_url
         )
 
         try:
@@ -40,20 +42,24 @@ class CheckoutClient:
 
     @staticmethod
     def _create_request_params(
+        customer_id: str,
+        stripe_customer_id: str | None,
         price_id: str,
-        client_reference_id: str,
-        customer_id: str | None,
         success_url: str,
     ) -> SessionCreateParams:
         params = SessionCreateParams(
-            client_reference_id=client_reference_id,
             line_items=[SessionCreateParamsLineItem(price=price_id, quantity=1)],
             mode="subscription",
+            subscription_data=SessionCreateParamsSubscriptionData(
+                metadata={
+                    SubscriptionMetadataKey.CUSTOMER_ID: customer_id,
+                }
+            ),
             success_url=success_url,
         )
 
-        if customer_id is not None:
-            params.update(customer=customer_id)
+        if stripe_customer_id is not None:
+            params.update(customer=stripe_customer_id)
 
         return params
 

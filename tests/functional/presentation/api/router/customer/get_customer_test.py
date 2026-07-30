@@ -10,7 +10,7 @@ PATH = "/api/customers/{external_id}"
 
 async def test_get(client: TestClient, session: AsyncSession) -> None:
     customer = generate()
-    customer.link_stripe_subscription("customer-1")
+    customer.link_subscription("customer-1")
 
     session.add(CustomerSchema.from_domain(customer))
     await session.flush()

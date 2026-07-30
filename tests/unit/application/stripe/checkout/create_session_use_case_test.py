@@ -11,9 +11,9 @@ from app.application.stripe.errors import CustomerAlreadyHasStripeSubscriptionEr
 from tests.generator.customer import generate
 
 
-async def test_subscription_active_in_stripe() -> None:
+async def test_customer_already_has_subscription() -> None:
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     use_case = CreateSessionUseCase(
         AsyncMock(

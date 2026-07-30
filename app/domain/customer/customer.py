@@ -28,12 +28,12 @@ class Customer:
     def can_access_stripe_billing_portal(self) -> bool:
         return self.stripe_id is not None
 
-    def link_stripe_subscription(self, stripe_customer_id: str) -> None:
+    def link_subscription(self, stripe_customer_id: str) -> None:
         self._has_pro = True
         self._stripe_id = stripe_customer_id
 
-    def has_stripe_subscription(self) -> bool:
+    def has_subscription(self) -> bool:
         return self.has_pro and self.stripe_id is not None
 
-    def deactivate_pro(self) -> None:
+    def remove_subscription(self) -> None:
         self._has_pro = False
