@@ -1,8 +1,8 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 
 
 class SubscriptionMetadataKey(StrEnum):
-    CUSTOMER_ID = "customer_id"
+    CUSTOMER_ID = auto()
 
 
 class WebhookEventType(StrEnum):
