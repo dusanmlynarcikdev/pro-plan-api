@@ -11,24 +11,24 @@ def test_from_domain() -> None:
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
-    assert result.stripe_id == "cus-1"
-    assert result.stripe_product_id == "prod-1"
+    assert result.stripe_id == "customer-1"
+    assert result.stripe_product_id == "product-1"
 
 
 def test_to_domain() -> None:
     schema = CustomerSchema(
         id=UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
         external_id="user-1",
-        stripe_id="cus-1",
-        stripe_product_id="prod-1",
+        stripe_id="customer-1",
+        stripe_product_id="product-1",
     )
 
     result = schema.to_domain()
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
-    assert result.stripe_id == "cus-1"
-    assert result.stripe_product_id == "prod-1"
+    assert result.stripe_id == "customer-1"
+    assert result.stripe_product_id == "product-1"
 
 
 def test_update_from_domain() -> None:
@@ -37,5 +37,5 @@ def test_update_from_domain() -> None:
 
     schema.update_from_domain(customer)
 
-    assert schema.stripe_id == "cus-1"
-    assert schema.stripe_product_id == "prod-1"
+    assert schema.stripe_id == "customer-1"
+    assert schema.stripe_product_id == "product-1"

@@ -23,8 +23,8 @@ async def test_add(session: AsyncSession) -> None:
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.external_id == "user-1"
-    assert repository_customer.stripe_id == "cus-1"
-    assert repository_customer.stripe_product_id == "prod-1"
+    assert repository_customer.stripe_id == "customer-1"
+    assert repository_customer.stripe_product_id == "product-1"
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
@@ -84,7 +84,7 @@ async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
     session.expunge_all()
 
     repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "cus-1"
+        "customer-1"
     )
 
     assert repository_customer is not None
@@ -99,7 +99,7 @@ async def test_find_one_by_stripe_id_another_customer_exists(
     session.expunge_all()
 
     repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "cus_456"
+        "customer-1"
     )
 
     assert repository_customer is None
@@ -109,7 +109,7 @@ async def test_find_one_by_stripe_id_empty_repository(
     session: AsyncSession,
 ) -> None:
     repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "cus_456"
+        "customer-1"
     )
 
     assert repository_customer is None
@@ -184,8 +184,8 @@ async def test_update(session: AsyncSession) -> None:
     repository_customer = await get_customer(session)
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.stripe_id == "cus-1"
-    assert repository_customer.stripe_product_id == "prod-1"
+    assert repository_customer.stripe_id == "customer-1"
+    assert repository_customer.stripe_product_id == "product-1"
 
 
 async def test_update_unknown(session: AsyncSession) -> None:

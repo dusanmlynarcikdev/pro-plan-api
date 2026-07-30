@@ -21,9 +21,9 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
         Event(
             type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
             data={
-                "customer": "cus-1",
+                "customer": "customer-1",
                 "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
-                "plan": {"product": "prod-1"},
+                "plan": {"product": "product-1"},
             },
         )
     )
@@ -32,8 +32,8 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
     customer = (await session.exec(select(CustomerSchema))).one()
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert customer.stripe_id == "cus-1"
-    assert customer.stripe_product_id == "prod-1"
+    assert customer.stripe_id == "customer-1"
+    assert customer.stripe_product_id == "product-1"
 
 
 async def test_customer_subscription_deleted(session: AsyncSession) -> None:
@@ -48,7 +48,7 @@ async def test_customer_subscription_deleted(session: AsyncSession) -> None:
     await use_case(
         Event(
             type=WebhookEventType.CUSTOMER_SUBSCRIPTION_DELETED,
-            data={"customer": "cus-1"},
+            data={"customer": "customer-1"},
         )
     )
     session.expunge_all()

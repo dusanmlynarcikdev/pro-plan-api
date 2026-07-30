@@ -22,7 +22,7 @@ def test_create() -> None:
     ("stripe_id", "expected_result"),
     (
         (None, False),
-        ("cus_123", True),
+        ("customer-1", True),
     ),
 )
 def test_can_access_stripe_billing_portal(
@@ -37,10 +37,10 @@ def test_can_access_stripe_billing_portal(
 def test_link_subscription() -> None:
     customer = generate()
 
-    customer.link_subscription("cus-1", "prod-1")
+    customer.link_subscription("customer-1", "product-1")
 
-    assert customer.stripe_id == "cus-1"
-    assert customer.stripe_product_id == "prod-1"
+    assert customer.stripe_id == "customer-1"
+    assert customer.stripe_product_id == "product-1"
 
 
 @pytest.mark.parametrize(
