@@ -28,7 +28,7 @@ class HandleEventUseCase:
         try:
             customer_id = UUID(customer_id)
         except TypeError, ValueError:
-            raise ValueError(f"Invalid metadata customer_id: {customer_id}")
+            raise ValueError(f"Invalid metadata customer id: {customer_id}")
 
         try:
             return await self._repository.get(customer_id)
@@ -41,7 +41,7 @@ class HandleEventUseCase:
                 cast(dict, event.data.get("metadata"))
             )
         except ValueError as e:
-            logger.error(f"Customer subscription created: {e}")
+            logger.error(f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED}: {e}")
             return
 
         customer.link_subscription(cast(str, event.data.get("customer")))
@@ -55,8 +55,8 @@ class HandleEventUseCase:
 
         if customer is None:
             logger.error(
-                "Customer subscription deleted: Customer not found for id: %s",
-                customer_id,
+                f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_DELETED}: "
+                f"Customer not found for id: {customer_id}",
             )
             return
 

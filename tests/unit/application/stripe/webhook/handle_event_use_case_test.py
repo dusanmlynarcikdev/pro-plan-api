@@ -29,7 +29,7 @@ async def test_customer_subscription_created_customer_not_found() -> None:
         )
 
     logger.error.assert_called_once_with(
-        "Customer subscription created: Customer not found for id: "
+        "customer.subscription.created: Customer not found for id: "
         "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
     )
 
@@ -39,9 +39,9 @@ async def test_customer_subscription_created_customer_not_found() -> None:
     (
         (
             {"customer_id": "not-a-uuid"},
-            "Customer subscription created: Invalid metadata customer_id: not-a-uuid",
+            "customer.subscription.created: Invalid metadata customer id: not-a-uuid",
         ),
-        ({}, "Customer subscription created: Invalid metadata customer_id: None"),
+        ({}, "customer.subscription.created: Invalid metadata customer id: None"),
     ),
 )
 async def test_customer_subscription_created_invalid_customer_id(
@@ -75,6 +75,5 @@ async def test_customer_subscription_deleted_customer_does_not_exist() -> None:
         )
 
     logger.error.assert_called_once_with(
-        "Customer subscription deleted: Customer not found for id: %s",
-        "cus_123",
+        "customer.subscription.deleted: Customer not found for id: cus_123",
     )
