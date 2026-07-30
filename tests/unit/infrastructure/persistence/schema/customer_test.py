@@ -5,9 +5,7 @@ from tests.generator.customer import generate, generate_with_subscription
 
 
 def test_from_domain() -> None:
-    customer = generate_with_subscription()
-
-    result = CustomerSchema.from_domain(customer)
+    result = CustomerSchema.from_domain(generate_with_subscription())
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
@@ -32,10 +30,9 @@ def test_to_domain() -> None:
 
 
 def test_update_from_domain() -> None:
-    customer = generate_with_subscription()
     schema = CustomerSchema.from_domain(generate())
 
-    schema.update_from_domain(customer)
+    schema.update_from_domain(generate_with_subscription())
 
     assert schema.stripe_id == "customer-1"
     assert schema.stripe_product_id == "product-1"

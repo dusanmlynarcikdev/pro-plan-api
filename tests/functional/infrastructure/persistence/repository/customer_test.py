@@ -14,9 +14,7 @@ from tests.generator.customer import generate, generate_with_subscription
 
 
 async def test_add(session: AsyncSession) -> None:
-    customer = generate_with_subscription()
-
-    await CustomerRepository(session).add(customer)
+    await CustomerRepository(session).add(generate_with_subscription())
     session.expunge_all()
 
     repository_customer = await get_customer(session)
@@ -77,9 +75,7 @@ async def test_find_one_by_external_id_empty_repository(
 
 
 async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
-    customer = generate_with_subscription()
-
-    session.add(CustomerSchema.from_domain(customer))
+    session.add(CustomerSchema.from_domain(generate_with_subscription()))
     await session.flush()
     session.expunge_all()
 

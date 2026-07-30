@@ -37,9 +37,7 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
 
 
 async def test_customer_subscription_deleted(session: AsyncSession) -> None:
-    customer = generate_with_subscription()
-
-    session.add(CustomerSchema.from_domain(customer))
+    session.add(CustomerSchema.from_domain(generate_with_subscription()))
     await session.flush()
     session.expunge_all()
 

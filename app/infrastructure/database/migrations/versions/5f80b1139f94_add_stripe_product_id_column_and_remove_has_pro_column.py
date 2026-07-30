@@ -1,4 +1,4 @@
-"""add stripe_product_id columns and remove has_pro column
+"""add stripe_product_id column and remove has_pro column
 
 Revision ID: 5f80b1139f94
 Revises: b7c31f04a9e2
