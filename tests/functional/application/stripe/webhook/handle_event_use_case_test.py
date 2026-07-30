@@ -23,7 +23,7 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
             data={
                 "customer": "customer-1",
                 "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
-                "plan": {"product": "product-1"},
+                "items": {"data": [{"price": {"product": "product-1"}}]},
             },
         )
     )
