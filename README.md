@@ -12,8 +12,8 @@
 
 ## Main highlights
 
-✔️ **Built with modern technologies (Python, FastAPI)**  
-✔️ **Simple integration and use**  
+✔️ **Fast and modern stack (Python, FastAPI)**  
+✔️ **Simple to integrate and use**  
 ✔️ **Production-ready Docker image for amd64 and arm64**  
 ✔️ **Deployable in minutes**
 
@@ -27,7 +27,7 @@
 ## Features
 
 - Creates Stripe Checkout and Billing Portal sessions
-- Synchronizes subscription states via Stripe webhooks
+- Synchronizes subscription access via Stripe webhooks
 - Manages customers using your own external IDs
 - Does not store any customer data
 

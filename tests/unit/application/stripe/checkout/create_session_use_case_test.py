@@ -8,17 +8,14 @@ from app.application.customer.get_or_create_customer_use_case import (
 from app.application.stripe.checkout.client import Client
 from app.application.stripe.checkout.create_session_use_case import CreateSessionUseCase
 from app.application.stripe.errors import CustomerAlreadyHasStripeSubscriptionError
-from tests.generator.customer import generate
+from tests.generator.customer import generate_with_subscription
 
 
 async def test_customer_already_has_subscription() -> None:
-    customer = generate()
-    customer.link_subscription("cus_123")
-
     use_case = CreateSessionUseCase(
         AsyncMock(
             GetOrCreateCustomerUseCase,
-            return_value=customer,
+            return_value=generate_with_subscription(),
         ),
         Mock(Client),
     )
