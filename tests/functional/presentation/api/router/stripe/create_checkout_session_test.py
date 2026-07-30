@@ -8,6 +8,7 @@ from stripe import StripeError
 from stripe.params.checkout import (
     SessionCreateParams,
     SessionCreateParamsLineItem,
+    SessionCreateParamsSubscriptionData,
 )
 
 from app.infrastructure.database.schema.customer import CustomerSchema
@@ -50,10 +51,14 @@ async def test_create_with_existing_customer(
     stripe_client.assert_called_once_with("example-api-key")
     stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(
         SessionCreateParams(
-            client_reference_id=str(customer.id),
             customer="customer-1",
             line_items=[SessionCreateParamsLineItem(price="price-1", quantity=1)],
             mode="subscription",
+            subscription_data=SessionCreateParamsSubscriptionData(
+                metadata={
+                    "customer_id": str(customer.id),
+                }
+            ),
             success_url="https://example.com/success",
         )
     )
