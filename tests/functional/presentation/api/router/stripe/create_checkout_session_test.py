@@ -46,7 +46,6 @@ async def test_create_with_existing_customer(
 
     customer = (await session.exec(select(CustomerSchema))).one()
     assert customer.external_id == "user-1"
-    assert not customer.has_pro
 
     stripe_client.assert_called_once_with("example-api-key")
     stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(

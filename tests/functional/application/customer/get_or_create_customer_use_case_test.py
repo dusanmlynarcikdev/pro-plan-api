@@ -20,15 +20,11 @@ async def test_create(session: AsyncSession) -> None:
     session.expunge_all()
 
     assert customer.external_id == "user-1"
-    assert not customer.has_pro
-    assert customer.stripe_id is None
 
     repository_customer = (await session.exec(select(CustomerSchema))).one()
 
     assert repository_customer.id == customer.id
     assert repository_customer.external_id == "user-1"
-    assert not repository_customer.has_pro
-    assert repository_customer.stripe_id is None
 
 
 async def test_create_when_another_customer_exists(

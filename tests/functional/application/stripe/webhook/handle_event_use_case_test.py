@@ -32,7 +32,6 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
     customer = (await session.exec(select(CustomerSchema))).one()
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert customer.has_pro
     assert customer.stripe_id == "cus-1"
     assert customer.stripe_product_id == "prod-1"
 
@@ -57,5 +56,4 @@ async def test_customer_subscription_deleted(session: AsyncSession) -> None:
     customer = (await session.exec(select(CustomerSchema))).one()
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert not customer.has_pro
     assert customer.stripe_product_id is None

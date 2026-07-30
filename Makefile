@@ -21,13 +21,13 @@ lf:
 m:
 	alembic upgrade head
 
-# revert last database migration
-md:
-	alembic downgrade -1
-
 # generate database migration from diff
 mg:
 	alembic revision -m "autogenerate" --autogenerate
+
+# rollback last database migration
+mr:
+	alembic downgrade -1
 
 # check database schema
 s:

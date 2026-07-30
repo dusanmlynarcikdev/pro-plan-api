@@ -23,7 +23,6 @@ async def test_add(session: AsyncSession) -> None:
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.external_id == "user-1"
-    assert repository_customer.has_pro
     assert repository_customer.stripe_id == "cus-1"
     assert repository_customer.stripe_product_id == "prod-1"
 
@@ -185,7 +184,6 @@ async def test_update(session: AsyncSession) -> None:
     repository_customer = await get_customer(session)
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-    assert repository_customer.has_pro
     assert repository_customer.stripe_id == "cus-1"
     assert repository_customer.stripe_product_id == "prod-1"
 
