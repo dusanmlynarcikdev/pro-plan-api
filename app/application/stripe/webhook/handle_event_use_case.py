@@ -2,7 +2,7 @@ import logging
 from typing import cast
 from uuid import UUID
 
-from app.application.stripe.enums import SubscriptionMetadata, WebhookEventType
+from app.application.stripe.enums import SubscriptionMetadataKey, WebhookEventType
 from app.application.stripe.webhook.event import Event
 from app.domain.customer.customer import Customer
 from app.domain.customer.errors import CustomerNotFoundError
@@ -23,7 +23,7 @@ class HandleEventUseCase:
                 await self._handle_customer_subscription_deleted(event)
 
     async def _get_customer_by_metadata(self, metadata: dict[str, str]) -> Customer:
-        customer_id = metadata.get(SubscriptionMetadata.CUSTOMER_ID)
+        customer_id = metadata.get(SubscriptionMetadataKey.CUSTOMER_ID)
 
         try:
             customer_id = UUID(customer_id)

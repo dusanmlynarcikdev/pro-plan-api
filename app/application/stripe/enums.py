@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class SubscriptionMetadata(StrEnum):
+class SubscriptionMetadataKey(StrEnum):
     CUSTOMER_ID = "customer_id"
 
 

@@ -6,7 +6,7 @@ from stripe.params.checkout import (
     SessionCreateParamsSubscriptionData,
 )
 
-from app.application.stripe.enums import SubscriptionMetadata
+from app.application.stripe.enums import SubscriptionMetadataKey
 from app.application.stripe.errors import UnableToCreateCheckoutSessionError
 
 
@@ -52,7 +52,7 @@ class CheckoutClient:
             mode="subscription",
             subscription_data=SessionCreateParamsSubscriptionData(
                 metadata={
-                    SubscriptionMetadata.CUSTOMER_ID: customer_id,
+                    SubscriptionMetadataKey.CUSTOMER_ID: customer_id,
                 }
             ),
             success_url=success_url,
