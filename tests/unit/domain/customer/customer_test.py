@@ -37,27 +37,28 @@ def test_can_access_stripe_billing_portal(
 def test_link_subscription() -> None:
     customer = generate()
 
-    customer.link_subscription("cus_123")
+    customer.link_subscription("cus-1", "prod-1")
 
     assert customer.has_pro
-    assert customer.stripe_id == "cus_123"
+    assert customer.stripe_id == "cus-1"
+    assert customer.stripe_product_id == "prod-1"
 
 
 @pytest.mark.parametrize(
-    ("has_pro", "stripe_id", "expected_result"),
+    ("has_pro", "stripe_product_id", "expected_result"),
     (
         (False, None, False),
-        (False, "cus_123", False),
+        (False, "prod-1", False),
         (True, None, False),
-        (True, "cus_123", True),
+        (True, "prod-1", True),
     ),
 )
 def test_has_subscription(
-    has_pro: bool, stripe_id: str | None, expected_result: bool
+    has_pro: bool, stripe_product_id: str | None, expected_result: bool
 ) -> None:
     customer = generate()
     customer._has_pro = has_pro
-    customer._stripe_id = stripe_id
+    customer._stripe_product_id = stripe_product_id
 
     assert customer.has_subscription() == expected_result
 

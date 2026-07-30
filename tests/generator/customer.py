@@ -10,3 +10,10 @@ def generate(
     external_id: str = "user-1",
 ) -> Customer:
     return Customer(id, external_id)
+
+
+def generate_with_subscription() -> Customer:
+    customer = generate()
+    customer.link_subscription("cus-1", "prod-1")
+
+    return customer

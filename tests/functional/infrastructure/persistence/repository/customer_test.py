@@ -10,12 +10,11 @@ from app.infrastructure.database.repository.customer import (
     CustomerRepository,
 )
 from app.infrastructure.database.schema.customer import CustomerSchema
-from tests.generator.customer import generate
+from tests.generator.customer import generate, generate_with_subscription
 
 
 async def test_add(session: AsyncSession) -> None:
-    customer = generate()
-    customer.link_subscription("cus_123")
+    customer = generate_with_subscription()
 
     await CustomerRepository(session).add(customer)
     session.expunge_all()
@@ -25,7 +24,8 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.external_id == "user-1"
     assert repository_customer.has_pro
-    assert repository_customer.stripe_id == "cus_123"
+    assert repository_customer.stripe_id == "cus-1"
+    assert repository_customer.stripe_product_id == "prod-1"
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
@@ -78,15 +78,14 @@ async def test_find_one_by_external_id_empty_repository(
 
 
 async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
-    customer = generate()
-    customer.link_subscription("cus_123")
+    customer = generate_with_subscription()
 
     session.add(CustomerSchema.from_domain(customer))
     await session.flush()
     session.expunge_all()
 
     repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "cus_123"
+        "cus-1"
     )
 
     assert repository_customer is not None
@@ -180,17 +179,15 @@ async def test_update(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    customer = generate()
-    customer.link_subscription("cus_123")
-
-    await CustomerRepository(session).update(customer)
+    await CustomerRepository(session).update(generate_with_subscription())
     session.expunge_all()
 
     repository_customer = await get_customer(session)
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.has_pro
-    assert repository_customer.stripe_id == "cus_123"
+    assert repository_customer.stripe_id == "cus-1"
+    assert repository_customer.stripe_product_id == "prod-1"
 
 
 async def test_update_unknown(session: AsyncSession) -> None:

@@ -3,16 +3,13 @@ from fastapi.testclient import TestClient
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.infrastructure.database.schema.customer import CustomerSchema
-from tests.generator.customer import generate
+from tests.generator.customer import generate_with_subscription
 
 PATH = "/api/customers/{external_id}"
 
 
 async def test_get(client: TestClient, session: AsyncSession) -> None:
-    customer = generate()
-    customer.link_subscription("customer-1")
-
-    session.add(CustomerSchema.from_domain(customer))
+    session.add(CustomerSchema.from_domain(generate_with_subscription()))
     await session.flush()
     session.expunge_all()
 

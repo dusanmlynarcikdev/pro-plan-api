@@ -44,7 +44,10 @@ class HandleEventUseCase:
             logger.error(f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED}: {e}")
             return
 
-        customer.link_subscription(cast(str, event.data.get("customer")))
+        customer.link_subscription(
+            cast(str, event.data.get("customer")),
+            cast(str, cast(dict, event.data.get("plan")).get("product")),
+        )
 
         await self._repository.update(customer)
         await self._repository.commit()
