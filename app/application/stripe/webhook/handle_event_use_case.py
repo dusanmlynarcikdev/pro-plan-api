@@ -44,7 +44,7 @@ class HandleEventUseCase:
             logger.error(f"Customer subscription created: {e}")
             return
 
-        customer.link_stripe_subscription(cast(str, event.data.get("customer")))
+        customer.link_subscription(cast(str, event.data.get("customer")))
 
         await self._repository.update(customer)
         await self._repository.commit()
@@ -60,7 +60,7 @@ class HandleEventUseCase:
             )
             return
 
-        customer.deactivate_pro()
+        customer.remove_subscription()
 
         await self._repository.update(customer)
         await self._repository.commit()

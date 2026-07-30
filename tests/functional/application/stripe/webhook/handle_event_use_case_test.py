@@ -37,7 +37,7 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
 
 async def test_customer_subscription_deleted(session: AsyncSession) -> None:
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     session.add(CustomerSchema.from_domain(customer))
     await session.flush()

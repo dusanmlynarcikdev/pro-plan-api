@@ -33,7 +33,7 @@ class CreateSessionUseCase:
         """
         customer = await self._get_or_create_customer(customer_external_id)
 
-        if customer.has_stripe_subscription():
+        if customer.has_subscription():
             raise CustomerAlreadyHasStripeSubscriptionError
 
         try:

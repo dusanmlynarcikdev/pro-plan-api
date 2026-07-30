@@ -15,7 +15,7 @@ from tests.generator.customer import generate
 
 async def test_add(session: AsyncSession) -> None:
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     await CustomerRepository(session).add(customer)
     session.expunge_all()
@@ -79,7 +79,7 @@ async def test_find_one_by_external_id_empty_repository(
 
 async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     session.add(CustomerSchema.from_domain(customer))
     await session.flush()
@@ -181,7 +181,7 @@ async def test_update(session: AsyncSession) -> None:
     session.expunge_all()
 
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     await CustomerRepository(session).update(customer)
     session.expunge_all()

@@ -6,7 +6,7 @@ from tests.generator.customer import generate
 
 def test_from_domain() -> None:
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     result = CustomerSchema.from_domain(customer)
 
@@ -34,7 +34,7 @@ def test_to_domain() -> None:
 
 def test_update_from_domain() -> None:
     customer = generate()
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
     schema = CustomerSchema.from_domain(generate())
 
     schema.update_from_domain(customer)

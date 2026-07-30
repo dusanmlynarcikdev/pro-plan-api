@@ -34,10 +34,10 @@ def test_can_access_stripe_billing_portal(
     assert customer.can_access_stripe_billing_portal == expected_result
 
 
-def test_link_stripe_subscription() -> None:
+def test_link_subscription() -> None:
     customer = generate()
 
-    customer.link_stripe_subscription("cus_123")
+    customer.link_subscription("cus_123")
 
     assert customer.has_pro
     assert customer.stripe_id == "cus_123"
@@ -52,20 +52,20 @@ def test_link_stripe_subscription() -> None:
         (True, "cus_123", True),
     ),
 )
-def test_has_stripe_subscription(
+def test_has_subscription(
     has_pro: bool, stripe_id: str | None, expected_result: bool
 ) -> None:
     customer = generate()
     customer._has_pro = has_pro
     customer._stripe_id = stripe_id
 
-    assert customer.has_stripe_subscription() == expected_result
+    assert customer.has_subscription() == expected_result
 
 
-def test_deactivate_pro() -> None:
+def test_remove_subscription() -> None:
     customer = generate()
     customer._has_pro = True
 
-    customer.deactivate_pro()
+    customer.remove_subscription()
 
     assert not customer.has_pro
