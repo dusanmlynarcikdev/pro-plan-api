@@ -1,4 +1,4 @@
-"""rename stripe product id to stripe subscription product id
+"""rename stripe_product_id column to stripe_subscription_product_id
 
 Revision ID: 451f56bd5a55
 Revises: b2930cf7aa1b
