@@ -6,7 +6,7 @@ class Customer:
         self._id = id
         self._external_id = external_id
         self._stripe_id: str | None = None
-        self._stripe_product_id: str | None = None
+        self._stripe_subscription_product_id: str | None = None
         self._stripe_subscription_status: str | None = None
 
     @property
@@ -22,8 +22,8 @@ class Customer:
         return self._stripe_id
 
     @property
-    def stripe_product_id(self) -> str | None:
-        return self._stripe_product_id
+    def stripe_subscription_product_id(self) -> str | None:
+        return self._stripe_subscription_product_id
 
     @property
     def stripe_subscription_status(self) -> str | None:
@@ -41,5 +41,5 @@ class Customer:
         self, customer_id: str, subscription_product_id: str, subscription_status: str
     ) -> None:
         self._stripe_id = customer_id
-        self._stripe_product_id = subscription_product_id
+        self._stripe_subscription_product_id = subscription_product_id
         self._stripe_subscription_status = subscription_status

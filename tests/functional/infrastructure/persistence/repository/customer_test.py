@@ -22,7 +22,7 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.external_id == "user-1"
     assert repository_customer.stripe_id == "customer-1"
-    assert repository_customer.stripe_product_id == "product-1"
+    assert repository_customer.stripe_subscription_product_id == "product-1"
 
 
 async def test_add_duplicity(session: AsyncSession) -> None:
@@ -144,7 +144,7 @@ async def test_update(session: AsyncSession) -> None:
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.stripe_id == "customer-1"
-    assert repository_customer.stripe_product_id == "product-1"
+    assert repository_customer.stripe_subscription_product_id == "product-1"
 
 
 async def test_update_unknown(session: AsyncSession) -> None:

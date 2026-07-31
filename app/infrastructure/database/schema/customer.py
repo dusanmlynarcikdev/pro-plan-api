@@ -17,7 +17,7 @@ class CustomerSchema(SQLModel, table=True):
     id: Annotated[UUID, Field(primary_key=True)]
     external_id: str
     stripe_id: str | None
-    stripe_product_id: str | None
+    stripe_subscription_product_id: str | None
     stripe_subscription_status: str | None
 
     @classmethod
@@ -26,19 +26,19 @@ class CustomerSchema(SQLModel, table=True):
             id=customer.id,
             external_id=customer.external_id,
             stripe_id=customer.stripe_id,
-            stripe_product_id=customer.stripe_product_id,
+            stripe_subscription_product_id=customer.stripe_subscription_product_id,
             stripe_subscription_status=customer.stripe_subscription_status,
         )
 
     def to_domain(self) -> Customer:
         customer = Customer(self.id, self.external_id)
         customer._stripe_id = self.stripe_id
-        customer._stripe_product_id = self.stripe_product_id
+        customer._stripe_subscription_product_id = self.stripe_subscription_product_id
         customer._stripe_subscription_status = self.stripe_subscription_status
 
         return customer
 
     def update_from_domain(self, customer: Customer) -> None:
         self.stripe_id = customer.stripe_id
-        self.stripe_product_id = customer.stripe_product_id
+        self.stripe_subscription_product_id = customer.stripe_subscription_product_id
         self.stripe_subscription_status = customer.stripe_subscription_status
