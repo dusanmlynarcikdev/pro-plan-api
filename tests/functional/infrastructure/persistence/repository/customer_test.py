@@ -74,43 +74,6 @@ async def test_find_one_by_external_id_empty_repository(
     assert repository_customer is None
 
 
-async def test_find_one_by_stripe_id(session: AsyncSession) -> None:
-    session.add(CustomerSchema.from_domain(generate_with_subscription()))
-    await session.flush()
-    session.expunge_all()
-
-    repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "customer-1"
-    )
-
-    assert repository_customer is not None
-    assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-
-
-async def test_find_one_by_stripe_id_another_customer_exists(
-    session: AsyncSession,
-) -> None:
-    session.add(CustomerSchema.from_domain(generate()))
-    await session.flush()
-    session.expunge_all()
-
-    repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "customer-1"
-    )
-
-    assert repository_customer is None
-
-
-async def test_find_one_by_stripe_id_empty_repository(
-    session: AsyncSession,
-) -> None:
-    repository_customer = await CustomerRepository(session).find_one_by_stripe_id(
-        "customer-1"
-    )
-
-    assert repository_customer is None
-
-
 async def test_get(session: AsyncSession) -> None:
     session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
@@ -167,6 +130,36 @@ async def test_get_by_external_id_another_customer_exists(
 async def test_get_by_external_id_empty_repository(session: AsyncSession) -> None:
     with raises(CustomerNotFoundError):
         await CustomerRepository(session).get_by_external_id("user-1")
+
+
+async def test_get_by_stripe_id(session: AsyncSession) -> None:
+    session.add(CustomerSchema.from_domain(generate_with_subscription()))
+    await session.flush()
+    session.expunge_all()
+
+    repository_customer = await CustomerRepository(session).get_by_stripe_id(
+        "customer-1"
+    )
+
+    assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+
+
+async def test_get_by_stripe_id_another_customer_exists(
+    session: AsyncSession,
+) -> None:
+    session.add(CustomerSchema.from_domain(generate()))
+    await session.flush()
+    session.expunge_all()
+
+    with raises(CustomerNotFoundError):
+        await CustomerRepository(session).get_by_stripe_id("customer-1")
+
+
+async def test_get_by_stripe_id_empty_repository(
+    session: AsyncSession,
+) -> None:
+    with raises(CustomerNotFoundError):
+        await CustomerRepository(session).get_by_stripe_id("customer-1")
 
 
 async def test_update(session: AsyncSession) -> None:
