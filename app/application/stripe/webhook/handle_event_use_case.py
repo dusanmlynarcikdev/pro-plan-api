@@ -79,13 +79,17 @@ class HandleEventUseCase:
         await self._repository.update(customer)
         await self._repository.commit()
 
+    @staticmethod
+    def _is_subscription_active(status: str) -> bool:
+        return status in ("active", "past_due")
+
     async def _link_subscription(self, customer: Customer, event: Event) -> None:
         items = cast(list[dict], cast(dict, event.data.get("items")).get("data"))
 
         customer.link_subscription(
             cast(str, event.data.get("customer")),
             cast(str, cast(dict, items[0].get("price")).get("product")),
-            True,
+            self._is_subscription_active(cast(str, event.data.get("status"))),
         )
 
         await self._repository.update(customer)

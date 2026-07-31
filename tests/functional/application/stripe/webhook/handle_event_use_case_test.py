@@ -24,6 +24,7 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
                 "customer": "customer-1",
                 "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
                 "items": {"data": [{"price": {"product": "product-1"}}]},
+                "status": "active",
             },
         )
     )
@@ -32,6 +33,7 @@ async def test_customer_subscription_created(session: AsyncSession) -> None:
     customer = (await session.exec(select(CustomerSchema))).one()
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert customer.has_active_subscription
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_product_id == "product-1"
 
@@ -49,6 +51,7 @@ async def test_customer_subscription_updated(session: AsyncSession) -> None:
             data={
                 "customer": "customer-1",
                 "items": {"data": [{"price": {"product": "product-2"}}]},
+                "status": "canceled",
             },
         )
     )
@@ -57,6 +60,7 @@ async def test_customer_subscription_updated(session: AsyncSession) -> None:
     customer = (await session.exec(select(CustomerSchema))).one()
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert not customer.has_active_subscription
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_product_id == "product-2"
 
@@ -79,4 +83,5 @@ async def test_customer_subscription_deleted(session: AsyncSession) -> None:
     customer = (await session.exec(select(CustomerSchema))).one()
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
+    assert not customer.has_active_subscription
     assert customer.stripe_product_id is None

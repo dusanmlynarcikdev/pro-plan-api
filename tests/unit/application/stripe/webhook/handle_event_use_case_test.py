@@ -96,3 +96,17 @@ async def test_customer_subscription_deleted_customer_does_not_exist() -> None:
     logger.error.assert_called_once_with(
         "customer.subscription.deleted: Customer not found: customer-1",
     )
+
+
+@pytest.mark.parametrize(
+    ("status", "expected_result"),
+    (
+        ("active", True),
+        ("past_due", True),
+        ("canceled", False),
+    ),
+)
+async def test_is_subscription_active(status: str, expected_result: bool) -> None:
+    use_case = HandleEventUseCase(Mock(CustomerRepository))
+
+    assert use_case._is_subscription_active(status) == expected_result
