@@ -43,25 +43,6 @@ def test_link_subscription() -> None:
     assert customer.stripe_product_id == "product-1"
 
 
-@pytest.mark.parametrize(
-    ("stripe_id", "stripe_product_id", "expected_result"),
-    (
-        (None, None, False),
-        (None, "product-1", False),
-        ("customer-1", None, False),
-        ("customer-1", "product-1", True),
-    ),
-)
-def test_has_subscription(
-    stripe_id: str | None, stripe_product_id: str | None, expected_result: bool
-) -> None:
-    customer = generate()
-    customer._stripe_id = stripe_id
-    customer._stripe_product_id = stripe_product_id
-
-    assert customer.has_subscription() == expected_result
-
-
 def test_remove_subscription() -> None:
     customer = generate_with_subscription()
 

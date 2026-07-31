@@ -1,11 +1,6 @@
 from app.domain.errors import ConflictDomainError, DomainError
 
 
-class CustomerAlreadyHasStripeSubscriptionError(ConflictDomainError):
-    def __init__(self) -> None:
-        super().__init__("Customer already has a Stripe subscription")
-
-
 class CustomerIsNotLinkedToStripeError(ConflictDomainError):
     def __init__(self) -> None:
         super().__init__("Customer is not linked to Stripe")

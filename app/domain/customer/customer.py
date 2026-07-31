@@ -34,8 +34,5 @@ class Customer:
         self._stripe_id = stripe_customer_id
         self._stripe_product_id = stripe_product_id
 
-    def has_subscription(self) -> bool:
-        return self.stripe_id is not None and self.stripe_product_id is not None
-
     def remove_subscription(self) -> None:
         self._stripe_product_id = None
