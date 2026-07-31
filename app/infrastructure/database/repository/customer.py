@@ -26,13 +26,6 @@ class CustomerRepository:
 
         return customer.to_domain() if customer else None
 
-    async def find_one_by_stripe_id(self, stripe_id: str) -> Customer | None:
-        query = select(CustomerSchema).where(CustomerSchema.stripe_id == stripe_id)
-
-        customer = (await self._session.exec(query)).one_or_none()
-
-        return customer.to_domain() if customer else None
-
     async def get(self, id: UUID) -> Customer:
         """
         :raises CustomerNotFoundError:
@@ -54,6 +47,19 @@ class CustomerRepository:
             raise CustomerNotFoundError
 
         return customer
+
+    async def get_by_stripe_id(self, stripe_id: str) -> Customer:
+        """
+        :raises CustomerNotFoundError:
+        """
+        query = select(CustomerSchema).where(CustomerSchema.stripe_id == stripe_id)
+
+        customer = (await self._session.exec(query)).one_or_none()
+
+        if customer is None:
+            raise CustomerNotFoundError
+
+        return customer.to_domain()
 
     async def update(self, customer: Customer) -> None:
         _customer = await self._session.get(CustomerSchema, customer.id)

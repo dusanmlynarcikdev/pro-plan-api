@@ -11,8 +11,6 @@ class CustomerRepository(Protocol):
 
     async def find_one_by_external_id(self, external_id: str) -> Customer | None: ...
 
-    async def find_one_by_stripe_id(self, stripe_id: str) -> Customer | None: ...
-
     async def get(self, id: UUID) -> Customer:
         """
         :raises CustomerNotFound:
@@ -20,6 +18,12 @@ class CustomerRepository(Protocol):
         ...
 
     async def get_by_external_id(self, external_id: str) -> Customer:
+        """
+        :raises CustomerNotFound:
+        """
+        ...
+
+    async def get_by_stripe_id(self, stripe_id: str) -> Customer:
         """
         :raises CustomerNotFound:
         """
