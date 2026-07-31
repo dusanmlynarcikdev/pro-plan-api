@@ -17,7 +17,7 @@ async def test_add(session: AsyncSession) -> None:
     await CustomerRepository(session).add(generate_with_subscription())
     session.expunge_all()
 
-    repository_customer = await get_customer(session)
+    repository_customer = (await session.exec(select(CustomerSchema))).one()
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.external_id == "user-1"
@@ -132,36 +132,6 @@ async def test_get_by_external_id_empty_repository(session: AsyncSession) -> Non
         await CustomerRepository(session).get_by_external_id("user-1")
 
 
-async def test_get_by_stripe_id(session: AsyncSession) -> None:
-    session.add(CustomerSchema.from_domain(generate_with_subscription()))
-    await session.flush()
-    session.expunge_all()
-
-    repository_customer = await CustomerRepository(session).get_by_stripe_id(
-        "customer-1"
-    )
-
-    assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
-
-
-async def test_get_by_stripe_id_another_customer_exists(
-    session: AsyncSession,
-) -> None:
-    session.add(CustomerSchema.from_domain(generate()))
-    await session.flush()
-    session.expunge_all()
-
-    with raises(CustomerNotFoundError):
-        await CustomerRepository(session).get_by_stripe_id("customer-1")
-
-
-async def test_get_by_stripe_id_empty_repository(
-    session: AsyncSession,
-) -> None:
-    with raises(CustomerNotFoundError):
-        await CustomerRepository(session).get_by_stripe_id("customer-1")
-
-
 async def test_update(session: AsyncSession) -> None:
     session.add(CustomerSchema.from_domain(generate()))
     await session.flush()
@@ -170,7 +140,7 @@ async def test_update(session: AsyncSession) -> None:
     await CustomerRepository(session).update(generate_with_subscription())
     session.expunge_all()
 
-    repository_customer = await get_customer(session)
+    repository_customer = (await session.exec(select(CustomerSchema))).one()
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.stripe_id == "customer-1"
@@ -186,9 +156,3 @@ async def test_update_unknown(session: AsyncSession) -> None:
         await CustomerRepository(session).update(
             generate(UUID("019d2fb0-b4d2-7731-9924-9de4130ec63e"))
         )
-
-
-async def get_customer(session: AsyncSession) -> CustomerSchema:
-    result = await session.exec(select(CustomerSchema))
-
-    return result.one()
