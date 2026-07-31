@@ -16,9 +16,9 @@ async def test_get(client: TestClient, session: AsyncSession) -> None:
     response = client.get(PATH.format(external_id="user-1"))
 
     assert response.status_code == status.HTTP_200_OK
-    assert (
-        response.content
-        == b'{"canAccessStripeBillingPortal":true,"stripeProductId":"product-1"}'
+    assert response.content == (
+        b'{"canAccessStripeBillingPortal":true,"hasActiveSubscription":true,'
+        b'"stripeProductId":"product-1"}'
     )
 
 

@@ -16,6 +16,7 @@ class CustomerSchema(SQLModel, table=True):
 
     id: Annotated[UUID, Field(primary_key=True)]
     external_id: str
+    has_active_subscription: bool
     stripe_id: str | None
     stripe_product_id: str | None
 
@@ -24,17 +25,20 @@ class CustomerSchema(SQLModel, table=True):
         return cls(
             id=customer.id,
             external_id=customer.external_id,
+            has_active_subscription=customer.has_active_subscription,
             stripe_id=customer.stripe_id,
             stripe_product_id=customer.stripe_product_id,
         )
 
     def to_domain(self) -> Customer:
         customer = Customer(self.id, self.external_id)
+        customer._has_active_subscription = self.has_active_subscription
         customer._stripe_id = self.stripe_id
         customer._stripe_product_id = self.stripe_product_id
 
         return customer
 
     def update_from_domain(self, customer: Customer) -> None:
+        self.has_active_subscription = customer.has_active_subscription
         self.stripe_id = customer.stripe_id
         self.stripe_product_id = customer.stripe_product_id

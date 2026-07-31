@@ -14,6 +14,7 @@ def test_create() -> None:
 
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
+    assert not result.has_active_subscription
     assert result.stripe_id is None
     assert result.stripe_product_id is None
 
@@ -34,11 +35,16 @@ def test_can_access_stripe_billing_portal(
     assert customer.can_access_stripe_billing_portal == expected_result
 
 
-def test_link_subscription() -> None:
+@pytest.mark.parametrize(
+    "is_active",
+    (True, False),
+)
+def test_link_subscription(is_active: bool) -> None:
     customer = generate()
 
-    customer.link_subscription("customer-1", "product-1")
+    customer.link_subscription("customer-1", "product-1", is_active)
 
+    assert customer.has_active_subscription == is_active
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_product_id == "product-1"
 
@@ -48,4 +54,5 @@ def test_remove_subscription() -> None:
 
     customer.remove_subscription()
 
+    assert not customer.has_active_subscription
     assert customer.stripe_product_id is None

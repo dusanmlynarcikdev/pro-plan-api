@@ -5,6 +5,7 @@ class Customer:
     def __init__(self, id: UUID, external_id: str) -> None:
         self._id = id
         self._external_id = external_id
+        self._has_active_subscription: bool = False
         self._stripe_id: str | None = None
         self._stripe_product_id: str | None = None
 
@@ -15,6 +16,10 @@ class Customer:
     @property
     def external_id(self) -> str:
         return self._external_id
+
+    @property
+    def has_active_subscription(self) -> bool:
+        return self._has_active_subscription
 
     @property
     def stripe_id(self) -> str | None:
@@ -29,10 +34,12 @@ class Customer:
         return self.stripe_id is not None
 
     def link_subscription(
-        self, stripe_customer_id: str, stripe_product_id: str
+        self, stripe_customer_id: str, stripe_product_id: str, is_active: bool
     ) -> None:
+        self._has_active_subscription = is_active
         self._stripe_id = stripe_customer_id
         self._stripe_product_id = stripe_product_id
 
     def remove_subscription(self) -> None:
+        self._has_active_subscription = False
         self._stripe_product_id = None

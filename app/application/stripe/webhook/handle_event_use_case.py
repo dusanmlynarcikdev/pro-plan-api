@@ -85,6 +85,7 @@ class HandleEventUseCase:
         customer.link_subscription(
             cast(str, event.data.get("customer")),
             cast(str, cast(dict, items[0].get("price")).get("product")),
+            True,
         )
 
         await self._repository.update(customer)
