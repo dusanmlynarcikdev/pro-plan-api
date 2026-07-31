@@ -29,8 +29,8 @@ async def test_customer_subscription_created_customer_does_not_exist() -> None:
         )
 
     logger.error.assert_called_once_with(
-        f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED}: "
-        f"Customer not found: 019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
+        "customer.subscription.created: "
+        "Customer not found: 019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04",
     )
 
 
@@ -49,6 +49,6 @@ async def test_customer_subscription_created_invalid_customer_id(
         )
 
     logger.error.assert_called_once_with(
-        f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED}: "
+        "customer.subscription.created: "
         f"Invalid metadata customer_id: {metadata.get('customer_id')}"
     )

@@ -36,7 +36,7 @@ def test_can_access_stripe_billing_portal(
 
 
 @pytest.mark.parametrize(
-    ("status", "expected_result"),
+    ("stripe_subscription_status", "expected_result"),
     (
         (None, False),
         ("active", True),
@@ -44,17 +44,19 @@ def test_can_access_stripe_billing_portal(
         ("canceled", False),
     ),
 )
-def test_has_active_subscription(status: str | None, expected_result: bool) -> None:
+def test_has_active_subscription(
+    stripe_subscription_status: str | None, expected_result: bool
+) -> None:
     customer = generate()
-    customer._stripe_subscription_status = status
+    customer._stripe_subscription_status = stripe_subscription_status
 
     assert customer.has_active_subscription == expected_result
 
 
-def test_set_stripe_subscription() -> None:
+def test_set_stripe() -> None:
     customer = generate()
 
-    customer.set_stripe_subscription("customer-1", "product-1", "active")
+    customer.set_stripe("customer-1", "product-1", "active")
 
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_product_id == "product-1"

@@ -12,8 +12,8 @@ def generate(
     return Customer(id, external_id)
 
 
-def generate_with_subscription() -> Customer:
+def generate_with_stripe() -> Customer:
     customer = generate()
-    customer.set_stripe_subscription("customer-1", "product-1", "active")
+    customer.set_stripe("customer-1", "product-1", "active")
 
     return customer

@@ -8,7 +8,7 @@ from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook.event import Event
 from app.infrastructure.database.schema.customer import CustomerSchema
 from app.presentation.api.dependencies import get_handle_webhook_event_use_case
-from tests.generator.customer import generate_with_subscription
+from tests.generator.customer import generate_with_stripe
 
 
 @pytest.mark.parametrize(
@@ -22,7 +22,7 @@ from tests.generator.customer import generate_with_subscription
 async def test_customer_subscription(
     event_type: WebhookEventType, session: AsyncSession
 ) -> None:
-    session.add(CustomerSchema.from_domain(generate_with_subscription()))
+    session.add(CustomerSchema.from_domain(generate_with_stripe()))
     await session.flush()
     session.expunge_all()
 

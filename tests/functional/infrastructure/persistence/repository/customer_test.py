@@ -10,11 +10,11 @@ from app.infrastructure.database.repository.customer import (
     CustomerRepository,
 )
 from app.infrastructure.database.schema.customer import CustomerSchema
-from tests.generator.customer import generate, generate_with_subscription
+from tests.generator.customer import generate, generate_with_stripe
 
 
 async def test_add(session: AsyncSession) -> None:
-    await CustomerRepository(session).add(generate_with_subscription())
+    await CustomerRepository(session).add(generate_with_stripe())
     session.expunge_all()
 
     repository_customer = (await session.exec(select(CustomerSchema))).one()
@@ -137,7 +137,7 @@ async def test_update(session: AsyncSession) -> None:
     await session.flush()
     session.expunge_all()
 
-    await CustomerRepository(session).update(generate_with_subscription())
+    await CustomerRepository(session).update(generate_with_stripe())
     session.expunge_all()
 
     repository_customer = (await session.exec(select(CustomerSchema))).one()
