@@ -15,7 +15,7 @@ def test_create() -> None:
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
     assert result.stripe_id is None
-    assert result.stripe_product_id is None
+    assert result.stripe_subscription_product_id is None
     assert result.stripe_subscription_status is None
 
 
@@ -59,5 +59,5 @@ def test_set_stripe() -> None:
     customer.set_stripe("customer-1", "product-1", "active")
 
     assert customer.stripe_id == "customer-1"
-    assert customer.stripe_product_id == "product-1"
+    assert customer.stripe_subscription_product_id == "product-1"
     assert customer.stripe_subscription_status == "active"

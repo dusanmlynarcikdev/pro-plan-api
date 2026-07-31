@@ -10,7 +10,7 @@ def test_from_domain() -> None:
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
     assert result.stripe_id == "customer-1"
-    assert result.stripe_product_id == "product-1"
+    assert result.stripe_subscription_product_id == "product-1"
     assert result.stripe_subscription_status == "active"
 
 
@@ -19,7 +19,7 @@ def test_to_domain() -> None:
         id=UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
         external_id="user-1",
         stripe_id="customer-1",
-        stripe_product_id="product-1",
+        stripe_subscription_product_id="product-1",
         stripe_subscription_status="active",
     )
 
@@ -28,7 +28,7 @@ def test_to_domain() -> None:
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
     assert result.stripe_id == "customer-1"
-    assert result.stripe_product_id == "product-1"
+    assert result.stripe_subscription_product_id == "product-1"
     assert result.stripe_subscription_status == "active"
 
 
@@ -38,5 +38,5 @@ def test_update_from_domain() -> None:
     schema.update_from_domain(generate_with_stripe())
 
     assert schema.stripe_id == "customer-1"
-    assert schema.stripe_product_id == "product-1"
+    assert schema.stripe_subscription_product_id == "product-1"
     assert schema.stripe_subscription_status == "active"
