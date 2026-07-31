@@ -2,6 +2,10 @@ from app.presentation.api.responses import BaseResponse
 
 
 class CustomerResponse(BaseResponse):
-    can_access_stripe_billing_portal: bool
     has_active_subscription: bool
-    stripe_subscription_product_id: str | None
+    stripe: CustomerStripeResponse
+
+
+class CustomerStripeResponse(BaseResponse):
+    can_access_billing_portal: bool
+    subscription_product_id: str | None
