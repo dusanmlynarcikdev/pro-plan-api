@@ -3,7 +3,7 @@ from uuid import UUID
 import pytest
 
 from app.domain.customer.customer import Customer
-from tests.generator.customer import generate, generate_with_subscription
+from tests.generator.customer import generate
 
 
 def test_create() -> None:
@@ -16,6 +16,7 @@ def test_create() -> None:
     assert result.external_id == "user-1"
     assert result.stripe_id is None
     assert result.stripe_product_id is None
+    assert result.stripe_subscription_status is None
 
 
 @pytest.mark.parametrize(
@@ -34,37 +35,29 @@ def test_can_access_stripe_billing_portal(
     assert customer.can_access_stripe_billing_portal == expected_result
 
 
-def test_link_subscription() -> None:
+@pytest.mark.parametrize(
+    ("stripe_subscription_status", "expected_result"),
+    (
+        (None, False),
+        ("active", True),
+        ("past_due", True),
+        ("canceled", False),
+    ),
+)
+def test_has_active_subscription(
+    stripe_subscription_status: str | None, expected_result: bool
+) -> None:
+    customer = generate()
+    customer._stripe_subscription_status = stripe_subscription_status
+
+    assert customer.has_active_subscription == expected_result
+
+
+def test_set_stripe() -> None:
     customer = generate()
 
-    customer.link_subscription("customer-1", "product-1")
+    customer.set_stripe("customer-1", "product-1", "active")
 
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_product_id == "product-1"
-
-
-@pytest.mark.parametrize(
-    ("stripe_id", "stripe_product_id", "expected_result"),
-    (
-        (None, None, False),
-        (None, "product-1", False),
-        ("customer-1", None, False),
-        ("customer-1", "product-1", True),
-    ),
-)
-def test_has_subscription(
-    stripe_id: str | None, stripe_product_id: str | None, expected_result: bool
-) -> None:
-    customer = generate()
-    customer._stripe_id = stripe_id
-    customer._stripe_product_id = stripe_product_id
-
-    assert customer.has_subscription() == expected_result
-
-
-def test_remove_subscription() -> None:
-    customer = generate_with_subscription()
-
-    customer.remove_subscription()
-
-    assert customer.stripe_product_id is None
+    assert customer.stripe_subscription_status == "active"

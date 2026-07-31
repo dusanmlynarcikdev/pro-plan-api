@@ -4,10 +4,7 @@ from app.application.customer.get_or_create_customer_use_case import (
     GetOrCreateCustomerUseCase,
 )
 from app.application.stripe.checkout.client import Client
-from app.application.stripe.errors import (
-    CustomerAlreadyHasStripeSubscriptionError,
-    UnableToCreateCheckoutSessionError,
-)
+from app.application.stripe.errors import UnableToCreateCheckoutSessionError
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +25,9 @@ class CreateSessionUseCase:
         success_url: str,
     ) -> str:
         """
-        :raises CustomerAlreadyHasStripeSubscriptionError:
         :raises UnableToCreateCheckoutSessionError:
         """
         customer = await self._get_or_create_customer(customer_external_id)
-
-        if customer.has_subscription():
-            raise CustomerAlreadyHasStripeSubscriptionError
 
         try:
             return await self._client.create_session(

@@ -23,10 +23,4 @@ class CustomerRepository(Protocol):
         """
         ...
 
-    async def get_by_stripe_id(self, stripe_id: str) -> Customer:
-        """
-        :raises CustomerNotFound:
-        """
-        ...
-
     async def update(self, customer: Customer) -> None: ...
