@@ -17,8 +17,8 @@ async def test_get(client: TestClient, session: AsyncSession) -> None:
 
     assert response.status_code == status.HTTP_200_OK
     assert response.content == (
-        b'{"canAccessStripeBillingPortal":true,"hasActiveSubscription":true,'
-        b'"stripeSubscriptionProductId":"product-1"}'
+        b'{"hasActiveSubscription":true,'
+        b'"stripe":{"canAccessBillingPortal":true,"subscriptionProductId":"product-1"}}'
     )
 
 
