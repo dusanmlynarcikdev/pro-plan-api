@@ -19,6 +19,8 @@ class HandleEventUseCase:
         match event.type:
             case WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED:
                 await self._handle_customer_subscription_created(event)
+            case WebhookEventType.CUSTOMER_SUBSCRIPTION_UPDATED:
+                await self._handle_customer_subscription_updated(event)
             case WebhookEventType.CUSTOMER_SUBSCRIPTION_DELETED:
                 await self._handle_customer_subscription_deleted(event)
 
@@ -54,6 +56,20 @@ class HandleEventUseCase:
         await self._repository.update(customer)
         await self._repository.commit()
 
+    async def _handle_customer_subscription_updated(self, event: Event) -> None:
+        customer_id = cast(str, event.data.get("customer"))
+
+        try:
+            customer = await self._repository.get_by_stripe_id(customer_id)
+        except CustomerNotFoundError:
+            logger.error(
+                f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_UPDATED}: "
+                f"Customer not found for id: {customer_id}"
+            )
+            return
+
+        await self._link_subscription(customer, event)
+
     async def _handle_customer_subscription_deleted(self, event: Event) -> None:
         customer_id = cast(str, event.data.get("customer"))
         customer = await self._repository.find_one_by_stripe_id(customer_id)
@@ -66,6 +82,17 @@ class HandleEventUseCase:
             return
 
         customer.remove_subscription()
+
+        await self._repository.update(customer)
+        await self._repository.commit()
+
+    async def _link_subscription(self, customer: Customer, event: Event) -> None:
+        items = cast(list[dict], cast(dict, event.data.get("items")).get("data"))
+
+        customer.link_subscription(
+            cast(str, event.data.get("customer")),
+            cast(str, cast(dict, items[0].get("price")).get("product")),
+        )
 
         await self._repository.update(customer)
         await self._repository.commit()

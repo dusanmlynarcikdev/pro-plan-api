@@ -55,6 +55,17 @@ class CustomerRepository:
 
         return customer
 
+    async def get_by_stripe_id(self, stripe_id: str) -> Customer:
+        """
+        :raises CustomerNotFoundError:
+        """
+        customer = await self.find_one_by_stripe_id(stripe_id)
+
+        if customer is None:
+            raise CustomerNotFoundError
+
+        return customer
+
     async def update(self, customer: Customer) -> None:
         _customer = await self._session.get(CustomerSchema, customer.id)
 
