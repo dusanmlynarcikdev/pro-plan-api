@@ -52,7 +52,7 @@ class HandleEventUseCase:
             logger.error(f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED}: {e}")
             return
 
-        await self._link_subscription(customer, event)
+        await self._set_subscription(customer, event)
 
     async def _handle_customer_subscription_updated(self, event: Event) -> None:
         customer_id = cast(str, event.data.get("customer"))
@@ -63,7 +63,7 @@ class HandleEventUseCase:
             logger.error(f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_UPDATED}: {e}")
             return
 
-        await self._link_subscription(customer, event)
+        await self._set_subscription(customer, event)
 
     async def _handle_customer_subscription_deleted(self, event: Event) -> None:
         customer_id = cast(str, event.data.get("customer"))
@@ -74,22 +74,15 @@ class HandleEventUseCase:
             logger.error(f"{WebhookEventType.CUSTOMER_SUBSCRIPTION_DELETED}: {e}")
             return
 
-        customer.remove_subscription()
+        await self._set_subscription(customer, event)
 
-        await self._repository.update(customer)
-        await self._repository.commit()
-
-    @staticmethod
-    def _is_subscription_active(status: str) -> bool:
-        return status in ("active", "past_due")
-
-    async def _link_subscription(self, customer: Customer, event: Event) -> None:
+    async def _set_subscription(self, customer: Customer, event: Event) -> None:
         items = cast(list[dict], cast(dict, event.data.get("items")).get("data"))
 
-        customer.link_subscription(
+        customer.set_stripe_subscription(
             cast(str, event.data.get("customer")),
             cast(str, cast(dict, items[0].get("price")).get("product")),
-            self._is_subscription_active(cast(str, event.data.get("status"))),
+            cast(str, event.data.get("status")),
         )
 
         await self._repository.update(customer)

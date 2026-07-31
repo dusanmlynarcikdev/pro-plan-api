@@ -5,9 +5,9 @@ class Customer:
     def __init__(self, id: UUID, external_id: str) -> None:
         self._id = id
         self._external_id = external_id
-        self._has_active_subscription: bool = False
         self._stripe_id: str | None = None
         self._stripe_product_id: str | None = None
+        self._stripe_subscription_status: str | None = None
 
     @property
     def id(self) -> UUID:
@@ -18,10 +18,6 @@ class Customer:
         return self._external_id
 
     @property
-    def has_active_subscription(self) -> bool:
-        return self._has_active_subscription
-
-    @property
     def stripe_id(self) -> str | None:
         return self._stripe_id
 
@@ -30,16 +26,20 @@ class Customer:
         return self._stripe_product_id
 
     @property
+    def stripe_subscription_status(self) -> str | None:
+        return self._stripe_subscription_status
+
+    @property
     def can_access_stripe_billing_portal(self) -> bool:
         return self.stripe_id is not None
 
-    def link_subscription(
-        self, stripe_customer_id: str, stripe_product_id: str, is_active: bool
-    ) -> None:
-        self._has_active_subscription = is_active
-        self._stripe_id = stripe_customer_id
-        self._stripe_product_id = stripe_product_id
+    @property
+    def has_active_subscription(self) -> bool:
+        return self._stripe_subscription_status in ("active", "past_due")
 
-    def remove_subscription(self) -> None:
-        self._has_active_subscription = False
-        self._stripe_product_id = None
+    def set_stripe_subscription(
+        self, customer_id: str, product_id: str, status: str
+    ) -> None:
+        self._stripe_id = customer_id
+        self._stripe_product_id = product_id
+        self._stripe_subscription_status = status
