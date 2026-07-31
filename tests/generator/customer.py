@@ -14,6 +14,6 @@ def generate(
 
 def generate_with_subscription() -> Customer:
     customer = generate()
-    customer.link_subscription("customer-1", "product-1", True)
+    customer.link_subscription("customer-1", "product-1", is_active=True)
 
     return customer
