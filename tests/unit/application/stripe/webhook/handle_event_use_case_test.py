@@ -60,3 +60,24 @@ async def test_customer_subscription_created_invalid_customer_id(
         "customer.subscription.created: "
         f"Invalid metadata customer_id: {metadata.get('customer_id')}"
     )
+
+
+async def test_customer_subscription_created_missing_item() -> None:
+    use_case = HandleEventUseCase(Mock(CustomerRepository))
+
+    with patch.object(handle_event_use_case_module, "logger") as logger:
+        await use_case(
+            Event(
+                type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
+                data={
+                    "customer": "customer-1",
+                    "items": {"data": []},
+                    "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
+                    "status": "active",
+                },
+            )
+        )
+
+    logger.error.assert_called_once_with(
+        "customer.subscription.created: Missing subscription item at index 0"
+    )

@@ -24,6 +24,9 @@ class HandleEventUseCase:
                 await self._handle_customer_subscription(event)
 
     async def _get_customer(self, metadata: dict[str, str]) -> Customer:
+        """
+        :raises ValueError:
+        """
         customer_id = metadata.get(key := SubscriptionMetadataKey.CUSTOMER_ID)
 
         try:
@@ -40,19 +43,23 @@ class HandleEventUseCase:
         try:
             subscription = Subscription.model_validate(event.data)
             customer = await self._get_customer(subscription.metadata)
+            await self._update_customer(customer, subscription)
         except ValueError as e:
             logger.error(f"{event.type}: {e}")
-            return
-
-        await self._update_customer(customer, subscription)
 
     async def _update_customer(
         self, customer: Customer, subscription: Subscription
     ) -> None:
+        """
+        :raises ValueError:
+        """
+        try:
+            item = subscription.items.data[0]
+        except IndexError:
+            raise ValueError("Missing subscription item at index 0")
+
         customer.set_stripe(
-            subscription.customer,
-            subscription.items.data[0].price.product,
-            subscription.status,
+            subscription.customer, item.price.product, subscription.status
         )
 
         await self._customer_repository.update(customer)
