@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Annotated
 from uuid import UUID
 
-from sqlalchemy import Column, DateTime, UniqueConstraint
+from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, SQLModel
 
 from app.domain.customer.customer import Customer
@@ -18,12 +18,8 @@ class CustomerSchema(SQLModel, table=True):
     id: Annotated[UUID, Field(primary_key=True)]
     external_id: str
     stripe_id: str | None
-    stripe_subscription_cancel_at: Annotated[
-        datetime | None, Field(sa_column=Column(DateTime(timezone=True)))
-    ]
-    stripe_subscription_period_end_at: Annotated[
-        datetime | None, Field(sa_column=Column(DateTime(timezone=True)))
-    ]
+    stripe_subscription_cancel_at: datetime | None
+    stripe_subscription_period_end_at: datetime | None
     stripe_subscription_product_id: str | None
     stripe_subscription_status: str | None
 
