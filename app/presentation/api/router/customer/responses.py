@@ -5,7 +5,7 @@ from pydantic import AfterValidator
 
 from app.presentation.api.responses import BaseResponse
 
-type Datetime = Annotated[
+type UTCDatetime = Annotated[
     datetime, AfterValidator(lambda value: value.replace(tzinfo=UTC))
 ]
 
@@ -20,8 +20,8 @@ class CustomerStripeResponse(BaseResponse):
 
 
 class CustomerStripeSubscriptionResponse(BaseResponse):
-    cancel_at: Datetime | None
+    cancel_at: UTCDatetime | None
     is_active: bool
     is_trial: bool
-    period_end_at: Datetime
+    period_end_at: UTCDatetime
     product_id: str
