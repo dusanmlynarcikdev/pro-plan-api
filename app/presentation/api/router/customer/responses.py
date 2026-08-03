@@ -3,6 +3,7 @@ from app.presentation.api.responses import BaseResponse
 
 class CustomerResponse(BaseResponse):
     has_active_subscription: bool
+    is_trial: bool
     stripe: CustomerStripeResponse
 
 

@@ -14,6 +14,6 @@ def generate(
 
 def generate_with_stripe() -> Customer:
     customer = generate()
-    customer.set_stripe("customer-1", "product-1", "active")
+    customer.set_stripe("customer-1", "product-1", "trialing")
 
     return customer
