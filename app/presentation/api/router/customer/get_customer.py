@@ -7,6 +7,7 @@ from app.presentation.api.responses import (
 from app.presentation.api.router.customer.responses import (
     CustomerResponse,
     CustomerStripeResponse,
+    CustomerStripeSubscriptionResponse,
 )
 
 router = APIRouter()
@@ -25,10 +26,14 @@ async def get_customer(
     customer = await get_customer(external_id)
 
     return CustomerResponse(
-        has_active_subscription=customer.has_active_subscription,
-        is_trial=customer.is_trial,
         stripe=CustomerStripeResponse(
-            can_access_billing_portal=customer.can_access_stripe_billing_portal,
-            subscription_product_id=customer.stripe_subscription_product_id,
-        ),
+            can_access_billing_portal=customer.can_access_stripe_billing_portal(),
+            subscription=CustomerStripeSubscriptionResponse(
+                is_active=customer.is_stripe_subscription_active(),
+                is_trial=customer.is_stripe_subscription_trial(),
+                product_id=customer.stripe_subscription_product_id,
+            )
+            if customer.stripe_subscription_product_id
+            else None,
+        )
     )

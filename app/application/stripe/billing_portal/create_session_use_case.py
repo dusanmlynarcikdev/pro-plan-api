@@ -23,7 +23,7 @@ class CreateSessionUseCase:
         """
         customer = await self._repository.get_by_external_id(external_customer_id)
 
-        if not customer.can_access_stripe_billing_portal:
+        if not customer.can_access_stripe_billing_portal():
             raise CustomerIsNotLinkedToStripeError
 
         if not customer.stripe_id:
