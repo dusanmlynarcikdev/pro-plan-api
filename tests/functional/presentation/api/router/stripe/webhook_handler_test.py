@@ -8,7 +8,7 @@ import pytest
 from fastapi import BackgroundTasks, status
 from fastapi.testclient import TestClient
 
-from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.dtos import Event
 from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
 from app.infrastructure.config import get_config
 

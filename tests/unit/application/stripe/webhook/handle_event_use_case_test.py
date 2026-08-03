@@ -6,7 +6,7 @@ from app.application.stripe.enums import WebhookEventType
 from app.application.stripe.webhook import (
     handle_event_use_case as handle_event_use_case_module,
 )
-from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.dtos import Event
 from app.application.stripe.webhook.handle_event_use_case import HandleEventUseCase
 from app.domain.customer.errors import CustomerNotFoundError
 from app.domain.customer.repository import CustomerRepository
@@ -23,7 +23,10 @@ async def test_customer_subscription_created_customer_does_not_exist() -> None:
             Event(
                 type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
                 data={
-                    "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"}
+                    "customer": "customer-1",
+                    "items": {"data": [{"price": {"product": "product-1"}}]},
+                    "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
+                    "status": "active",
                 },
             )
         )
@@ -44,7 +47,12 @@ async def test_customer_subscription_created_invalid_customer_id(
         await use_case(
             Event(
                 type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
-                data={"metadata": metadata},
+                data={
+                    "customer": "customer-1",
+                    "items": {"data": [{"price": {"product": "product-1"}}]},
+                    "metadata": metadata,
+                    "status": "active",
+                },
             )
         )
 
