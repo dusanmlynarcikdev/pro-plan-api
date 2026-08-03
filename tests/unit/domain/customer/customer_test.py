@@ -74,22 +74,6 @@ def test_is_stripe_subscription_trial(
     assert customer.is_stripe_subscription_trial() == expected_result
 
 
-@pytest.mark.parametrize(
-    ("stripe_subscription_cancel_at", "expected_result"),
-    (
-        (None, False),
-        (datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC), True),
-    ),
-)
-def test_is_stripe_subscription_cancelling(
-    stripe_subscription_cancel_at: datetime | None, expected_result: bool
-) -> None:
-    customer = generate()
-    customer._stripe_subscription_cancel_at = stripe_subscription_cancel_at
-
-    assert customer.is_stripe_subscription_cancelling() == expected_result
-
-
 def test_set_stripe() -> None:
     customer = generate()
 

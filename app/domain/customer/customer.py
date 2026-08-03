@@ -53,9 +53,6 @@ class Customer:
             self.stripe_subscription_status == StripeSubscriptionActiveStatus.TRIALING
         )
 
-    def is_stripe_subscription_cancelling(self) -> bool:
-        return self._stripe_subscription_cancel_at is not None
-
     def set_stripe(
         self,
         customer_id: str,

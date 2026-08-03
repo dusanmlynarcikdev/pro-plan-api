@@ -13,8 +13,8 @@ class CustomerStripeResponse(BaseResponse):
 
 
 class CustomerStripeSubscriptionResponse(BaseResponse):
+    cancel_at: datetime | None
     is_active: bool
-    is_cancelling: bool
     is_trial: bool
     period_end_at: datetime
     product_id: str
