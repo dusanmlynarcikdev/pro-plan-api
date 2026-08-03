@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
@@ -17,6 +18,8 @@ def test_create() -> None:
     assert result.stripe_id is None
     assert result.stripe_subscription_product_id is None
     assert result.stripe_subscription_status is None
+    assert result.stripe_subscription_period_end_at is None
+    assert result.stripe_subscription_cancel_at is None
 
 
 @pytest.mark.parametrize(
@@ -71,11 +74,39 @@ def test_is_stripe_subscription_trial(
     assert customer.is_stripe_subscription_trial() == expected_result
 
 
+@pytest.mark.parametrize(
+    ("stripe_subscription_cancel_at", "expected_result"),
+    (
+        (None, False),
+        (datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC), True),
+    ),
+)
+def test_is_stripe_subscription_cancelling(
+    stripe_subscription_cancel_at: datetime | None, expected_result: bool
+) -> None:
+    customer = generate()
+    customer._stripe_subscription_cancel_at = stripe_subscription_cancel_at
+
+    assert customer.is_stripe_subscription_cancelling() == expected_result
+
+
 def test_set_stripe() -> None:
     customer = generate()
 
-    customer.set_stripe("customer-1", "product-1", "active")
+    customer.set_stripe(
+        "customer-1",
+        "product-1",
+        "active",
+        datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+        datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+    )
 
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_subscription_product_id == "product-1"
     assert customer.stripe_subscription_status == "active"
+    assert customer.stripe_subscription_period_end_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert customer.stripe_subscription_cancel_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )

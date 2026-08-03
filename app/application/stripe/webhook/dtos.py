@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, NamedTuple
 
 from pydantic import BaseModel
@@ -13,6 +14,7 @@ class SubscriptionItemPrice(BaseModel):
 
 
 class SubscriptionItem(BaseModel):
+    current_period_end: datetime
     price: SubscriptionItemPrice
 
 
@@ -21,6 +23,7 @@ class SubscriptionItems(BaseModel):
 
 
 class Subscription(BaseModel):
+    cancel_at: datetime | None
     customer: str
     items: SubscriptionItems
     metadata: dict[str, str]

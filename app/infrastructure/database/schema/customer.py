@@ -1,7 +1,8 @@
+from datetime import datetime
 from typing import Annotated
 from uuid import UUID
 
-from sqlalchemy import UniqueConstraint
+from sqlalchemy import Column, DateTime, UniqueConstraint
 from sqlmodel import Field, SQLModel
 
 from app.domain.customer.customer import Customer
@@ -19,6 +20,12 @@ class CustomerSchema(SQLModel, table=True):
     stripe_id: str | None
     stripe_subscription_product_id: str | None
     stripe_subscription_status: str | None
+    stripe_subscription_period_end_at: Annotated[
+        datetime | None, Field(sa_column=Column(DateTime(timezone=True)))
+    ]
+    stripe_subscription_cancel_at: Annotated[
+        datetime | None, Field(sa_column=Column(DateTime(timezone=True)))
+    ]
 
     @classmethod
     def from_domain(cls, customer: Customer) -> CustomerSchema:
@@ -28,6 +35,8 @@ class CustomerSchema(SQLModel, table=True):
             stripe_id=customer.stripe_id,
             stripe_subscription_product_id=customer.stripe_subscription_product_id,
             stripe_subscription_status=customer.stripe_subscription_status,
+            stripe_subscription_period_end_at=customer.stripe_subscription_period_end_at,
+            stripe_subscription_cancel_at=customer.stripe_subscription_cancel_at,
         )
 
     def to_domain(self) -> Customer:
@@ -35,6 +44,10 @@ class CustomerSchema(SQLModel, table=True):
         customer._stripe_id = self.stripe_id
         customer._stripe_subscription_product_id = self.stripe_subscription_product_id
         customer._stripe_subscription_status = self.stripe_subscription_status
+        customer._stripe_subscription_period_end_at = (
+            self.stripe_subscription_period_end_at
+        )
+        customer._stripe_subscription_cancel_at = self.stripe_subscription_cancel_at
 
         return customer
 
@@ -42,3 +55,7 @@ class CustomerSchema(SQLModel, table=True):
         self.stripe_id = customer.stripe_id
         self.stripe_subscription_product_id = customer.stripe_subscription_product_id
         self.stripe_subscription_status = customer.stripe_subscription_status
+        self.stripe_subscription_period_end_at = (
+            customer.stripe_subscription_period_end_at
+        )
+        self.stripe_subscription_cancel_at = customer.stripe_subscription_cancel_at

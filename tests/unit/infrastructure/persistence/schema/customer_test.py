@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from app.infrastructure.database.schema.customer import CustomerSchema
@@ -12,6 +13,12 @@ def test_from_domain() -> None:
     assert result.stripe_id == "customer-1"
     assert result.stripe_subscription_product_id == "product-1"
     assert result.stripe_subscription_status == "trialing"
+    assert result.stripe_subscription_period_end_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert result.stripe_subscription_cancel_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
 
 
 def test_to_domain() -> None:
@@ -21,6 +28,8 @@ def test_to_domain() -> None:
         stripe_id="customer-1",
         stripe_subscription_product_id="product-1",
         stripe_subscription_status="trialing",
+        stripe_subscription_period_end_at=datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+        stripe_subscription_cancel_at=datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
     )
 
     result = schema.to_domain()
@@ -30,6 +39,12 @@ def test_to_domain() -> None:
     assert result.stripe_id == "customer-1"
     assert result.stripe_subscription_product_id == "product-1"
     assert result.stripe_subscription_status == "trialing"
+    assert result.stripe_subscription_period_end_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert result.stripe_subscription_cancel_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
 
 
 def test_update_from_domain() -> None:
@@ -40,3 +55,9 @@ def test_update_from_domain() -> None:
     assert schema.stripe_id == "customer-1"
     assert schema.stripe_subscription_product_id == "product-1"
     assert schema.stripe_subscription_status == "trialing"
+    assert schema.stripe_subscription_period_end_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert schema.stripe_subscription_cancel_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
