@@ -32,7 +32,7 @@ def test_can_access_stripe_billing_portal(
     customer = generate()
     customer._stripe_id = stripe_id
 
-    assert customer.can_access_stripe_billing_portal == expected_result
+    assert customer.can_access_stripe_billing_portal() == expected_result
 
 
 @pytest.mark.parametrize(
@@ -51,7 +51,7 @@ def test_is_stripe_subscription_active(
     customer = generate()
     customer._stripe_subscription_status = stripe_subscription_status
 
-    assert customer.is_stripe_subscription_active == expected_result
+    assert customer.is_stripe_subscription_active() == expected_result
 
 
 @pytest.mark.parametrize(
@@ -68,7 +68,7 @@ def test_is_stripe_subscription_trial(
     customer = generate()
     customer._stripe_subscription_status = stripe_subscription_status
 
-    assert customer.is_stripe_subscription_trial == expected_result
+    assert customer.is_stripe_subscription_trial() == expected_result
 
 
 def test_set_stripe() -> None:

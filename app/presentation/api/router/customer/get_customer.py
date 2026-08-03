@@ -27,10 +27,10 @@ async def get_customer(
 
     return CustomerResponse(
         stripe=CustomerStripeResponse(
-            can_access_billing_portal=customer.can_access_stripe_billing_portal,
+            can_access_billing_portal=customer.can_access_stripe_billing_portal(),
             subscription=CustomerStripeSubscriptionResponse(
-                is_active=customer.is_stripe_subscription_active,
-                is_trial=customer.is_stripe_subscription_trial,
+                is_active=customer.is_stripe_subscription_active(),
+                is_trial=customer.is_stripe_subscription_trial(),
                 product_id=customer.stripe_subscription_product_id,
             )
             if customer.stripe_subscription_product_id

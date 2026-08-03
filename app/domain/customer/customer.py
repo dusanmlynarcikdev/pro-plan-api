@@ -31,15 +31,12 @@ class Customer:
     def stripe_subscription_status(self) -> str | None:
         return self._stripe_subscription_status
 
-    @property
     def can_access_stripe_billing_portal(self) -> bool:
         return self.stripe_id is not None
 
-    @property
     def is_stripe_subscription_active(self) -> bool:
         return self.stripe_subscription_status in StripeSubscriptionActiveStatus
 
-    @property
     def is_stripe_subscription_trial(self) -> bool:
         return (
             self.stripe_subscription_status == StripeSubscriptionActiveStatus.TRIALING
