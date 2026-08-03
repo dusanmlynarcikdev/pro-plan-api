@@ -9,10 +9,10 @@ class Customer:
         self._id = id
         self._external_id = external_id
         self._stripe_id: str | None = None
+        self._stripe_subscription_cancel_at: datetime | None = None
+        self._stripe_subscription_period_end_at: datetime | None = None
         self._stripe_subscription_product_id: str | None = None
         self._stripe_subscription_status: str | None = None
-        self._stripe_subscription_period_end_at: datetime | None = None
-        self._stripe_subscription_cancel_at: datetime | None = None
 
     @property
     def id(self) -> UUID:
@@ -27,20 +27,20 @@ class Customer:
         return self._stripe_id
 
     @property
-    def stripe_subscription_product_id(self) -> str | None:
-        return self._stripe_subscription_product_id
-
-    @property
-    def stripe_subscription_status(self) -> str | None:
-        return self._stripe_subscription_status
+    def stripe_subscription_cancel_at(self) -> datetime | None:
+        return self._stripe_subscription_cancel_at
 
     @property
     def stripe_subscription_period_end_at(self) -> datetime | None:
         return self._stripe_subscription_period_end_at
 
     @property
-    def stripe_subscription_cancel_at(self) -> datetime | None:
-        return self._stripe_subscription_cancel_at
+    def stripe_subscription_product_id(self) -> str | None:
+        return self._stripe_subscription_product_id
+
+    @property
+    def stripe_subscription_status(self) -> str | None:
+        return self._stripe_subscription_status
 
     def can_access_stripe_billing_portal(self) -> bool:
         return self.stripe_id is not None
@@ -56,13 +56,13 @@ class Customer:
     def set_stripe(
         self,
         customer_id: str,
+        subscription_cancel_at: datetime | None,
+        subscription_period_end_at: datetime,
         subscription_product_id: str,
         subscription_status: str,
-        subscription_period_end_at: datetime,
-        subscription_cancel_at: datetime | None,
     ) -> None:
         self._stripe_id = customer_id
+        self._stripe_subscription_cancel_at = subscription_cancel_at
+        self._stripe_subscription_period_end_at = subscription_period_end_at
         self._stripe_subscription_product_id = subscription_product_id
         self._stripe_subscription_status = subscription_status
-        self._stripe_subscription_period_end_at = subscription_period_end_at
-        self._stripe_subscription_cancel_at = subscription_cancel_at

@@ -33,13 +33,13 @@ async def test_customer_subscription(
         Event(
             type=WebhookEventType.CUSTOMER_SUBSCRIPTION_UPDATED,
             data={
-                "cancel_at": 1801575355,
+                "cancel_at": 1835707255,
                 "customer": "customer-2",
                 "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
                 "items": {
                     "data": [
                         {
-                            "current_period_end": 1801575355,
+                            "current_period_end": 1801575350,
                             "price": {"product": "product-2"},
                         }
                     ]
@@ -54,11 +54,11 @@ async def test_customer_subscription(
 
     assert customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert customer.stripe_id == "customer-2"
+    assert customer.stripe_subscription_cancel_at == datetime(
+        2028, 3, 3, 14, 40, 55, tzinfo=UTC
+    )
+    assert customer.stripe_subscription_period_end_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
     assert customer.stripe_subscription_product_id == "product-2"
     assert customer.stripe_subscription_status == "canceled"
-    assert customer.stripe_subscription_period_end_at == datetime(
-        2027, 2, 2, 13, 35, 55, tzinfo=UTC
-    )
-    assert customer.stripe_subscription_cancel_at == datetime(
-        2027, 2, 2, 13, 35, 55, tzinfo=UTC
-    )

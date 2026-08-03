@@ -60,10 +60,10 @@ class HandleEventUseCase:
 
         customer.set_stripe(
             subscription.customer,
+            subscription.cancel_at,
+            item.current_period_end,
             item.price.product,
             subscription.status,
-            item.current_period_end,
-            subscription.cancel_at,
         )
 
         await self._customer_repository.update(customer)

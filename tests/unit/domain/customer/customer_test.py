@@ -16,10 +16,10 @@ def test_create() -> None:
     assert result.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert result.external_id == "user-1"
     assert result.stripe_id is None
+    assert result.stripe_subscription_cancel_at is None
+    assert result.stripe_subscription_period_end_at is None
     assert result.stripe_subscription_product_id is None
     assert result.stripe_subscription_status is None
-    assert result.stripe_subscription_period_end_at is None
-    assert result.stripe_subscription_cancel_at is None
 
 
 @pytest.mark.parametrize(
@@ -79,18 +79,18 @@ def test_set_stripe() -> None:
 
     customer.set_stripe(
         "customer-1",
+        datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
+        datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
         "product-1",
         "active",
-        datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
-        datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
     )
 
     assert customer.stripe_id == "customer-1"
-    assert customer.stripe_subscription_product_id == "product-1"
-    assert customer.stripe_subscription_status == "active"
+    assert customer.stripe_subscription_cancel_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
     assert customer.stripe_subscription_period_end_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert customer.stripe_subscription_cancel_at == datetime(
-        2026, 1, 1, 12, 30, 45, tzinfo=UTC
-    )
+    assert customer.stripe_subscription_product_id == "product-1"
+    assert customer.stripe_subscription_status == "active"
