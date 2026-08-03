@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from app.domain.customer.enums import StripeSubscriptionActiveStatus
+
 
 class Customer:
     def __init__(self, id: UUID, external_id: str) -> None:
@@ -35,7 +37,13 @@ class Customer:
 
     @property
     def has_active_subscription(self) -> bool:
-        return self.stripe_subscription_status in ("active", "past_due")
+        return self.stripe_subscription_status in StripeSubscriptionActiveStatus
+
+    @property
+    def is_trial(self) -> bool:
+        return (
+            self.stripe_subscription_status == StripeSubscriptionActiveStatus.TRIALING
+        )
 
     def set_stripe(
         self, customer_id: str, subscription_product_id: str, subscription_status: str

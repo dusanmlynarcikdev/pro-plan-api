@@ -11,7 +11,7 @@ def test_from_domain() -> None:
     assert result.external_id == "user-1"
     assert result.stripe_id == "customer-1"
     assert result.stripe_subscription_product_id == "product-1"
-    assert result.stripe_subscription_status == "active"
+    assert result.stripe_subscription_status == "trialing"
 
 
 def test_to_domain() -> None:
@@ -20,7 +20,7 @@ def test_to_domain() -> None:
         external_id="user-1",
         stripe_id="customer-1",
         stripe_subscription_product_id="product-1",
-        stripe_subscription_status="active",
+        stripe_subscription_status="trialing",
     )
 
     result = schema.to_domain()
@@ -29,7 +29,7 @@ def test_to_domain() -> None:
     assert result.external_id == "user-1"
     assert result.stripe_id == "customer-1"
     assert result.stripe_subscription_product_id == "product-1"
-    assert result.stripe_subscription_status == "active"
+    assert result.stripe_subscription_status == "trialing"
 
 
 def test_update_from_domain() -> None:
@@ -39,4 +39,4 @@ def test_update_from_domain() -> None:
 
     assert schema.stripe_id == "customer-1"
     assert schema.stripe_subscription_product_id == "product-1"
-    assert schema.stripe_subscription_status == "active"
+    assert schema.stripe_subscription_status == "trialing"

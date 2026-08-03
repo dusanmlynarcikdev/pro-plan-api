@@ -23,12 +23,16 @@ class CheckoutClient:
         stripe_customer_id: str | None,
         price_id: str,
         success_url: str,
+        trial_days: int | None,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:
         """
         request_params = self._create_request_params(
-            customer_id, stripe_customer_id, price_id, success_url
+            stripe_customer_id,
+            price_id,
+            self._create_subscription_request_params(customer_id, trial_days),
+            success_url,
         )
 
         try:
@@ -42,24 +46,36 @@ class CheckoutClient:
 
     @staticmethod
     def _create_request_params(
-        customer_id: str,
         stripe_customer_id: str | None,
         price_id: str,
+        subscription_data: SessionCreateParamsSubscriptionData,
         success_url: str,
     ) -> SessionCreateParams:
         params = SessionCreateParams(
             line_items=[SessionCreateParamsLineItem(price=price_id, quantity=1)],
             mode="subscription",
-            subscription_data=SessionCreateParamsSubscriptionData(
-                metadata={
-                    SubscriptionMetadataKey.CUSTOMER_ID: customer_id,
-                }
-            ),
+            subscription_data=subscription_data,
             success_url=success_url,
         )
 
         if stripe_customer_id is not None:
             params.update(customer=stripe_customer_id)
+
+        return params
+
+    @staticmethod
+    def _create_subscription_request_params(
+        customer_id: str,
+        trial_days: int | None,
+    ) -> SessionCreateParamsSubscriptionData:
+        params = SessionCreateParamsSubscriptionData(
+            metadata={
+                SubscriptionMetadataKey.CUSTOMER_ID: customer_id,
+            }
+        )
+
+        if trial_days is not None:
+            params.update(trial_period_days=trial_days)
 
         return params
 

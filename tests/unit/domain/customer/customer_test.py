@@ -40,6 +40,7 @@ def test_can_access_stripe_billing_portal(
     (
         (None, False),
         ("active", True),
+        ("trialing", True),
         ("past_due", True),
         ("canceled", False),
     ),
@@ -51,6 +52,23 @@ def test_has_active_subscription(
     customer._stripe_subscription_status = stripe_subscription_status
 
     assert customer.has_active_subscription == expected_result
+
+
+@pytest.mark.parametrize(
+    ("stripe_subscription_status", "expected_result"),
+    (
+        (None, False),
+        ("trialing", True),
+        ("canceled", False),
+    ),
+)
+def test_is_trial(
+    stripe_subscription_status: str | None, expected_result: bool
+) -> None:
+    customer = generate()
+    customer._stripe_subscription_status = stripe_subscription_status
+
+    assert customer.is_trial == expected_result
 
 
 def test_set_stripe() -> None:

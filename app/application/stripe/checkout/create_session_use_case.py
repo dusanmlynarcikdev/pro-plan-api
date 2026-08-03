@@ -23,6 +23,7 @@ class CreateSessionUseCase:
         customer_external_id: str,
         stripe_price_id: str,
         success_url: str,
+        trial_days: int | None,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:
@@ -31,7 +32,11 @@ class CreateSessionUseCase:
 
         try:
             return await self._client.create_session(
-                str(customer.id), customer.stripe_id, stripe_price_id, success_url
+                str(customer.id),
+                customer.stripe_id,
+                stripe_price_id,
+                success_url,
+                trial_days,
             )
         except UnableToCreateCheckoutSessionError as e:
             logger.error(e.__cause__)
