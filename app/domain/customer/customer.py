@@ -36,11 +36,11 @@ class Customer:
         return self.stripe_id is not None
 
     @property
-    def has_active_subscription(self) -> bool:
+    def is_stripe_subscription_active(self) -> bool:
         return self.stripe_subscription_status in StripeSubscriptionActiveStatus
 
     @property
-    def is_trial(self) -> bool:
+    def is_stripe_subscription_trial(self) -> bool:
         return (
             self.stripe_subscription_status == StripeSubscriptionActiveStatus.TRIALING
         )
