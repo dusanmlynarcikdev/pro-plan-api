@@ -1,9 +1,8 @@
 import logging
-from typing import cast
 from uuid import UUID
 
 from app.application.stripe.enums import SubscriptionMetadataKey, WebhookEventType
-from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.dtos import Event, Subscription
 from app.domain.customer.customer import Customer
 from app.domain.customer.errors import CustomerNotFoundError
 from app.domain.customer.repository import CustomerRepository
@@ -25,6 +24,9 @@ class HandleEventUseCase:
                 await self._handle_customer_subscription(event)
 
     async def _get_customer(self, metadata: dict[str, str]) -> Customer:
+        """
+        :raises ValueError:
+        """
         customer_id = metadata.get(key := SubscriptionMetadataKey.CUSTOMER_ID)
 
         try:
@@ -38,23 +40,26 @@ class HandleEventUseCase:
             raise ValueError(f"{e}: {customer_id}")
 
     async def _handle_customer_subscription(self, event: Event) -> None:
-        metadata = cast(dict, event.data.get("metadata"))
-
         try:
-            customer = await self._get_customer(metadata)
+            subscription = Subscription.model_validate(event.data)
+            customer = await self._get_customer(subscription.metadata)
+            await self._update_customer(customer, subscription)
         except ValueError as e:
             logger.error(f"{event.type}: {e}")
-            return
 
-        await self._update_customer(customer, event)
-
-    async def _update_customer(self, customer: Customer, event: Event) -> None:
-        items = cast(list[dict], cast(dict, event.data.get("items")).get("data"))
+    async def _update_customer(
+        self, customer: Customer, subscription: Subscription
+    ) -> None:
+        """
+        :raises ValueError:
+        """
+        try:
+            item = subscription.items.data[0]
+        except IndexError:
+            raise ValueError("Missing subscription item at index 0")
 
         customer.set_stripe(
-            cast(str, event.data.get("customer")),
-            cast(str, cast(dict, items[0].get("price")).get("product")),
-            cast(str, event.data.get("status")),
+            subscription.customer, item.price.product, subscription.status
         )
 
         await self._customer_repository.update(customer)

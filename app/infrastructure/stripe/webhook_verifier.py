@@ -1,7 +1,7 @@
 from stripe import SignatureVerificationError, Webhook
 
 from app.application.stripe.errors import WebhookVerificationError
-from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.dtos import Event
 
 
 class WebhookVerifier:

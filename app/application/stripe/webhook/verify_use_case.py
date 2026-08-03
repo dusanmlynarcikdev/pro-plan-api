@@ -1,7 +1,7 @@
 import logging
 
 from app.application.stripe.errors import WebhookVerificationError
-from app.application.stripe.webhook.event import Event
+from app.application.stripe.webhook.dtos import Event
 from app.application.stripe.webhook.verifier import Verifier
 
 logger = logging.getLogger(__name__)
