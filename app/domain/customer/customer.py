@@ -35,7 +35,7 @@ class Customer:
 
     @property
     def has_active_subscription(self) -> bool:
-        return self.stripe_subscription_status in ("active", "past_due")
+        return self.stripe_subscription_status in ("active", "trialing", "past_due")
 
     def set_stripe(
         self, customer_id: str, subscription_product_id: str, subscription_status: str

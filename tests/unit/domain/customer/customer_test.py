@@ -40,6 +40,7 @@ def test_can_access_stripe_billing_portal(
     (
         (None, False),
         ("active", True),
+        ("trialing", True),
         ("past_due", True),
         ("canceled", False),
     ),

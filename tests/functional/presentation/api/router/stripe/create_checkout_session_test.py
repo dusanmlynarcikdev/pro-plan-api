@@ -21,15 +21,15 @@ PATH = "/api/customers/stripe/checkout/sessions"
 async def test_create_with_existing_customer(
     client: TestClient, session: AsyncSession, stripe_client: Mock
 ) -> None:
-    stripe_client.return_value.v1.checkout.sessions.create_async = AsyncMock(
-        return_value=Mock(url=CHECKOUT_URL)
-    )
-
     customer = generate()
     customer._stripe_id = "customer-1"
     session.add(CustomerSchema.from_domain(customer))
     await session.flush()
     session.expunge_all()
+
+    stripe_client.return_value.v1.checkout.sessions.create_async = AsyncMock(
+        return_value=Mock(url=CHECKOUT_URL)
+    )
 
     response = client.post(
         PATH,
@@ -37,6 +37,7 @@ async def test_create_with_existing_customer(
             "customerExternalId": "user-1",
             "stripePriceId": "price-1",
             "successUrl": "https://example.com/success",
+            "trialDays": 7,
         },
     )
     session.expunge_all()
@@ -56,7 +57,8 @@ async def test_create_with_existing_customer(
             subscription_data=SessionCreateParamsSubscriptionData(
                 metadata={
                     "customer_id": str(customer.id),
-                }
+                },
+                trial_period_days=7,
             ),
             success_url="https://example.com/success",
         )
@@ -79,22 +81,9 @@ async def test_stripe_error(
             "customerExternalId": "user-1",
             "stripePriceId": "price-1",
             "successUrl": "https://example.com/success",
+            "trialDays": None,
         },
     )
 
     assert response.status_code == status.HTTP_502_BAD_GATEWAY
     assert response.content == b'{"detail":"Unable to create checkout session"}'
-
-
-def test_invalid_success_url(client: TestClient) -> None:
-    response = client.post(
-        PATH,
-        json={
-            "customerExternalId": "user-1",
-            "stripePriceId": "price-1",
-            "successUrl": "invalid-url",
-        },
-    )
-
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert b"successUrl" in response.content

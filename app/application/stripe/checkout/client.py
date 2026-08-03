@@ -8,6 +8,7 @@ class Client(Protocol):
         stripe_customer_id: str | None,
         price_id: str,
         success_url: str,
+        trial_days: int | None,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:
