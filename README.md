@@ -2,7 +2,7 @@
 
 **An API that integrates with Stripe and handles paid plan subscriptions.**
 
-## How it works
+## How It Works
 
 ```text
 ┌──────────────┐      ┌──────────────┐       ┌────────┐
@@ -10,26 +10,37 @@
 └──────────────┘      └──────────────┘       └────────┘
 ```
 
-## Main highlights
+## Main Highlights
 
 ✔️ **Fast and modern stack (Python, FastAPI)**  
 ✔️ **Simple to integrate and use**  
 ✔️ **Production-ready Docker image for amd64 and arm64**  
 ✔️ **Deployable in minutes**
 
-## Why use Pro Plan API?
+## Why Use Pro Plan API?
 
-- Skip the Stripe integration complexity
-- Save development time and effort
-- Focus on your core product
-- Ship your product faster
+- Removes the need to implement Stripe
+- Saves development time and effort
+- Ensures a correct Stripe integration
+- Lets you focus on your core product
+- Helps you ship your product faster
 
 ## Features
 
 - Creates Stripe Checkout and Billing Portal sessions
 - Synchronizes subscription access via Stripe webhooks
-- Manages customers using your own external IDs
-- Does not store any customer data
+- Supports trials, subscription pauses, and grace periods
+- Returns subscription data for your UI
+- Identifies customers by your own external IDs
+- Does not store customer data
+
+## Limitations
+
+- Automatically synchronizes only subscriptions created through checkouts initiated via Pro Plan API
+- Other subscriptions require manual setup for synchronization
+- Supports only one subscription with a single price per customer
+- Does not support more complex billing models, such as usage-based pricing
+- Currently supports only PostgreSQL
 
 ---
 
