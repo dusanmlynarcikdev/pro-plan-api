@@ -1,4 +1,4 @@
-"""add stripe_subscription_current_period_end_at and stripe_subscription_cancel_at columns
+"""add stripe subscription datetime columns
 
 Revision ID: 7f789c3958fe
 Revises: 451f56bd5a55
