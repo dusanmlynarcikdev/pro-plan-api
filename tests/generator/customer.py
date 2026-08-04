@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from app.domain.customer.customer import Customer
@@ -14,6 +15,12 @@ def generate(
 
 def generate_with_stripe() -> Customer:
     customer = generate()
-    customer.set_stripe("customer-1", "product-1", "trialing")
+    customer.set_stripe(
+        "customer-1",
+        datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+        datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
+        "product-1",
+        "trialing",
+    )
 
     return customer

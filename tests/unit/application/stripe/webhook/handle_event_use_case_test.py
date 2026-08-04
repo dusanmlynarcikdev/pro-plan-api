@@ -23,8 +23,16 @@ async def test_customer_subscription_created_customer_does_not_exist() -> None:
             Event(
                 type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
                 data={
+                    "cancel_at": None,
                     "customer": "customer-1",
-                    "items": {"data": [{"price": {"product": "product-1"}}]},
+                    "items": {
+                        "data": [
+                            {
+                                "current_period_end": 1767270645,
+                                "price": {"product": "product-1"},
+                            }
+                        ]
+                    },
                     "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},
                     "status": "active",
                 },
@@ -48,8 +56,16 @@ async def test_customer_subscription_created_invalid_customer_id(
             Event(
                 type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
                 data={
+                    "cancel_at": None,
                     "customer": "customer-1",
-                    "items": {"data": [{"price": {"product": "product-1"}}]},
+                    "items": {
+                        "data": [
+                            {
+                                "current_period_end": 1767270645,
+                                "price": {"product": "product-1"},
+                            }
+                        ]
+                    },
                     "metadata": metadata,
                     "status": "active",
                 },
@@ -70,6 +86,7 @@ async def test_customer_subscription_created_missing_item() -> None:
             Event(
                 type=WebhookEventType.CUSTOMER_SUBSCRIPTION_CREATED,
                 data={
+                    "cancel_at": None,
                     "customer": "customer-1",
                     "items": {"data": []},
                     "metadata": {"customer_id": "019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"},

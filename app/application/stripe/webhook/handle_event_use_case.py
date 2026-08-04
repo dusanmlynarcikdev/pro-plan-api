@@ -59,7 +59,11 @@ class HandleEventUseCase:
             raise ValueError("Missing subscription item at index 0")
 
         customer.set_stripe(
-            subscription.customer, item.price.product, subscription.status
+            subscription.customer,
+            subscription.cancel_at,
+            item.current_period_end,
+            item.price.product,
+            subscription.status,
         )
 
         await self._customer_repository.update(customer)

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.presentation.api.responses import BaseResponse
 
 
@@ -14,3 +16,5 @@ class CustomerStripeSubscriptionResponse(BaseResponse):
     is_active: bool
     is_trial: bool
     product_id: str
+    current_period_end_at: datetime
+    cancel_at: datetime | None

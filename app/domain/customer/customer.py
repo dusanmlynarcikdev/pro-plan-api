@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID
 
 from app.domain.customer.enums import StripeSubscriptionActiveStatus
@@ -8,6 +9,8 @@ class Customer:
         self._id = id
         self._external_id = external_id
         self._stripe_id: str | None = None
+        self._stripe_subscription_cancel_at: datetime | None = None
+        self._stripe_subscription_current_period_end_at: datetime | None = None
         self._stripe_subscription_product_id: str | None = None
         self._stripe_subscription_status: str | None = None
 
@@ -22,6 +25,14 @@ class Customer:
     @property
     def stripe_id(self) -> str | None:
         return self._stripe_id
+
+    @property
+    def stripe_subscription_cancel_at(self) -> datetime | None:
+        return self._stripe_subscription_cancel_at
+
+    @property
+    def stripe_subscription_current_period_end_at(self) -> datetime | None:
+        return self._stripe_subscription_current_period_end_at
 
     @property
     def stripe_subscription_product_id(self) -> str | None:
@@ -43,8 +54,17 @@ class Customer:
         )
 
     def set_stripe(
-        self, customer_id: str, subscription_product_id: str, subscription_status: str
+        self,
+        customer_id: str,
+        subscription_cancel_at: datetime | None,
+        subscription_current_period_end_at: datetime,
+        subscription_product_id: str,
+        subscription_status: str,
     ) -> None:
         self._stripe_id = customer_id
+        self._stripe_subscription_cancel_at = subscription_cancel_at
+        self._stripe_subscription_current_period_end_at = (
+            subscription_current_period_end_at
+        )
         self._stripe_subscription_product_id = subscription_product_id
         self._stripe_subscription_status = subscription_status

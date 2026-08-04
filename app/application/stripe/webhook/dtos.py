@@ -1,6 +1,6 @@
 from typing import Any, NamedTuple
 
-from pydantic import BaseModel
+from pydantic import AwareDatetime, BaseModel
 
 
 class Event(NamedTuple):
@@ -13,6 +13,7 @@ class SubscriptionItemPrice(BaseModel):
 
 
 class SubscriptionItem(BaseModel):
+    current_period_end: AwareDatetime
     price: SubscriptionItemPrice
 
 
@@ -21,6 +22,7 @@ class SubscriptionItems(BaseModel):
 
 
 class Subscription(BaseModel):
+    cancel_at: AwareDatetime | None
     customer: str
     items: SubscriptionItems
     metadata: dict[str, str]

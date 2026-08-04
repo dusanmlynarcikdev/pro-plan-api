@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from pytest import raises
@@ -22,6 +23,12 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.external_id == "user-1"
     assert repository_customer.stripe_id == "customer-1"
+    assert repository_customer.stripe_subscription_cancel_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert repository_customer.stripe_subscription_current_period_end_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
     assert repository_customer.stripe_subscription_product_id == "product-1"
     assert repository_customer.stripe_subscription_status == "trialing"
 
@@ -145,6 +152,12 @@ async def test_update(session: AsyncSession) -> None:
 
     assert repository_customer.id == UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04")
     assert repository_customer.stripe_id == "customer-1"
+    assert repository_customer.stripe_subscription_cancel_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert repository_customer.stripe_subscription_current_period_end_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
     assert repository_customer.stripe_subscription_product_id == "product-1"
     assert repository_customer.stripe_subscription_status == "trialing"
 
