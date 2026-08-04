@@ -15,7 +15,7 @@ def test_from_domain() -> None:
     assert result.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert result.stripe_subscription_period_end_at == datetime(
+    assert result.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert result.stripe_subscription_product_id == "product-1"
@@ -28,7 +28,9 @@ def test_to_domain() -> None:
         external_id="user-1",
         stripe_id="customer-1",
         stripe_subscription_cancel_at=datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
-        stripe_subscription_period_end_at=datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
+        stripe_subscription_current_period_end_at=datetime(
+            2027, 2, 2, 13, 35, 50, tzinfo=UTC
+        ),
         stripe_subscription_product_id="product-1",
         stripe_subscription_status="trialing",
     )
@@ -41,7 +43,7 @@ def test_to_domain() -> None:
     assert result.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert result.stripe_subscription_period_end_at == datetime(
+    assert result.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert result.stripe_subscription_product_id == "product-1"
@@ -56,7 +58,7 @@ def test_to_domain_dates_with_different_timezone() -> None:
         stripe_subscription_cancel_at=datetime(
             2026, 1, 1, 13, 30, 45, tzinfo=ZoneInfo("Europe/Prague")
         ),
-        stripe_subscription_period_end_at=datetime(
+        stripe_subscription_current_period_end_at=datetime(
             2027, 2, 2, 14, 35, 50, tzinfo=ZoneInfo("Europe/Prague")
         ),
         stripe_subscription_product_id=None,
@@ -68,7 +70,7 @@ def test_to_domain_dates_with_different_timezone() -> None:
     assert result.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert result.stripe_subscription_period_end_at == datetime(
+    assert result.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
 
@@ -82,7 +84,7 @@ def test_update_from_domain() -> None:
     assert schema.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert schema.stripe_subscription_period_end_at == datetime(
+    assert schema.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert schema.stripe_subscription_product_id == "product-1"

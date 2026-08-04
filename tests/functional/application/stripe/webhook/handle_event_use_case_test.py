@@ -57,7 +57,7 @@ async def test_customer_subscription(
     assert customer.stripe_subscription_cancel_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
-    assert customer.stripe_subscription_period_end_at == datetime(
+    assert customer.stripe_subscription_current_period_end_at == datetime(
         2028, 3, 3, 14, 40, 55, tzinfo=UTC
     )
     assert customer.stripe_subscription_product_id == "product-2"

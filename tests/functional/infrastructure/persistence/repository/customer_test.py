@@ -26,7 +26,7 @@ async def test_add(session: AsyncSession) -> None:
     assert repository_customer.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert repository_customer.stripe_subscription_period_end_at == datetime(
+    assert repository_customer.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert repository_customer.stripe_subscription_product_id == "product-1"
@@ -155,7 +155,7 @@ async def test_update(session: AsyncSession) -> None:
     assert repository_customer.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert repository_customer.stripe_subscription_period_end_at == datetime(
+    assert repository_customer.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert repository_customer.stripe_subscription_product_id == "product-1"

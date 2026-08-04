@@ -21,7 +21,7 @@ class CustomerSchema(SQLModel, table=True):
     stripe_subscription_cancel_at: Annotated[
         datetime | None, Field(sa_column=Column(DateTime(timezone=True)))
     ]
-    stripe_subscription_period_end_at: Annotated[
+    stripe_subscription_current_period_end_at: Annotated[
         datetime | None, Field(sa_column=Column(DateTime(timezone=True)))
     ]
     stripe_subscription_product_id: str | None
@@ -34,7 +34,7 @@ class CustomerSchema(SQLModel, table=True):
             external_id=customer.external_id,
             stripe_id=customer.stripe_id,
             stripe_subscription_cancel_at=customer.stripe_subscription_cancel_at,
-            stripe_subscription_period_end_at=customer.stripe_subscription_period_end_at,
+            stripe_subscription_current_period_end_at=customer.stripe_subscription_current_period_end_at,
             stripe_subscription_product_id=customer.stripe_subscription_product_id,
             stripe_subscription_status=customer.stripe_subscription_status,
         )
@@ -45,8 +45,8 @@ class CustomerSchema(SQLModel, table=True):
         customer._stripe_subscription_cancel_at = self._to_utc_timezone(
             self.stripe_subscription_cancel_at
         )
-        customer._stripe_subscription_period_end_at = self._to_utc_timezone(
-            self.stripe_subscription_period_end_at
+        customer._stripe_subscription_current_period_end_at = self._to_utc_timezone(
+            self.stripe_subscription_current_period_end_at
         )
         customer._stripe_subscription_product_id = self.stripe_subscription_product_id
         customer._stripe_subscription_status = self.stripe_subscription_status
@@ -56,8 +56,8 @@ class CustomerSchema(SQLModel, table=True):
     def update_from_domain(self, customer: Customer) -> None:
         self.stripe_id = customer.stripe_id
         self.stripe_subscription_cancel_at = customer.stripe_subscription_cancel_at
-        self.stripe_subscription_period_end_at = (
-            customer.stripe_subscription_period_end_at
+        self.stripe_subscription_current_period_end_at = (
+            customer.stripe_subscription_current_period_end_at
         )
         self.stripe_subscription_product_id = customer.stripe_subscription_product_id
         self.stripe_subscription_status = customer.stripe_subscription_status

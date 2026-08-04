@@ -17,7 +17,7 @@ def test_create() -> None:
     assert result.external_id == "user-1"
     assert result.stripe_id is None
     assert result.stripe_subscription_cancel_at is None
-    assert result.stripe_subscription_period_end_at is None
+    assert result.stripe_subscription_current_period_end_at is None
     assert result.stripe_subscription_product_id is None
     assert result.stripe_subscription_status is None
 
@@ -89,7 +89,7 @@ def test_set_stripe() -> None:
     assert customer.stripe_subscription_cancel_at == datetime(
         2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
-    assert customer.stripe_subscription_period_end_at == datetime(
+    assert customer.stripe_subscription_current_period_end_at == datetime(
         2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert customer.stripe_subscription_product_id == "product-1"
