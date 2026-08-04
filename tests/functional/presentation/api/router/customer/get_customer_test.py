@@ -18,8 +18,8 @@ async def test_get(client: TestClient, session: AsyncSession) -> None:
     assert response.status_code == status.HTTP_200_OK
     assert response.content == (
         b'{"stripe":{"canAccessBillingPortal":true,"subscription":'
-        b'{"cancelAt":"2027-02-02T13:35:50Z","isActive":true,"isTrial":true,'
-        b'"periodEndAt":"2026-01-01T12:30:45Z","productId":"product-1"}}}'
+        b'{"cancelAt":"2026-01-01T12:30:45Z","isActive":true,"isTrial":true,'
+        b'"periodEndAt":"2027-02-02T13:35:50Z","productId":"product-1"}}}'
     )
 
 

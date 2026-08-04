@@ -79,18 +79,18 @@ def test_set_stripe() -> None:
 
     customer.set_stripe(
         "customer-1",
-        datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
         datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+        datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
         "product-1",
         "active",
     )
 
     assert customer.stripe_id == "customer-1"
     assert customer.stripe_subscription_cancel_at == datetime(
-        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
     assert customer.stripe_subscription_period_end_at == datetime(
-        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert customer.stripe_subscription_product_id == "product-1"
     assert customer.stripe_subscription_status == "active"

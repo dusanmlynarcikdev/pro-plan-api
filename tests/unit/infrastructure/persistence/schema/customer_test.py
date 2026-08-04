@@ -12,10 +12,10 @@ def test_from_domain() -> None:
     assert result.external_id == "user-1"
     assert result.stripe_id == "customer-1"
     assert result.stripe_subscription_cancel_at == datetime(
-        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
     assert result.stripe_subscription_period_end_at == datetime(
-        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert result.stripe_subscription_product_id == "product-1"
     assert result.stripe_subscription_status == "trialing"
@@ -26,8 +26,8 @@ def test_to_domain() -> None:
         id=UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
         external_id="user-1",
         stripe_id="customer-1",
-        stripe_subscription_cancel_at=datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
-        stripe_subscription_period_end_at=datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+        stripe_subscription_cancel_at=datetime(2026, 1, 1, 12, 30, 45, tzinfo=UTC),
+        stripe_subscription_period_end_at=datetime(2027, 2, 2, 13, 35, 50, tzinfo=UTC),
         stripe_subscription_product_id="product-1",
         stripe_subscription_status="trialing",
     )
@@ -38,13 +38,34 @@ def test_to_domain() -> None:
     assert result.external_id == "user-1"
     assert result.stripe_id == "customer-1"
     assert result.stripe_subscription_cancel_at == datetime(
-        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
     assert result.stripe_subscription_period_end_at == datetime(
-        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert result.stripe_subscription_product_id == "product-1"
     assert result.stripe_subscription_status == "trialing"
+
+
+def test_to_domain_dates_without_timezone() -> None:
+    schema = CustomerSchema(
+        id=UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
+        external_id="user-1",
+        stripe_id="customer-1",
+        stripe_subscription_cancel_at=datetime.fromisoformat("2026-01-01T12:30:45"),
+        stripe_subscription_period_end_at=datetime.fromisoformat("2027-02-02T13:35:50"),
+        stripe_subscription_product_id=None,
+        stripe_subscription_status=None,
+    )
+
+    result = schema.to_domain()
+
+    assert result.stripe_subscription_cancel_at == datetime(
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+    )
+    assert result.stripe_subscription_period_end_at == datetime(
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+    )
 
 
 def test_update_from_domain() -> None:
@@ -54,10 +75,10 @@ def test_update_from_domain() -> None:
 
     assert schema.stripe_id == "customer-1"
     assert schema.stripe_subscription_cancel_at == datetime(
-        2027, 2, 2, 13, 35, 50, tzinfo=UTC
+        2026, 1, 1, 12, 30, 45, tzinfo=UTC
     )
     assert schema.stripe_subscription_period_end_at == datetime(
-        2026, 1, 1, 12, 30, 45, tzinfo=UTC
+        2027, 2, 2, 13, 35, 50, tzinfo=UTC
     )
     assert schema.stripe_subscription_product_id == "product-1"
     assert schema.stripe_subscription_status == "trialing"
