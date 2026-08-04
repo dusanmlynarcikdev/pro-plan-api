@@ -1,5 +1,6 @@
 from datetime import UTC, datetime
 from uuid import UUID
+from zoneinfo import ZoneInfo
 
 from app.infrastructure.database.schema.customer import CustomerSchema
 from tests.generator.customer import generate, generate_with_stripe
@@ -47,13 +48,17 @@ def test_to_domain() -> None:
     assert result.stripe_subscription_status == "trialing"
 
 
-def test_to_domain_dates_without_timezone() -> None:
+def test_to_domain_dates_with_different_timezone() -> None:
     schema = CustomerSchema(
         id=UUID("019d2a4c-ab5d-7a0c-87bb-d4306b6d9d04"),
         external_id="user-1",
         stripe_id="customer-1",
-        stripe_subscription_cancel_at=datetime.fromisoformat("2026-01-01T12:30:45"),
-        stripe_subscription_period_end_at=datetime.fromisoformat("2027-02-02T13:35:50"),
+        stripe_subscription_cancel_at=datetime(
+            2026, 1, 1, 13, 30, 45, tzinfo=ZoneInfo("Europe/Prague")
+        ),
+        stripe_subscription_period_end_at=datetime(
+            2027, 2, 2, 14, 35, 50, tzinfo=ZoneInfo("Europe/Prague")
+        ),
         stripe_subscription_product_id=None,
         stripe_subscription_status=None,
     )

@@ -42,10 +42,10 @@ class CustomerSchema(SQLModel, table=True):
     def to_domain(self) -> Customer:
         customer = Customer(self.id, self.external_id)
         customer._stripe_id = self.stripe_id
-        customer._stripe_subscription_cancel_at = self._ensure_timezone(
+        customer._stripe_subscription_cancel_at = self._to_utc_timezone(
             self.stripe_subscription_cancel_at
         )
-        customer._stripe_subscription_period_end_at = self._ensure_timezone(
+        customer._stripe_subscription_period_end_at = self._to_utc_timezone(
             self.stripe_subscription_period_end_at
         )
         customer._stripe_subscription_product_id = self.stripe_subscription_product_id
@@ -63,8 +63,8 @@ class CustomerSchema(SQLModel, table=True):
         self.stripe_subscription_status = customer.stripe_subscription_status
 
     @staticmethod
-    def _ensure_timezone(datetime: datetime | None) -> datetime | None:
+    def _to_utc_timezone(datetime: datetime | None) -> datetime | None:
         if datetime is None:
             return None
 
-        return datetime if datetime.tzinfo is not None else datetime.replace(tzinfo=UTC)
+        return datetime.astimezone(UTC)
