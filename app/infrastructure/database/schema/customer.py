@@ -9,7 +9,7 @@ from app.domain.customer.customer import Customer
 
 
 class CustomerSchema(SQLModel, table=True):
-    __tablename__ = "customer"
+    __tablename__ = "customers"
     __table_args__ = (
         UniqueConstraint("external_id", name="c_ui_external_id"),
         UniqueConstraint("stripe_id", name="c_ui_stripe_id"),
