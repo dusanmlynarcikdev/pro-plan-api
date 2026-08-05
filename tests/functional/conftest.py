@@ -52,7 +52,6 @@ def prepare_database() -> None:
     database_url = str(get_config().database_url)
 
     alembic_config = Config("alembic.ini")
-    alembic_config.set_main_option("sqlalchemy.url", database_url)
 
     if database_exists(database_url):
         try:
