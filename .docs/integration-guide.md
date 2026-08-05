@@ -245,7 +245,7 @@ curl -o docker-compose.yml https://raw.githubusercontent.com/dusanmlynarcikdev/p
 
 Set the environment variables in the `.env` file to production values.
 
-> 💡 **Tip:** Point `DATABASE_URL` to a database dedicated to Pro Plan API to avoid table name conflicts.
+> 💡 **Tip:** Point `DATABASE_URL` to a database dedicated for Pro Plan API to avoid table name conflicts.
 
 ### 3) Run the project
 
