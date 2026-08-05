@@ -44,6 +44,12 @@
 
 ---
 
+## 🚀 Getting Started
+
+To integrate Pro Plan API into your application, see the [Integration Guide](./.docs/integration-guide.md).
+
+---
+
 ## 👤 Author
 
 **Dušan Mlynarčík** — Senior Backend Engineer
