@@ -19,11 +19,11 @@
 
 ## Why Use Pro Plan API?
 
-- Removes the need to implement Stripe
+- No need to integrate Stripe yourself
 - Saves development time and effort
 - Ensures a correct Stripe integration
-- Lets you focus on your core product
-- Helps you ship your product faster
+- Allows teams to focus on the core product
+- Helps ship products faster
 
 ## Features
 
@@ -41,6 +41,12 @@
 - Supports only one subscription with a single price per customer
 - Does not support more complex billing models, such as usage-based pricing
 - Currently supports only PostgreSQL
+
+---
+
+## 🚀 Getting Started
+
+To integrate Pro Plan API into your application, see the [Integration Guide](./.docs/integration-guide.md).
 
 ---
 

@@ -1,13 +1,35 @@
-# all checks & fixes
-cf: lf ty s t
+# --- docker ---
 
 # show api token
 at:
 	@cat /data/api-token && echo
 
-# enter docker container
-dc:
+# enter api container
+c:
 	docker exec -it pro-plan-api /bin/bash
+
+# run containers
+r:
+	docker compose --env-file .env.local up -d
+
+# --- database migrations ---
+
+# run migrations
+m:
+	alembic upgrade head
+
+# generate migration from diff
+mg:
+	alembic revision -m "autogenerate" --autogenerate
+
+# rollback last migration
+mr:
+	alembic downgrade -1
+
+# --- checks ---
+
+# all checks & fixes
+cf: lf ty s t
 
 # lint check
 l:
@@ -16,18 +38,6 @@ l:
 # lint fix
 lf:
 	ruff format && ruff check --fix
-
-# run database migrations
-m:
-	alembic upgrade head
-
-# generate database migration from diff
-mg:
-	alembic revision -m "autogenerate" --autogenerate
-
-# rollback last database migration
-mr:
-	alembic downgrade -1
 
 # check database schema
 s:

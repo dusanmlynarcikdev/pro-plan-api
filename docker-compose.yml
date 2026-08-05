@@ -40,8 +40,6 @@ services:
 
   stripe-cli:
     command: listen --forward-to api:80/api/webhooks/stripe
-    depends_on:
-      - api
     environment:
-      - STRIPE_API_KEY
+      STRIPE_API_KEY: ${STRIPE_API_KEY?required}
     image: stripe/stripe-cli
