@@ -29,7 +29,7 @@
 
 - Creates Stripe Checkout and Billing Portal sessions
 - Synchronizes subscription access via Stripe webhooks
-- Supports trials, subscription pauses, and grace periods
+- Supports trials, subscription pauses, grace periods, Stripe Tax, and business tax IDs
 - Returns subscription data for your UI
 - Identifies customers by your own external IDs
 - Does not store customer data
