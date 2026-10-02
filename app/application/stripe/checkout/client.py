@@ -9,6 +9,8 @@ class Client(Protocol):
         price_id: str,
         success_url: str,
         trial_days: int | None,
+        automatic_tax: bool,
+        business_customers: bool,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:

@@ -24,6 +24,8 @@ class CreateSessionUseCase:
         stripe_price_id: str,
         success_url: str,
         trial_days: int | None,
+        automatic_tax: bool,
+        business_customers: bool,
     ) -> str:
         """
         :raises UnableToCreateCheckoutSessionError:
@@ -37,6 +39,8 @@ class CreateSessionUseCase:
                 stripe_price_id,
                 success_url,
                 trial_days,
+                automatic_tax,
+                business_customers,
             )
         except UnableToCreateCheckoutSessionError as e:
             logger.error(e.__cause__)

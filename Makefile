@@ -10,7 +10,7 @@ c:
 
 # run containers
 r:
-	docker compose --env-file .env.local up -d
+	docker compose up -d
 
 # --- database migrations ---
 
