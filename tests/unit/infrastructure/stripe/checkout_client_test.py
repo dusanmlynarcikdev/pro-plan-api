@@ -18,6 +18,7 @@ AUTOMATIC_TAX_PARAMS = SessionCreateParams(
     automatic_tax=SessionCreateParamsAutomaticTax(enabled=True),
     billing_address_collection="required",
 )
+
 BUSINESS_CUSTOMERS_PARAMS = SessionCreateParams(
     name_collection=SessionCreateParamsNameCollection(
         business=SessionCreateParamsNameCollectionBusiness(enabled=True, optional=True)

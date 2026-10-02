@@ -18,6 +18,7 @@ _AUTOMATIC_TAX_REQUEST_PARAMS = SessionCreateParams(
     automatic_tax=SessionCreateParamsAutomaticTax(enabled=True),
     billing_address_collection="required",
 )
+
 _BUSINESS_CUSTOMERS_REQUEST_PARAMS = SessionCreateParams(
     name_collection=SessionCreateParamsNameCollection(
         business=SessionCreateParamsNameCollectionBusiness(enabled=True, optional=True)
@@ -50,9 +51,6 @@ class CheckoutClient:
             stripe_customer_id,
             price_id,
             self._create_subscription_request_params(customer_id, trial_days),
-            self._create_customer_update_request_params(
-                automatic_tax, business_customers
-            ),
             success_url,
             automatic_tax,
             business_customers,
@@ -67,12 +65,12 @@ class CheckoutClient:
 
         return self._validate_response_url(session)
 
-    @staticmethod
+    @classmethod
     def _create_request_params(
+        cls,
         stripe_customer_id: str | None,
         price_id: str,
         subscription_data: SessionCreateParamsSubscriptionData,
-        customer_update: SessionCreateParamsCustomerUpdate,
         success_url: str,
         automatic_tax: bool,
         business_customers: bool,
@@ -93,7 +91,9 @@ class CheckoutClient:
         if stripe_customer_id is not None:
             params.update(customer=stripe_customer_id)
 
-            if customer_update:
+            if customer_update := cls._create_customer_update_request_params(
+                automatic_tax, business_customers
+            ):
                 params.update(customer_update=customer_update)
 
         return params

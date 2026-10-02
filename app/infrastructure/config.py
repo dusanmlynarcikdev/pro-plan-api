@@ -5,9 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Config(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=(".env.dist", ".env"), extra="ignore"
-    )
+    model_config = SettingsConfigDict(env_file=(".env.dist", ".env"), extra="ignore")
 
     database_url: PostgresDsn
     stripe_api_key: str
