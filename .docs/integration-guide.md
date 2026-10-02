@@ -35,7 +35,7 @@ cd pro-plan-api
 
 ### 2) Create environment variables file
 
-Create a `.env.local` file with Stripe environment variables based on `.env.dist`. You get the webhook secret in the next step, so you can leave it empty for now:
+Create a `.env` file with Stripe environment variables based on `.env.dist`. You get the webhook secret in the next step, so you can leave it empty for now:
 
 ```text
 STRIPE_API_KEY=...
@@ -49,7 +49,7 @@ The local Docker setup includes a `stripe-cli` container. It forwards Stripe eve
 Start the container:
 
 ```bash
-docker compose --env-file .env.local up -d stripe-cli
+docker compose up -d stripe-cli
 ```
 
 It prints the webhook secret in its log:
@@ -58,12 +58,12 @@ It prints the webhook secret in its log:
 docker logs pro-plan-api-stripe-cli-1
 ```
 
-Copy the secret to `STRIPE_WEBHOOK_SECRET` in `.env.local`. The secret does not change, so you only need this once.
+Copy the secret to `STRIPE_WEBHOOK_SECRET` in `.env`. The secret does not change, so you only need this once.
 
 ### 4) Run the rest of the project
 
 ```bash
-docker compose --env-file .env.local up -d
+docker compose up -d
 ```
 
 or

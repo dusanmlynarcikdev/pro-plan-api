@@ -1,4 +1,4 @@
 .docker/*
 !.docker/.gitkeep
-.env.local
+.env
 **/__pycache__

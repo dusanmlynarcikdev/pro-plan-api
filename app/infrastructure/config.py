@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Config(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(".env.dist", ".env.local"), extra="ignore"
+        env_file=(".env.dist", ".env"), extra="ignore"
     )
 
     database_url: PostgresDsn
