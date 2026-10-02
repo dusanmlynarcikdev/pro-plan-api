@@ -99,7 +99,6 @@ async def test_stripe_error(
             "customerExternalId": "user-1",
             "stripePriceId": "price-1",
             "successUrl": "https://example.com/success",
-            "trialDays": None,
         },
     )
 

@@ -137,7 +137,7 @@ POST /api/customers/stripe/checkout/sessions
 - `customerExternalId` — your unique customer id
 - `stripePriceId` — id of the Stripe price the customer subscribes to
 - `successUrl` — where Stripe redirects the customer after payment
-- `trialDays` — number of trial days, or `null` for no trial
+- `trialDays` — optional, number of trial days, or `null` for no trial
 - `automaticTax` — optional, calculates tax with Stripe Tax from the required billing address
 - `businessCustomers` — optional, lets the customer add a business name and tax ID
 
