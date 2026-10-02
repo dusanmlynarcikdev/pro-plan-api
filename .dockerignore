@@ -1,13 +1,27 @@
+# Docker
 .docker
-.git
+.dockerignore
+Dockerfile
+docker-compose*.yml
+
+# CI
 .github
+
+# Git
+.git
 .gitignore
+
+# IDEs and editors
 .idea
+
+# Python cache
+__pycache__
 .pytest_cache
 .ruff_cache
-__pycache__
-docker-compose.yml
-docker-compose.prod.yml
-Dockerfile
+
+# Environment
+.env
+
+# Docs
 LICENSE
 README.md
