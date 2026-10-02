@@ -7,8 +7,13 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from stripe import StripeError
 from stripe.params.checkout import (
     SessionCreateParams,
+    SessionCreateParamsAutomaticTax,
+    SessionCreateParamsCustomerUpdate,
     SessionCreateParamsLineItem,
+    SessionCreateParamsNameCollection,
+    SessionCreateParamsNameCollectionBusiness,
     SessionCreateParamsSubscriptionData,
+    SessionCreateParamsTaxIdCollection,
 )
 
 from app.infrastructure.database.schema.customer import CustomerSchema
@@ -38,6 +43,8 @@ async def test_create_with_existing_customer(
             "stripePriceId": "price-1",
             "successUrl": "https://example.com/success",
             "trialDays": 7,
+            "automaticTax": True,
+            "businessCustomers": True,
         },
     )
     session.expunge_all()
@@ -51,9 +58,19 @@ async def test_create_with_existing_customer(
     stripe_client.assert_called_once_with("example-api-key")
     stripe_client.return_value.v1.checkout.sessions.create_async.assert_awaited_once_with(
         SessionCreateParams(
+            automatic_tax=SessionCreateParamsAutomaticTax(enabled=True),
+            billing_address_collection="required",
             customer="customer-1",
+            customer_update=SessionCreateParamsCustomerUpdate(
+                address="auto", name="auto"
+            ),
             line_items=[SessionCreateParamsLineItem(price="price-1", quantity=1)],
             mode="subscription",
+            name_collection=SessionCreateParamsNameCollection(
+                business=SessionCreateParamsNameCollectionBusiness(
+                    enabled=True, optional=True
+                )
+            ),
             subscription_data=SessionCreateParamsSubscriptionData(
                 metadata={
                     "customer_id": str(customer.id),
@@ -61,6 +78,7 @@ async def test_create_with_existing_customer(
                 trial_period_days=7,
             ),
             success_url="https://example.com/success",
+            tax_id_collection=SessionCreateParamsTaxIdCollection(enabled=True),
         )
     )
 

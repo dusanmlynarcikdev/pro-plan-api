@@ -23,5 +23,7 @@ async def create_checkout_session(
             request.stripe_price_id,
             str(request.success_url),
             request.trial_days,
+            request.automatic_tax,
+            request.business_customers,
         )
     )

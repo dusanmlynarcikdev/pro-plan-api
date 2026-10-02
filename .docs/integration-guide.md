@@ -128,7 +128,9 @@ POST /api/customers/stripe/checkout/sessions
   "customerExternalId": "019fd08e-56dd-7738-8310-57ec7e2eb921",
   "stripePriceId": "price-1",
   "successUrl": "https://yourdomain.com/success-payment",
-  "trialDays": 7
+  "trialDays": 7,
+  "automaticTax": true,
+  "businessCustomers": true
 }
 ```
 
@@ -136,6 +138,8 @@ POST /api/customers/stripe/checkout/sessions
 - `stripePriceId` — id of the Stripe price the customer subscribes to
 - `successUrl` — where Stripe redirects the customer after payment
 - `trialDays` — number of trial days, or `null` for no trial
+- `automaticTax` — optional, calculates tax with Stripe Tax from the required billing address
+- `businessCustomers` — optional, lets the customer add a business name and tax ID
 
 > 💡 **Tip:** Use the `successUrl` to trigger additional post-payment actions, such as sending a paid plan welcome email.
 

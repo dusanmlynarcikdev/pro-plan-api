@@ -8,3 +8,5 @@ class CreateCheckoutSessionRequest(BaseRequest):
     stripe_price_id: str
     success_url: HttpUrl
     trial_days: PositiveInt | None
+    automatic_tax: bool = False
+    business_customers: bool = False
